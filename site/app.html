@@ -1,0 +1,750 @@
+<div id="gbapp">
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="GYM BASECAMP">
+      <svg class="logo-mark" viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="13.5" width="28" height="3" fill="currentColor"/><rect x="4" y="6" width="4" height="18" rx="1" fill="currentColor"/><rect x="9" y="8.5" width="3" height="13" rx="1" fill="currentColor" opacity=".55"/><rect x="18" y="8.5" width="3" height="13" rx="1" fill="currentColor" opacity=".55"/><rect x="22" y="6" width="4" height="18" rx="1" fill="currentColor"/></svg>
+      <b>GYM BASECAMP</b>
+    </a>
+    <nav class="nav" aria-label="menu">
+      <a href="#home" data-nav="home">HOME</a>
+      <a href="#brands" data-nav="brands">BRANDS</a>
+      <a href="#quiz" data-nav="quiz">FIND</a>
+      <a href="#compare" data-nav="compare">COMPARE<span class="cnt" id="navCnt" hidden>0</span></a>
+      <a href="#about" data-nav="about">ABOUT</a>
+    </nav>
+    <button class="sbtn" id="sOpen" type="button" aria-label="Search"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg></button>
+    <button class="lang" id="langBtn" type="button" aria-label="Language">EN</button>
+  </div>
+</header>
+
+<div class="sover" id="sOver" hidden>
+  <div class="sbox" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="sfield"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg><input id="gq" class="sinput" type="search" autocomplete="off" enterkeyhint="search"><button class="sclose" id="sClose" type="button" aria-label="Close">ESC</button></div>
+    <div class="sres" id="gres"></div>
+  </div>
+</div>
+
+<main id="app"></main>
+
+<div class="tray" id="tray" hidden>
+  <div class="wrap">
+    <div class="tray-names" id="trayNames"></div>
+    <button class="btn ghost-dark sm" id="trayClear" type="button"></button>
+    <a class="btn inv sm" href="#compare" id="trayGo"></a>
+  </div>
+</div>
+<div class="flash" id="flash" role="status" hidden></div>
+
+<footer class="gbfoot">
+  <div class="wrap">
+    <div><b>GYM BASECAMP</b><br><span id="ftMotto"></span><br><a href="#submit" id="ftSubmit"></a></div>
+    <div style="max-width:30em" id="ftNote"></div>
+  </div>
+</footer>
+</div>
+
+<script>
+const BRANDS = __DATA__;
+const TOK = __TOK__;
+
+const FILTERS = ['남성','여성','머슬핏','오버핏','컴프레션','슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','아우터','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝'];
+const TYPES = ['짐웨어 전문','짐 스트리트','애슬레저','퍼포먼스 트레이닝','종합 스포츠','스트렝스 스포츠'];
+const TYPE_COLOR = {'짐웨어 전문':'#111111','짐 스트리트':'#2B2B29','애슬레저':'#6A6964','퍼포먼스 트레이닝':'#45453F','종합 스포츠':'#55544F','스트렝스 스포츠':'#1E1E1D'};
+/* Optional brand images hosted on your own WordPress media library: { 'hdex': 'http://gymbasecamp.kr/wp-content/uploads/....jpg' } */
+const IMG_URLS = {};
+const BUYS = ['국내 공식몰','해외 직배송','해외 직구/확인 필요'];
+const GROUP_ORDER = {'핵심':0,'비교':1,'확장':2};
+/*__RANK_V2__*/
+const REACT_COUNTS = __REACT__;
+const REACT = RANK_V2.reactFromCounts(REACT_COUNTS);
+RANK_V2.rank(BRANDS, REACT);
+
+/* ---------- i18n ---------- */
+const L = {
+ ko:{
+  motto:'모든 운동인은 이곳으로부터 시작한다', foot:'브랜드 정보는 각 공식몰에서 확인한 내용 기준이며, 가격과 상품 구성은 브랜드 사정에 따라 바뀔 수 있습니다. 광고·스폰서 브랜드는 반드시 별도 표시합니다.', submitLink:'브랜드 제보하기 →',
+  heroH:n=>`국내외 짐웨어 브랜드 <em>${n}</em>개, 한곳에서.`, heroP:'머슬핏, 오버핏, 컴프레션, 애슬레저까지. 브랜드 이름을 몰라도 핏과 아이템만 고르면 나에게 맞는 운동복 브랜드가 나옵니다.',
+  kr:'국내 브랜드', intl:'해외 브랜드', nf:'핏·아이템 필터', finderH:'원하는 조건을 고르세요', reset:'초기화', who:'누가 입나요', fit:'핏', item:'찾는 아이템', nat:'브랜드 국적', brandsN:'브랜드', seeBrands:'브랜드 보기 →',
+  quizH:'뭘 골라야 할지 모르겠다면', quizP:'질문 3개에 답하면 맞는 브랜드 5개를 골라드려요.', quizGo:'30초 테스트 시작',
+  presetsH:'많이 찾는 조합', presetsP:'운동하는 사람들이 실제로 찾는 조건을 한 번에 적용합니다.', nBrands:n=>`${n}개 브랜드 →`,
+  typesH:'브랜드 유형', typesP:'운동 성격에 따라 6가지로 나눴습니다.',
+  browse:'브랜드 둘러보기', quizShort:'30초 추천 테스트',
+  heroT:n=>`국내외 짐웨어 브랜드 <em>${n}+</em> 한곳에서`, heroL:'머슬핏, 오버핏, 컴프레션, 애슬레저까지<br>나에게 맞는 운동복 브랜드를 발견하세요.',
+  catsH:'카테고리 탐색', catsP:'어디서부터 볼지 고르세요.',
+  cats:[['국내 브랜드','국내 공식몰에서 바로 구매'],['해외 브랜드','짐샤크·영라·ASRV 등 글로벌 짐웨어'],['보디빌딩·짐웨어','웨이트룸을 위한 짐웨어와 짐 스트리트'],['여성 액티브웨어','레깅스·스포츠브라·여성 라인']],
+  featH:'대표 브랜드', featP:'국내외에서 많이 찾는 짐웨어 브랜드입니다.',
+  valH:'운동복 브랜드를<br>하나씩 검색하지 마세요.', valP:'GYM BASECAMP에서 핏, 스타일, 운동 목적, 국내 구매 가능 여부를 한 번에 비교하세요.',
+  val:[['FIT','핏','머슬핏 · 오버핏 · 컴프레션'],['STYLE','스타일','짐웨어 · 짐 스트리트 · 애슬레저'],['PURPOSE','운동 목적','보디빌딩 · 파워리프팅 · 러닝 · HYROX'],['BUY','국내 구매',(k,o)=>`국내 공식몰 ${k}곳 · 해외 직배송 ${o}곳`]],
+  finalH:'나에게 맞는<br>짐웨어 브랜드 찾기', finalP:'브랜드 이름을 몰라도 괜찮아요. 핏과 아이템만 고르면 됩니다.',
+  topH:'현재 점수 20 / 20', topP:'헬스 특화도·국내 접근성·제품군 완성도·정보 완성도 만점 브랜드입니다. 같은 점수는 공동 순위로 표시합니다.', scoreRule:'점수 기준 보기', all:n=>`전체 ${n}개 브랜드 보기 →`,
+  sPh:'브랜드·아이템 검색 (예: 싱글렛, 짐샤크)', sHot:'많이 찾는 검색어', sAll:n=>`검색 결과 ${n}개 모두 보기 →`, sNone:q=>`'${q}' 검색 결과가 없어요. 다른 단어나 영어 이름으로 찾아보세요.`, sTagN:'브랜드', sTagM:'관련', brandsH:'브랜드 찾기', brandsP:'조건을 고를수록 결과가 좁혀집니다. 핏·아이템 조건은 모두 만족하는 브랜드만 보여줍니다.', filter:'필터', search:'브랜드·상품 검색 (예: 싱글렛, 짐샤크)', gender:'성별', items:'아이템', type:'브랜드 유형', buy:'구매 방식', selected:n=>`${n}개 선택`,
+  sScore:'추천순 (점수)', sKr:'국내 브랜드 먼저', sName:'이름순 A–Z', empty:'조건에 모두 맞는 브랜드가 아직 없어요.<br>조건을 하나 빼보거나', clearAll:'전체 초기화',
+  cmpAdd:'+ 비교', cmpOn:'비교 담음', official:'공식몰 ↗', officialGo:'공식몰 바로가기 ↗', rank:(b,tie)=>`${tie?'공동 ':''}${b}위`, cmpMax:'비교는 최대 4개까지 담을 수 있어요. 하나를 빼고 다시 담아주세요.',
+  fType:'브랜드 유형', fSport:'핵심 운동', fVibe:'스타일 성향', fStyle:'주요 스타일', fItems:'대표 상품', fPrice:'가격대', fFor:'대상', fBuy:'구매 방식', fUrl:'공식몰',
+  scoreH:'GYM BASECAMP 점수', scoreNote:'6개 항목 100점 만점입니다. 사용자 반응은 방문 데이터가 충분히 쌓이기 전까지 모든 브랜드에 같은 중간값(10점)을 줍니다. 동점이면 사용자 반응 → 헬스 특화도 → 정보 신뢰도 순으로 순위를 정해 공동 순위가 없습니다.', bd:{focus:'헬스 특화도',range:'제품 구성',access:'국내 구매 편의',info:'정보 신뢰도',editor:'에디터 평가',user:'사용자 반응'}, coverH:'핏 · 아이템 커버리지', sameH:'같은 유형 브랜드',
+  upImg:'대표 이미지 올리기', chImg:'이미지 바꾸기', rmImg:'이미지 빼기', upNote:'편집 권한이 있는 사람에게만 보이는 버튼이에요. 브랜드에서 사용 허락을 받은 이미지만 올려주세요.', uploading:'올리는 중…', upFail:'이미지를 올리지 못했어요. PNG·JPG·WEBP 20MB 이하 파일인지 확인해주세요.',
+  cmpH:'브랜드 비교', cmpP:'최대 4개 브랜드를 나란히 놓고 핏, 아이템, 가격대, 구매 방식을 비교하세요.', cmpEmpty:'아직 담은 브랜드가 없어요. 브랜드 카드의 <b>+ 비교</b>를 눌러 담아보세요.', goFind:'브랜드 찾으러 가기', remove:'빼기', more:'브랜드 더 담기', cmpClear:'비교 비우기', score:'점수', rankL:'순위', origin:'국적', sport:'핵심 운동',
+  trayClear:'비우기', trayGo:'비교하기',
+  q:[
+   {t:'누가 입을 운동복인가요?', o:[['m','남성','남성 라인이 있는 브랜드'],['w','여성','여성 라인이 있는 브랜드'],['a','상관없어요','성별 상관없이']]},
+   {t:'주로 어떤 운동을 하나요?', o:[['bb','웨이트 · 보디빌딩','펌프, 분할, 근비대'],['pl','파워리프팅 · 스트렝스','3대 운동, 싱글렛, 벨트'],['run','러닝 · HYROX · 크로스핏','달리고 뛰고 버티는 운동'],['ath','요가 · 필라테스 · 데일리','운동과 일상을 함께']]},
+   {t:'어떤 핏을 좋아하세요?', o:[['muscle','머슬핏','몸 라인이 드러나게'],['over','오버핏','넉넉하고 편하게'],['comp','컴프레션','잡아주는 기능성'],['any','상관없어요','핏보다 브랜드 느낌']]}
+  ],
+  qStep:(i,n)=>`질문 ${i} / ${n}`, back:'← 이전', resH:'나에게 맞는 짐웨어 브랜드', resP:'답변과 GYM BASECAMP 점수를 함께 반영한 결과예요.', retry:'다시 하기', seeAll:'조건으로 전체 보기',
+  why:{gender:'성별 라인 있음',bb:'보디빌딩·웨이트 중심',pl:'스트렝스·싱글렛 라인',run:'러닝·HYROX 라인',ath:'애슬레저·레깅스',muscle:'머슬핏',over:'오버핏',comp:'컴프레션',kr:'국내 공식몰'},
+  shareH:'스토리·DM에 붙여넣을 문구', copy:'문구 복사', copied:'복사했어요', copyFail:'복사가 막혀 있어요. 문구를 길게 눌러 직접 복사해주세요.',
+  shareTxt:(list)=>`GYM BASECAMP 짐웨어 테스트 결과\n나에게 맞는 브랜드: ${list.join(', ')}\n당신에게 맞는 브랜드도 찾아보세요 → gymbasecamp.kr`,
+  subH:'브랜드 제보', subP:'소개하고 싶은 짐웨어 브랜드가 있나요? 공식 정보를 확인한 뒤 분류·필터·점수까지 반영해 추가합니다.',
+  sName:'브랜드 이름', sUrl:'공식몰 또는 인스타그램 주소', sWhy:'추천 이유', opt:'(선택)', sBy:'제보자 인스타 ID', send:'제보하기', needName:'브랜드 이름을 적어주세요.',
+  sent:'제보가 저장됐어요. 확인 후 반영할게요.', dmH:'인스타그램 DM으로 보내주세요', dmP:'이 화면에서는 제보를 바로 저장할 수 없어요. 아래 문구를 복사해 GYM BASECAMP 인스타그램 DM으로 보내주시면 됩니다.',
+  dmTxt:(d)=>`[브랜드 제보]\n브랜드: ${d.name}\n주소: ${d.url||'-'}\n추천 이유: ${d.why||'-'}`, subsH:n=>`받은 제보 ${n}건`, subsNone:'아직 받은 제보가 없어요.', dup:n=>`이미 등록된 브랜드예요: ${n}`,
+  presets:['남성 · 머슬핏 · 컴프레션 · 국내','보디빌딩 펌프커버 · 헤비웨이트','파워리프팅 싱글렛 · 스트렝스','여성 레깅스 · 스포츠브라','러닝 · HYROX · 크로스트레이닝','오버핏 짐웨어 · 국내 공식몰'],
+  typeD:{'짐웨어 전문':'웨이트룸을 위해 만든 브랜드','짐 스트리트':'보디빌딩 문화와 스트리트 감성','애슬레저':'운동과 일상을 함께 입는 레깅스·액티브웨어','퍼포먼스 트레이닝':'러닝·HYROX·기능성 원단 중심','종합 스포츠':'트레이닝 라인을 운영하는 글로벌 브랜드','스트렝스 스포츠':'파워리프팅·싱글렛·리프팅 장비'}
+ },
+ en:{
+  motto:'Every lifter starts here', foot:'Brand details are taken from each official store. Prices and ranges may change. Sponsored brands are always labeled.', submitLink:'Suggest a brand →',
+  heroH:n=>`<em>${n}</em> gymwear brands from Korea and abroad, in one place.`, heroP:'Muscle fit, oversized, compression, athleisure. Pick the fit and the items you want, and find brands that suit you without knowing their names.',
+  kr:'Korean brands', intl:'International brands', nf:'Fit & item filters', finderH:'Pick what you need', reset:'Reset', who:'Who is it for', fit:'Fit', item:'Items', nat:'Brand origin', brandsN:'brands', seeBrands:'Show brands →',
+  quizH:'Not sure where to start?', quizP:'Answer 3 questions and get your top 5 brands.', quizGo:'Take the 30-second quiz',
+  presetsH:'Popular searches', presetsP:'Common combinations, applied in one tap.', nBrands:n=>`${n} brands →`,
+  typesH:'Brand types', typesP:'Six groups by training style.',
+  browse:'Browse brands', quizShort:'30-second quiz',
+  heroT:n=>`<em>${n}+</em> gymwear brands from Korea and abroad, in one place`, heroL:'Muscle fit, oversized, compression, athleisure.<br>Find the activewear brand that fits you.',
+  catsH:'Browse by category', catsP:'Pick a place to start.',
+  cats:[['Korean brands','Buy from official Korean stores'],['International','Gymshark, YoungLA, ASRV and more'],['Bodybuilding & gymwear','Built for the weight room, plus gym street'],['Women\'s activewear','Leggings, sports bras and women\'s lines']],
+  featH:'Featured brands', featP:'Gymwear brands people search for most, in Korea and abroad.',
+  valH:'Stop searching<br>brands one by one.', valP:'Compare fit, style, training purpose and whether you can buy in Korea, all in one place.',
+  val:[['FIT','Fit','Muscle fit · Oversized · Compression'],['STYLE','Style','Gymwear · Gym street · Athleisure'],['PURPOSE','Training','Bodybuilding · Powerlifting · Running · HYROX'],['BUY','Buying in Korea',(k,o)=>`${k} Korean official stores · ${o} ship from abroad`]],
+  finalH:'Find gymwear<br>that fits you', finalP:'No need to know brand names. Just pick the fit and items you want.',
+  topH:'Score 20 / 20', topP:'Full marks on gym focus, access from Korea, range depth and verified info. Equal scores share a rank.', scoreRule:'How we score', all:n=>`See all ${n} brands →`,
+  sPh:'Search brands or items (e.g. singlet, Gymshark)', sHot:'Popular searches', sAll:n=>`See all ${n} results →`, sNone:q=>`No results for '${q}'. Try another word or the brand's English name.`, sTagN:'Brand', sTagM:'Match', brandsH:'Find brands', brandsP:'Each choice narrows the list. Brands must match every fit and item you select.', filter:'Filters', search:'Search brands or products (e.g. singlet, Gymshark)', gender:'Gender', items:'Items', type:'Brand type', buy:'How to buy', selected:n=>`${n} selected`,
+  sScore:'Recommended (score)', sKr:'Korean brands first', sName:'Name A–Z', empty:'No brand matches every filter yet.<br>Try removing one, or', clearAll:'reset all',
+  cmpAdd:'+ Compare', cmpOn:'Added', official:'Store ↗', officialGo:'Visit official store ↗', rank:(b,tie)=>`#${b}`, cmpMax:'You can compare up to 4 brands. Remove one first.',
+  fType:'Type', fSport:'Training', fVibe:'Style', fStyle:'Range', fItems:'Key products', fPrice:'Price range', fFor:'For', fBuy:'How to buy', fUrl:'Official store',
+  scoreH:'GYM BASECAMP score', scoreNote:'Six criteria, 100 points. Until we have enough visit data, every brand gets the same neutral user score (10). Ties are broken by user response, then gym focus, then verified info, so no two brands share a rank.', bd:{focus:'Gym focus',range:'Range',access:'Buying in Korea',info:'Verified info',editor:'Editor rating',user:'User response'}, coverH:'Fit & item coverage', sameH:'Same type',
+  upImg:'Upload brand image', chImg:'Change image', rmImg:'Remove image', upNote:'Only people who can edit see this. Upload only images the brand has allowed you to use.', uploading:'Uploading…', upFail:'Upload failed. Use a PNG, JPG or WEBP under 20 MB.',
+  cmpH:'Compare brands', cmpP:'Put up to 4 brands side by side: fit, items, price range and how to buy.', cmpEmpty:'Nothing to compare yet. Tap <b>+ Compare</b> on a brand card.', goFind:'Find brands', remove:'Remove', more:'Add more brands', cmpClear:'Clear comparison', score:'Score', rankL:'Rank', origin:'Origin', sport:'Training',
+  trayClear:'Clear', trayGo:'Compare',
+  q:[
+   {t:'Who are you shopping for?', o:[['m','Men','Brands with a men\'s line'],['w','Women','Brands with a women\'s line'],['a','Either','Any brand']]},
+   {t:'What do you mostly train?', o:[['bb','Weights · Bodybuilding','Pump, splits, hypertrophy'],['pl','Powerlifting · Strength','Big three, singlets, belts'],['run','Running · HYROX · CrossFit','Run, jump, endure'],['ath','Yoga · Pilates · Everyday','Gym and daily life']]},
+   {t:'What fit do you like?', o:[['muscle','Muscle fit','Shows your shape'],['over','Oversized','Loose and easy'],['comp','Compression','Supportive and technical'],['any','No preference','Brand feel over fit']]}
+  ],
+  qStep:(i,n)=>`Question ${i} / ${n}`, back:'← Back', resH:'Your gymwear brands', resP:'Based on your answers plus the GYM BASECAMP score.', retry:'Start over', seeAll:'See all matches',
+  why:{gender:'has the line you need',bb:'bodybuilding & weights',pl:'strength & singlets',run:'running & HYROX',ath:'athleisure & leggings',muscle:'muscle fit',over:'oversized',comp:'compression',kr:'Korean store'},
+  shareH:'Text for your story or DM', copy:'Copy text', copied:'Copied', copyFail:'Copy is blocked here. Press and hold the text to copy it.',
+  shareTxt:(list)=>`My GYM BASECAMP gymwear quiz result\nBrands for me: ${list.join(', ')}\nFind yours → gymbasecamp.kr`,
+  subH:'Suggest a brand', subP:'Know a gymwear brand we should list? We check the official details, then add it with type, filters and score.',
+  sName:'Brand name', sUrl:'Official store or Instagram link', sWhy:'Why you recommend it', opt:'(optional)', sBy:'Your Instagram ID', send:'Send suggestion', needName:'Please enter the brand name.',
+  sent:'Thanks, your suggestion is saved. We\'ll review it soon.', dmH:'Send it by Instagram DM', dmP:'Suggestions can\'t be saved from this view. Copy the text below and send it to GYM BASECAMP on Instagram.',
+  dmTxt:(d)=>`[Brand suggestion]\nBrand: ${d.name}\nLink: ${d.url||'-'}\nWhy: ${d.why||'-'}`, subsH:n=>`${n} suggestions received`, subsNone:'No suggestions yet.', dup:n=>`Already listed: ${n}`,
+  presets:['Men · Muscle fit · Compression · Korean','Bodybuilding pump covers · Heavyweight','Powerlifting singlets · Strength','Women\'s leggings · Sports bras','Running · HYROX · Cross-training','Oversized gymwear · Korean store'],
+  typeD:{'짐웨어 전문':'Made for the weight room','짐 스트리트':'Bodybuilding culture meets streetwear','애슬레저':'Leggings and activewear for gym and daily life','퍼포먼스 트레이닝':'Running, HYROX and technical fabrics','종합 스포츠':'Global sports brands with training lines','스트렝스 스포츠':'Powerlifting, singlets and lifting gear'}
+ }
+};
+const LBL_EN = {'남성':'Men','여성':'Women','머슬핏':'Muscle fit','오버핏':'Oversized','컴프레션':'Compression','슬리브리스/탱크':'Sleeveless / Tanks','쇼츠':'Shorts','팬츠/조거':'Pants / Joggers','레깅스':'Leggings','스포츠브라':'Sports bras','아우터':'Outerwear','펌프커버/헤비웨이트':'Pump covers / Heavyweight','스트렝스/싱글렛':'Strength / Singlets','러닝/HYROX/크로스트레이닝':'Running / HYROX / Cross-training',
+  '짐웨어 전문':'Gymwear specialist','짐 스트리트':'Gym street','애슬레저':'Athleisure','퍼포먼스 트레이닝':'Performance training','종합 스포츠':'Global sportswear','스트렝스 스포츠':'Strength sports',
+  '국내 공식몰':'Korean official store','해외 직배송':'Ships from abroad','해외 직구/확인 필요':'Overseas order (check shipping)','국내':'Korea','해외':'International'};
+
+let lang='ko';
+try{ const s=localStorage.getItem('gb_lang'); if(s==='en'||s==='ko') lang=s; }catch(e){}
+const T = () => L[lang];
+const lb = k => lang==='en' ? (LBL_EN[k]||k) : k;
+const trList = (s,sep) => lang==='en' ? s.split(sep).map(x=>TOK[x.trim()]||x.trim()).join(sep==='·'?' · ':', ') : s;
+const trOne = s => lang==='en' ? (TOK[s]||s) : s;
+function priceTxt(s){
+  if(lang!=='en') return s;
+  if(s.includes('상품별 상이')) return 'Varies by product';
+  let p=s.split('(')[0].replace(/의류\s*/,'').replace(/약\s*/,'approx. ');
+  p=p.replace(/(\d+(?:\.\d+)?)만/g,(m,n)=>'₩'+Math.round(parseFloat(n)*10000).toLocaleString('en-US'));
+  p=p.replace(/원대|원/g,'').replace(/전후부터/,' and up').replace(/부터/,' and up').replace(/대\+?/,m=>m.includes('+')?'+':'').replace(/~/g,'–');
+  return p.replace(/\s+/g,' ').trim();
+}
+const nm = b => lang==='en' ? b.en : b.ko;
+const desc = b => lang==='en' ? b.descEn : b.desc;
+
+const PRESETS = [
+  {f:['남성','머슬핏','컴프레션'],origin:['국내']},
+  {f:['펌프커버/헤비웨이트']},
+  {f:['스트렝스/싱글렛']},
+  {f:['여성','레깅스','스포츠브라']},
+  {f:['러닝/HYROX/크로스트레이닝']},
+  {f:['오버핏'],buy:['국내 공식몰']}
+];
+
+const byId = Object.fromEntries(BRANDS.map(b=>[b.id,b]));
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rankLabel = b => T().rank(b.rank2, false);
+
+/* Analytics hook: pushes to GA4/GTM dataLayer once the WordPress site loads a tag. */
+function track(event, params){
+  const p=Object.assign({lang},params||{});
+  try{ if(typeof window.gtag==='function'){ window.gtag('event', event, p); } else { (window.dataLayer=window.dataLayer||[]).push(Object.assign({event},p)); } }catch(e){}
+}
+
+/* ---------- state ---------- */
+const emptyState = () => ({f:[],origin:[],type:[],buy:[],q:'',sort:'score'});
+/* ---------- search ---------- */
+const norm = s => String(s??'').toLowerCase().replace(/[\s\-_.·\/,'’&()]/g,'');
+const HOT_Q = ['머슬핏','오버핏','컴프레션','싱글렛','레깅스','펌프커버','짐샤크','국내 공식몰'];
+const HOT_Q_EN = ['muscle fit','oversized','compression','singlet','leggings','pump cover','Gymshark','YoungLA'];
+function hayOf(b){
+  if(b._hay) return b._hay;
+  const en=(b.style+','+b.vibe+','+b.sport+','+(b.f||[]).join(',')).split(/[,·\/]/).map(x=>TOK[x.trim()]||'').join(' ');
+  return b._hay=norm([b.style,b.items,b.vibe,b.sport,b.type,b.buy,b.origin,(b.f||[]).join(' '),b.desc,b.descEn,en,b.price].join(' '));
+}
+function searchBrands(q){
+  const n=norm(q); if(!n) return [];
+  const out=[];
+  for(const b of BRANDS){
+    const ne=norm(b.en), nk=norm(b.ko); let sc=0;
+    if(ne===n||nk===n) sc=300; else if(ne.startsWith(n)||nk.startsWith(n)) sc=200; else if(ne.includes(n)||nk.includes(n)) sc=150;
+    else if(hayOf(b).includes(n)) sc=60;
+    if(sc) out.push({b,sc});
+  }
+  return out.sort((x,y)=>y.sc-x.sc||x.b.rank2-y.b.rank2).map(x=>({b:x.b,name:x.sc>=150}));
+}
+let S = emptyState();
+let finder = {f:[],origin:[]};
+let quiz = {step:0, a:[]};
+let cmp = [];
+try{ cmp = JSON.parse(localStorage.getItem('gb_cmp')||'[]').filter(id=>byId[id]).slice(0,4); }catch(e){ cmp=[]; }
+const saveCmp = () => { try{ localStorage.setItem('gb_cmp',JSON.stringify(cmp)); }catch(e){} };
+
+/* ---------- runtime capabilities (images, submissions) ---------- */
+let DB=null, ASSETS=null, USER=null, canEditFlag=false;
+let IMGS = {};            // brandId -> asset id
+let SUBS = null;          // submissions (only loaded for editors)
+let subDone = null;       // 'saved' | 'dm' after submit
+let subData = null;
+
+function match(b, st){
+  if(st.f && st.f.some(k=>!b.f.includes(k))) return false;
+  if(st.origin && st.origin.length && !st.origin.includes(b.origin)) return false;
+  if(st.type && st.type.length && !st.type.includes(b.type)) return false;
+  if(st.buy && st.buy.length && !st.buy.includes(b.buy)) return false;
+  if(st.q){ const q=norm(st.q); if(!(norm(b.en).includes(q)||norm(b.ko).includes(q)||hayOf(b).includes(q))) return false; }
+  return true;
+}
+function sorted(list, how){
+  const a=[...list];
+  if(how==='name') return a.sort((x,y)=>x.en.localeCompare(y.en));
+  if(how==='kr') return a.sort((x,y)=>(x.origin==='국내'?0:1)-(y.origin==='국내'?0:1)||x.rank2-y.rank2);
+  return a.sort((x,y)=>x.rank2-y.rank2);
+}
+
+function plates(score){
+  let h='<span class="plates" aria-hidden="true"><i class="bar"></i>';
+  for(let i=0;i<20;i++){ const ht=[18,18,16,16,14][i%5]; h+=`<i class="${i<score?'on':''}" style="height:${ht}px"></i>`; }
+  return h+'</span>';
+}
+function meter(b){ return `<span class="meter" title="${b.v2.total} / 100">${plates(Math.round(b.v2.total/5))}<span><b>${b.v2.total}</b>/100</span></span>`; }
+function breakdown(b){
+  const t=T(); const p=b.v2; const rows=[["focus",25],["range",20],["access",20],["info",10],["editor",5],["user",20]];
+  return `<div class="bd">${rows.map(([k,m])=>`<div class="bd-row"><span>${t.bd[k]}</span><i><b style="width:${Math.min(100,p[k]/m*100)}%"></b></i><em>${p[k]}<small>/${m}</small></em></div>`).join('')}</div>`;
+}
+function initials(b){ const w=b.en.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/); return (w.length>1?w[0][0]+w[1][0]:b.en.replace(/[^A-Za-z0-9]/g,'').slice(0,2)).toUpperCase(); }
+function thumb(b, cls='thumb'){
+  const bg=TYPE_COLOR[b.type]||'#2B2B29';
+  const src=IMGS[b.id]?'/_blob/'+IMGS[b.id]:(IMG_URLS[b.id]||'');
+  const img=src?`<img src="${esc(src)}" alt="${esc(b.en)}" loading="lazy" onerror="this.remove()">`:'';
+  return `<span class="${cls}" style="background:${bg}" aria-hidden="${img?'false':'true'}">${initials(b)}${img?`<span style="position:absolute;inset:0">${img}</span>`:''}</span>`;
+}
+
+function inCmp(id){ return cmp.includes(id); }
+function toggleCmp(id){
+  if(inCmp(id)) cmp=cmp.filter(x=>x!==id);
+  else { if(cmp.length>=4){ flash(T().cmpMax); return; } cmp.push(id); track('compare_add',{brand:byId[id].en}); }
+  saveCmp(); syncCmp();
+}
+function syncCmp(){
+  document.querySelectorAll('[data-cmp]').forEach(btn=>{ const on=inCmp(btn.dataset.cmp); btn.setAttribute('aria-pressed',on); btn.textContent=on?T().cmpOn:T().cmpAdd; });
+  const c=document.getElementById('navCnt'); c.textContent=cmp.length; c.hidden=!cmp.length;
+  const tray=document.getElementById('tray');
+  tray.hidden=!cmp.length||location.hash==='#compare';
+  document.getElementById('trayNames').innerHTML=`<b>${cmp.length}/4</b>&nbsp; `+cmp.map(id=>esc(nm(byId[id]))).join(' · ');
+}
+let flashT;
+function flash(msg){
+  let el=document.getElementById('flash');
+  el.textContent=msg; el.hidden=false; clearTimeout(flashT); flashT=setTimeout(()=>el.hidden=true,2600);
+}
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); flash(T().copied); }catch(e){ flash(T().copyFail); }
+}
+
+function card(b){
+  const fits=b.f.filter(k=>!['남성','여성'].includes(k)).slice(0,5);
+  return `<article class="card">
+    <div class="card-top">
+      <div class="card-id">${thumb(b)}<div><h3><a href="#b-${b.id}" data-track="brand_click" data-brand="${esc(b.en)}">${esc(b.en)}</a></h3><div class="ko">${esc(lang==='en'?b.ko:b.ko)}</div></div></div>
+      <span class="rank">${rankLabel(b)}</span>
+    </div>
+    <div class="meta"><span class="pill ${b.origin==='국내'?'kr':''}">${esc(lb(b.origin))}</span><span class="pill">${esc(lb(b.type))}</span><span class="pill">${esc(trOne(b.gender))}</span></div>
+    <p>${esc(desc(b))}</p>
+    ${fits.length?`<div class="tags">${fits.map(k=>`<span>${esc(lb(k))}</span>`).join('')}</div>`:''}
+    <div class="price">${esc(priceTxt(b.price))}</div>
+    <div class="card-foot">
+      ${meter(b)}
+      <button class="btn ghost sm" data-cmp="${b.id}" aria-pressed="false">${T().cmpAdd}</button>
+      <a class="btn sm" href="${esc(b.url)}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${T().official}</a>
+    </div>
+  </article>`;
+}
+
+function chipGroup(label, key, opts, st, cls='sfilter'){
+  return `<div class="fgroup"><span>${label}</span><div class="chips">${opts.map(o=>`<button class="chip ${cls}" data-k="${key}" data-v="${esc(o)}" aria-pressed="${(st[key]||[]).includes(o)}">${esc(lb(o))}</button>`).join('')}</div></div>`;
+}
+
+/* ---------- views ---------- */
+const FEATURED = ['hdex','borntowin','bysec','gymshark','youngla','under-armour'];
+const CATS = [{origin:['국내']},{origin:['해외']},{type:['짐웨어 전문','짐 스트리트']},{f:['여성','레깅스']}];
+function viewHome(){
+  const t=T(); const nKR=BRANDS.filter(b=>b.origin==='국내').length;
+  const n10=Math.floor(BRANDS.length/10)*10;
+  const kStore=BRANDS.filter(b=>b.buy==='국내 공식몰').length, oShip=BRANDS.filter(b=>b.buy==='해외 직배송').length;
+  const feat=FEATURED.map(id=>byId[id]).filter(Boolean);
+  return `
+  <section class="hero on-dark"><div class="wrap">
+    <div>
+      <div class="eyebrow">Gymwear brand index · Korea</div>
+      <h1>${t.heroT(n10)}</h1>
+      <p class="lede">${t.heroL}</p>
+      <form class="hsearch" id="hForm" role="search">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg>
+        <input id="hq" class="sinput" type="search" autocomplete="off" enterkeyhint="search" placeholder="${esc(t.sPh)}" aria-label="${esc(t.sPh)}">
+        <div class="sres drop" id="hres" hidden></div>
+      </form>
+      <div class="hot">${(lang==='en'?HOT_Q_EN:HOT_Q).slice(0,5).map(w=>`<button type="button" class="hotq" data-q="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+      <div class="cta-row">
+        <a class="btn inv lg" href="#brands" data-track="cta_browse" data-brand="hero">${t.browse}</a>
+        <a class="btn ghost-dark lg" href="#quiz" data-track="quiz_start_home">${t.quizShort}</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>${nKR}</b><span>${t.kr}</span></div>
+        <div class="stat"><b>${BRANDS.length-nKR}</b><span>${t.intl}</span></div>
+        <div class="stat"><b>${FILTERS.length}</b><span>${t.nf}</span></div>
+      </div>
+    </div>
+    <div class="finder">
+      <div class="finder-h"><h2>${t.finderH}</h2><button class="clear" id="finderReset" type="button">${t.reset}</button></div>
+      ${chipGroup(t.who,'f',['남성','여성'],finder,'ffilter')}
+      ${chipGroup(t.fit,'f',['머슬핏','오버핏','컴프레션'],finder,'ffilter')}
+      ${chipGroup(t.item,'f',['슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝'],finder,'ffilter')}
+      ${chipGroup(t.nat,'origin',['국내','해외'],finder,'ffilter')}
+      <div class="finder-go"><span class="count"><b id="finderN">0</b> ${t.brandsN}</span><button class="btn" id="finderGo" type="button">${t.seeBrands}</button></div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap">
+    <div class="sec-h"><div><h2 class="dsp">${t.catsH}</h2><p>${t.catsP}</p></div></div>
+    <div class="cats">${CATS.map((c,i)=>`<button class="cat" type="button" data-cat="${i}"><span class="n">${BRANDS.filter(b=>match(b,c)).length}</span><span class="dsp">${esc(t.cats[i][0])}</span><small>${esc(t.cats[i][1])}</small></button>`).join('')}</div>
+  </div></section>
+
+  <section class="band" style="padding-top:8px"><div class="wrap">
+    <div class="sec-h"><div><h2 class="dsp">${t.featH}</h2><p>${t.featP}</p></div><a class="link" href="#brands">${t.all(BRANDS.length)}</a></div>
+    <div class="grid">${feat.map(card).join('')}</div>
+  </div></section>
+
+  <section class="value on-dark"><div class="wrap">
+    <div><h2>${t.valH}</h2><p class="lede">${t.valP}</p></div>
+    <div class="vgrid">${t.val.map(v=>`<div class="vcell"><div class="eyebrow">${v[0]}</div><b>${esc(v[1])}</b><span>${esc(typeof v[2]==='function'?v[2](kStore,oShip):v[2])}</span></div>`).join('')}</div>
+  </div></section>
+
+  <section class="band"><div class="wrap">
+    <div class="sec-h"><div><h2 class="dsp">${t.presetsH}</h2><p>${t.presetsP}</p></div></div>
+    <div class="presets">${PRESETS.map((p,i)=>{const n=BRANDS.filter(b=>match(b,p)).length;return `<button class="preset" type="button" data-preset="${i}"><b>${esc(t.presets[i])}</b><small>${t.nBrands(n)}</small></button>`}).join('')}</div>
+  </div></section>
+
+  <section class="final on-dark"><div class="wrap">
+    <h2 class="dsp">${t.finalH}</h2>
+    <p>${t.finalP}</p>
+    <div class="cta-row" style="margin-top:0">
+      <a class="btn inv lg" href="#brands" data-track="cta_browse" data-brand="final">${t.browse}</a>
+      <a class="btn ghost-dark lg" href="#quiz" data-track="quiz_start_home">${t.quizShort}</a>
+    </div>
+  </div></section>`;
+}
+
+function viewBrands(){
+  const t=T();
+  return `
+  <div class="page-h"><div class="wrap">
+    <div class="eyebrow">Brands</div>
+    <h1 class="dsp" style="margin-top:8px">${t.brandsH}</h1>
+    <p>${t.brandsP}</p>
+  </div></div>
+  <div class="wrap layout">
+    <aside class="side">
+      <input class="search" id="q" type="search" enterkeyhint="search" placeholder="${esc(t.sPh)}" value="${esc(S.q)}" aria-label="${esc(t.sPh)}">
+      <details id="fDetails" open>
+        <summary><span>${t.filter}</span><span class="count" id="fSumN"></span></summary>
+        <div class="fbody">
+          ${chipGroup(t.gender,'f',['남성','여성'],S)}
+          ${chipGroup(t.origin,'origin',['국내','해외'],S)}
+          ${chipGroup(t.fit,'f',['머슬핏','오버핏','컴프레션'],S)}
+          ${chipGroup(t.items,'f',FILTERS.slice(5),S)}
+          ${chipGroup(t.type,'type',TYPES,S)}
+          ${chipGroup(t.buy,'buy',BUYS,S)}
+        </div>
+      </details>
+    </aside>
+    <div style="min-width:0">
+      <div class="toolbar">
+        <div class="active-f" id="activeF"></div>
+        <select id="sort" aria-label="sort">
+          <option value="score">${t.sScore}</option>
+          <option value="kr">${t.sKr}</option>
+          <option value="name">${t.sName}</option>
+        </select>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>`;
+}
+
+function renderGrid(){
+  const t=T();
+  const list=sorted(BRANDS.filter(b=>match(b,S)),S.sort);
+  const g=document.getElementById('grid'); if(!g) return;
+  g.innerHTML=list.length?list.map(card).join(''):`<div class="empty">${t.empty} <button class="clear" data-clearall>${t.clearAll}</button></div>`;
+  const all=[...S.f,...S.origin,...S.type,...S.buy];
+  document.getElementById('activeF').innerHTML=`<span class="count"><b>${list.length}</b> ${t.brandsN}</span>`+(all.length||S.q?` ${all.map(v=>`<button class="chip" aria-pressed="true" data-remove="${esc(v)}">${esc(lb(v))} ×</button>`).join('')}<button class="clear" data-clearall>${t.reset}</button>`:'');
+  const sn=document.getElementById('fSumN'); if(sn) sn.textContent=all.length?t.selected(all.length):'';
+  syncCmp();
+}
+
+function viewDetail(b){
+  const t=T();
+  const same=sorted(BRANDS.filter(x=>x.type===b.type&&x.id!==b.id),'score').slice(0,3);
+  const row=(k,v)=>v?`<dt>${k}</dt><dd>${v}</dd>`:'';
+  const has=!!IMGS[b.id];
+  const up=ASSETS&&DB?`<div class="uploader"><label class="btn ghost sm" for="imgIn" style="cursor:pointer">${has?t.chImg:t.upImg}</label><input id="imgIn" type="file" accept="image/png,image/jpeg,image/webp" data-brand="${b.id}">${has?`<button class="btn ghost sm" data-rmimg="${b.id}">${t.rmImg}</button>`:''}<span>${t.upNote}</span></div>`:'';
+  return `
+  <div class="wrap">
+    <div class="crumb"><a href="#brands">← BRANDS</a> &nbsp;/&nbsp; ${esc(lb(b.type))}</div>
+    <div class="d-head">
+      <div><h1 class="dsp">${esc(b.en)}</h1><div class="ko">${esc(b.ko)} · ${esc(lb(b.origin))} · ${rankLabel(b)}</div></div>
+      <div class="d-actions">
+        <button class="btn ghost" data-cmp="${b.id}" aria-pressed="false">${t.cmpAdd}</button>
+        <a class="btn" href="${esc(b.url)}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${t.officialGo}</a>
+      </div>
+    </div>
+    <div class="d-body">
+      <div style="min-width:0">
+        <p class="d-lede">${esc(desc(b))}</p>
+        <dl class="facts">
+          ${row(t.fType,esc(lb(b.type)))}
+          ${row(t.fSport,esc(trList(b.sport,'·')))}
+          ${row(t.fVibe,esc(trList(b.vibe,'·')))}
+          ${row(t.fStyle,esc(trList(b.style,',')))}
+          ${row(t.fItems,esc(b.items))}
+          ${row(t.fPrice,esc(priceTxt(b.price)))}
+          ${row(t.fFor,esc(trOne(b.gender)))}
+          ${row(t.fBuy,esc(lb(b.buy)))}
+          ${row(t.fUrl,`<a href="${esc(b.url)}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${esc(b.url.replace(/^https?:\/\//,''))}</a>`)}
+          ${b.ig && b.ig!=='확인 필요'?row('Instagram',esc(b.ig)):''}
+        </dl>
+      </div>
+      <div style="min-width:0">
+        ${thumb(b,'d-img')}
+        ${up}
+        <div class="panel">
+          <h2>${t.scoreH}</h2>
+          <div class="score-big"><b>${b.v2.total}</b><span>/ 100 · ${rankLabel(b)}</span></div>
+          ${breakdown(b)}
+          <p class="note">${t.scoreNote}</p>
+        </div>
+        <div class="panel">
+          <h2>${t.coverH}</h2>
+          <div class="fit-grid">${FILTERS.map(k=>`<div class="${b.f.includes(k)?'y':'n'}"><span class="dot"></span>${esc(lb(k))}</div>`).join('')}</div>
+        </div>
+        ${same.length?`<div class="panel"><h2>${t.sameH}</h2><div style="display:flex;flex-direction:column;gap:10px">${same.map(x=>`<a href="#b-${x.id}" style="display:flex;justify-content:space-between;gap:10px;text-decoration:none;align-items:center"><span><b style="font-family:var(--display);font-size:20px;text-transform:uppercase">${esc(x.en)}</b> <span class="ko" style="display:inline">${esc(x.ko)}</span></span><span class="rank">${x.v2.total}/100</span></a>`).join('')}</div></div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewCompare(){
+  const t=T(); const list=cmp.map(id=>byId[id]);
+  const head=`<div class="page-h"><div class="wrap"><div class="eyebrow">Compare</div><h1 class="dsp" style="margin-top:8px">${t.cmpH}</h1><p>${t.cmpP}</p></div></div>`;
+  if(!list.length) return head+`<div class="wrap" style="padding-block:28px 64px"><div class="empty">${t.cmpEmpty}<br><br><a class="btn" href="#brands">${t.goFind}</a></div></div>`;
+  const r=(label,fn)=>`<tr><th scope="row">${label}</th>${list.map(b=>`<td>${fn(b)}</td>`).join('')}</tr>`;
+  return head+`<div class="wrap" style="padding-bottom:64px">
+    <div class="cmp-wrap"><table class="cmp">
+      <thead><tr><th></th>${list.map(b=>`<th><div class="nm"><a href="#b-${b.id}" style="text-decoration:none">${esc(b.en)}</a></div><div class="ko">${esc(b.ko)}</div><button class="x" data-cmprm="${b.id}">${t.remove}</button></th>`).join('')}</tr></thead>
+      <tbody>
+        ${r(t.score,b=>meter(b))}
+        ${r(t.rankL,b=>rankLabel(b))}
+        ${r(t.origin,b=>esc(lb(b.origin)))}
+        ${r(t.fType,b=>esc(lb(b.type)))}
+        ${r(t.sport,b=>esc(trList(b.sport,'·')))}
+        ${r(t.fFor,b=>esc(trOne(b.gender)))}
+        ${r(t.fPrice,b=>esc(priceTxt(b.price)))}
+        ${r(t.fItems,b=>esc(b.items))}
+        ${FILTERS.map(k=>r(esc(lb(k)),b=>b.f.includes(k)?'<span class="yes">✓</span>':'<span class="no">—</span>')).join('')}
+        ${r(t.fBuy,b=>esc(lb(b.buy)))}
+        ${r('',b=>`<a class="btn sm" href="${esc(b.url)}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${t.official}</a>`)}
+      </tbody>
+    </table></div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="#brands">${t.more}</a><button class="btn ghost" id="cmpClear">${t.cmpClear}</button></div>
+  </div>`;
+}
+
+/* ---------- quiz ---------- */
+function quizScore(b,a){
+  const [g,sp,fit]=a; let s=0; const why=[]; const W=T().why;
+  if(g==='m'&&!b.f.includes('남성')) return null;
+  if(g==='w'&&!b.f.includes('여성')) return null;
+  if(g!=='a') why.push(W.gender);
+  if(sp==='bb'){ const hit=/보디빌딩|웨이트/.test(b.sport)||b.f.includes('펌프커버/헤비웨이트'); if(hit){s+=3;why.push(W.bb);} if(['짐웨어 전문','짐 스트리트'].includes(b.type)) s+=1; }
+  if(sp==='pl'){ if(b.f.includes('스트렝스/싱글렛')||b.type==='스트렝스 스포츠'){s+=5;why.push(W.pl);} else if(/웨이트리프팅|파워/.test(b.sport)) s+=2; }
+  if(sp==='run'){ if(b.f.includes('러닝/HYROX/크로스트레이닝')){s+=5;why.push(W.run);} else if(b.type==='퍼포먼스 트레이닝') s+=2; }
+  if(sp==='ath'){ if(b.type==='애슬레저'||b.f.includes('레깅스')){s+=3;why.push(W.ath);} if(/요가|필라테스/.test(b.sport)) s+=2; }
+  const fm={muscle:'머슬핏',over:'오버핏',comp:'컴프레션'}[fit];
+  if(fm && b.f.includes(fm)){ s+=3; why.push(W[fit]); }
+  if(b.origin==='국내'||b.buy==='국내 공식몰'){ s+=0.5; if(why.length<3) why.push(W.kr); }
+  s+=b.v2.total/50;
+  return {b,s,why:why.slice(0,3)};
+}
+function viewQuiz(){
+  const t=T(); const n=t.q.length;
+  if(quiz.step<n){
+    const q=t.q[quiz.step];
+    return `<div class="wrap quiz">
+      <div class="qstep">${t.qStep(quiz.step+1,n)}</div>
+      <div class="qbar">${t.q.map((_,i)=>`<i class="${i<=quiz.step?'on':''}"></i>`).join('')}</div>
+      <h1 class="qtitle">${esc(q.t)}</h1>
+      <div class="opts">${q.o.map(([v,l,s])=>`<button class="opt" data-ans="${v}"><b>${esc(l)}</b><small>${esc(s)}</small></button>`).join('')}</div>
+      ${quiz.step>0?`<button class="clear" id="qBack" style="margin-top:18px">${t.back}</button>`:''}
+    </div>`;
+  }
+  const res=BRANDS.map(b=>quizScore(b,quiz.a)).filter(Boolean).sort((x,y)=>y.s-x.s||x.b.en.localeCompare(y.b.en)).slice(0,5);
+  const names=res.map(r=>r.b.en);
+  const txt=t.shareTxt(names);
+  return `<div class="wrap quiz">
+    <div class="eyebrow">Result</div>
+    <h1 class="dsp" style="font-size:clamp(36px,6vw,56px);margin:8px 0 6px">${t.resH}</h1>
+    <p style="color:var(--muted);margin:0 0 18px">${t.resP}</p>
+    <div class="result">${res.map((r,i)=>`<div class="rrow"><span class="pos">${i+1}</span>${thumb(r.b)}<div style="min-width:0"><h3><a href="#b-${r.b.id}" data-track="quiz_result_click" data-brand="${esc(r.b.en)}">${esc(r.b.en)}</a></h3><div class="why">${esc(r.b.ko)} · ${r.why.map(esc).join(' · ')}</div></div><a class="btn sm" href="${esc(r.b.url)}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(r.b.en)}">${t.official}</a></div>`).join('')}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn ghost" id="qRetry">${t.retry}</button><button class="btn ghost" id="qAll">${t.seeAll}</button></div>
+    <div class="share"><b style="font-size:14px">${t.shareH}</b><pre id="shareTxt">${esc(txt)}</pre><button class="btn sm" id="qCopy">${t.copy}</button></div>
+  </div>`;
+}
+
+/* ---------- submit ---------- */
+function viewSubmit(){
+  const t=T();
+  let body;
+  if(subDone==='saved') body=`<div class="ok">${t.sent}</div><div style="margin-top:14px"><button class="btn ghost" id="subAgain">${t.submitLink.replace(' →','')}</button></div>`;
+  else if(subDone==='dm') body=`<div class="share" style="margin-top:0"><b>${t.dmH}</b><p style="margin:6px 0 0;color:var(--muted);font-size:14px">${t.dmP}</p><pre id="dmTxt">${esc(t.dmTxt(subData))}</pre><button class="btn sm" id="dmCopy">${t.copy}</button></div><div style="margin-top:14px"><button class="clear" id="subAgain">${t.back}</button></div>`;
+  else body=`<form class="form" id="subForm" novalidate>
+      <div class="field"><label for="s_name">${t.sName}</label><input id="s_name" maxlength="80" autocomplete="off"></div>
+      <div class="field"><label for="s_url">${t.sUrl} <span>${t.opt}</span></label><input id="s_url" maxlength="200" inputmode="url" autocomplete="off"></div>
+      <div class="field"><label for="s_why">${t.sWhy} <span>${t.opt}</span></label><textarea id="s_why" maxlength="600"></textarea></div>
+      <div class="field"><label for="s_by">${t.sBy} <span>${t.opt}</span></label><input id="s_by" maxlength="40" autocomplete="off"></div>
+      <div class="err" id="s_err" role="alert"></div>
+      <div><button class="btn" type="submit">${t.send}</button></div>
+    </form>`;
+  const subs = canEditFlag && SUBS ? `<div class="subs"><h2 style="font-size:16px;font-weight:700">${SUBS.length?t.subsH(SUBS.length):t.subsNone}</h2>${SUBS.map(s=>`<div class="sub"><b>${esc(s.name)}</b>${s.url?`<span>${esc(s.url)}</span>`:''}${s.why?`<span style="color:var(--muted)">${esc(s.why)}</span>`:''}<small>${esc(s.by||'')} ${esc((s.at||'').slice(0,10))}</small></div>`).join('')}</div>`:'';
+  return `<div class="page-h"><div class="wrap"><div class="eyebrow">Submit</div><h1 class="dsp" style="margin-top:8px">${t.subH}</h1><p>${t.subP}</p></div></div>
+  <div class="wrap" style="padding-block:24px 72px">${body}${subs}</div>`;
+}
+async function submitBrand(){
+  const t=T(); const g=id=>document.getElementById(id).value.trim();
+  const d={name:g('s_name'),url:g('s_url'),why:g('s_why'),by:g('s_by'),lang,at:new Date().toISOString()};
+  const err=document.getElementById('s_err');
+  if(!d.name){ err.textContent=t.needName; document.getElementById('s_name').focus(); return; }
+  const key=d.name.toLowerCase().replace(/[^a-z0-9가-힣]/g,'');
+  const dup=BRANDS.find(b=>b.en.toLowerCase().replace(/[^a-z0-9]/g,'')===key||b.ko.replace(/\s/g,'')===key);
+  if(dup){ err.innerHTML=`${esc(t.dup(dup.en+' / '+dup.ko))} → <a href="#b-${dup.id}">${esc(dup.en)}</a>`; return; }
+  subData=d;
+  if(DB){
+    try{ await DB.collection('submissions').add(d); subDone='saved'; track('brand_submit',{brand:d.name}); render(); return; }catch(e){ /* fall through to DM */ }
+  }
+  subDone='dm'; track('brand_submit_dm',{brand:d.name}); render();
+}
+
+function viewAbout(){
+  if(lang==='en') return `<div class="page-h"><div class="wrap"><div class="eyebrow">About</div><h1 class="dsp" style="margin-top:8px">Every lifter<br>starts here</h1></div></div>
+  <div class="wrap" style="padding-block:12px 72px"><div class="prose">
+    <h2 class="dsp">What GYM BASECAMP is</h2>
+    <p>A brand discovery platform that brings Korean and international gymwear brands together so you can find and compare them. We don't hold stock or sell clothes; we help you find the right brand and send you straight to its official store.</p>
+    <div class="flow"><span>Discover</span><i>→</i><span>Filter</span><i>→</i><span>Compare</span><i>→</i><span>Check products</span><i>→</i><span>Official store</span></div>
+    <p>You don't need to know brand names. Pick conditions like men's, muscle fit, compression and Korean brands, and the matches appear.</p>
+    <h2 class="dsp">How we rank</h2>
+    <table class="rubric"><thead><tr><th>Criterion</th><th>What we look at</th><th>Points</th></tr></thead><tbody>
+      <tr><td>Gym focus</td><td>Brand type, core training (bodybuilding, weights, powerlifting), gym items like muscle fit, compression, tanks, pump covers, singlets</td><td>25</td></tr>
+      <tr><td>Range</td><td>How many item categories and fits it covers, men's and women's lines</td><td>20</td></tr>
+      <tr><td>Buying in Korea</td><td>Korean official store 20 · ships from abroad 13 · overseas order 7</td><td>20</td></tr>
+      <tr><td>Verified info</td><td>Official store, stated price range, key products, Instagram confirmed</td><td>10</td></tr>
+      <tr><td>Editor rating</td><td>Our earlier hands-on review</td><td>5</td></tr>
+      <tr><td>User response</td><td>What visitors open, compare and click through to the store (last 28 days)</td><td>20</td></tr>
+    </tbody></table>
+    <p class="note">User response stays neutral (10 for every brand) until we have enough visits. Ties are broken by user response, gym focus, then verified info, so every brand has its own rank. We never fill in information we can't verify.</p>
+    <h2 class="dsp">Advertising policy</h2>
+    <p>Sponsored brands are never mixed into recommendations. Any paid placement is labeled Sponsored and shown separately.</p>
+    <h2 class="dsp">Suggest a brand</h2>
+    <p>Know a brand we should add? <a href="#submit">Send it here</a>. We check the official details first.</p>
+  </div></div>`;
+  return `<div class="page-h"><div class="wrap"><div class="eyebrow">About</div><h1 class="dsp" style="margin-top:8px">모든 운동인은<br>이곳으로부터 시작한다</h1></div></div>
+  <div class="wrap" style="padding-block:12px 72px"><div class="prose">
+    <h2 class="dsp">GYM BASECAMP는</h2>
+    <p>국내외 헬스웨어·짐웨어 브랜드를 한곳에 모아 발견하고 비교할 수 있게 만든 브랜드 탐색 플랫폼입니다. 직접 재고를 쌓아 파는 쇼핑몰이 아니라, 나에게 맞는 브랜드를 찾은 뒤 공식몰로 바로 이동하도록 돕습니다.</p>
+    <div class="flow"><span>브랜드 발견</span><i>→</i><span>필터</span><i>→</i><span>비교</span><i>→</i><span>제품 확인</span><i>→</i><span>공식몰 이동</span></div>
+    <p>브랜드 이름을 몰라도 괜찮습니다. 남성, 머슬핏, 컴프레션, 국내 브랜드처럼 원하는 조건만 고르면 맞는 브랜드가 나옵니다.</p>
+    <h2 class="dsp">순위는 이렇게 정합니다</h2>
+    <table class="rubric"><thead><tr><th>항목</th><th>보는 것</th><th>배점</th></tr></thead><tbody>
+      <tr><td>헬스 특화도</td><td>브랜드 유형, 핵심 운동(보디빌딩·웨이트·파워리프팅), 머슬핏·컴프레션·탱크·펌프커버·싱글렛 같은 헬스 아이템</td><td>25점</td></tr>
+      <tr><td>제품 구성</td><td>아이템 카테고리와 핏 종류가 얼마나 다양한지, 남성·여성 라인</td><td>20점</td></tr>
+      <tr><td>국내 구매 편의</td><td>국내 공식몰 20 · 해외 직배송 13 · 해외 직구 7</td><td>20점</td></tr>
+      <tr><td>정보 신뢰도</td><td>공식몰, 가격대 명시, 대표 상품, 인스타그램 확인 여부</td><td>10점</td></tr>
+      <tr><td>에디터 평가</td><td>기존 직접 검토 점수</td><td>5점</td></tr>
+      <tr><td>사용자 반응</td><td>방문자가 많이 보고, 비교하고, 공식몰로 넘어간 정도 (최근 28일)</td><td>20점</td></tr>
+    </tbody></table>
+    <p class="note">사용자 반응은 방문 데이터가 충분히 쌓이기 전까지 모든 브랜드에 같은 중간값(10점)을 줍니다. 동점이면 사용자 반응 → 헬스 특화도 → 정보 신뢰도 순으로 정해서 공동 순위가 없습니다. 확인할 수 없는 정보는 임의로 채우지 않습니다.</p>
+    <h2 class="dsp">광고 원칙</h2>
+    <p>광고나 스폰서 브랜드는 추천순에 섞지 않습니다. 광고가 붙는 경우 Sponsored 표시를 하고 일반 추천과 분리해서 보여줍니다.</p>
+    <h2 class="dsp">브랜드 제보</h2>
+    <p>소개하고 싶은 짐웨어 브랜드가 있다면 <a href="#submit">여기서 제보</a>해주세요. 공식 정보를 확인한 뒤 분류·필터·점수까지 반영해 추가합니다.</p>
+  </div></div>`;
+}
+
+/* ---------- router ---------- */
+const app=document.getElementById('app');
+function chrome(){
+  const t=T();
+  document.documentElement.lang=lang;
+  document.getElementById('langBtn').textContent=lang==='ko'?'EN':'KO';
+  document.getElementById('ftMotto').textContent=t.motto;
+  document.getElementById('ftNote').textContent=t.foot;
+  document.getElementById('ftSubmit').textContent=t.submitLink;
+  document.getElementById('trayClear').textContent=t.trayClear;
+  document.getElementById('trayGo').textContent=t.trayGo;
+}
+function render(){
+  chrome();
+  const h=(location.hash||'#home').slice(1);
+  let key='home';
+  if(h.startsWith('b-') && byId[h.slice(2)]){ app.innerHTML=viewDetail(byId[h.slice(2)]); key='brands'; }
+  else if(h==='brands'){ const open=document.getElementById('fDetails')?.open; app.innerHTML=viewBrands(); key='brands'; document.getElementById('sort').value=S.sort; const d=document.getElementById('fDetails'); if(open===false || (open===undefined && matchMedia('(max-width:900px)').matches)) d.open=false; renderGrid(); }
+  else if(h==='compare'){ app.innerHTML=viewCompare(); key='compare'; }
+  else if(h==='quiz'){ app.innerHTML=viewQuiz(); key='quiz'; }
+  else if(h==='submit'){ app.innerHTML=viewSubmit(); key='about'; }
+  else if(h==='about'){ app.innerHTML=viewAbout(); key='about'; }
+  else { app.innerHTML=viewHome(); updateFinder(); }
+  document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===key) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  syncCmp();
+}
+function route(){
+  const h=(location.hash||'#home').slice(1);
+  if(h.startsWith('b-')&&byId[h.slice(2)]) track('brand_view',{brand:byId[h.slice(2)].en});
+  if(h==='quiz'&&quiz.step===0) track('quiz_open');
+  if(h!=='submit'){ subDone=null; }
+  render(); window.scrollTo(0,0);
+}
+function updateFinder(){ const n=BRANDS.filter(b=>match(b,finder)).length; const el=document.getElementById('finderN'); if(el) el.textContent=n; }
+function go(state){ S=Object.assign(emptyState(),JSON.parse(JSON.stringify(state))); track('filter_use',{filters:[...S.f,...S.origin,...S.type,...S.buy].join('|')}); if(location.hash==='#brands') route(); else location.hash='brands'; }
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a,label'); if(!t) return;
+  if(t.dataset.track) track(t.dataset.track,{brand:t.dataset.brand});
+  if(t.id==='langBtn'){ lang=lang==='ko'?'en':'ko'; try{localStorage.setItem('gb_lang',lang);}catch(x){} track('lang_switch'); render(); return; }
+  if(t.dataset.cmp){ toggleCmp(t.dataset.cmp); return; }
+  if(t.dataset.cmprm){ cmp=cmp.filter(x=>x!==t.dataset.cmprm); saveCmp(); render(); return; }
+  if(t.id==='cmpClear'||t.id==='trayClear'){ cmp=[]; saveCmp(); if(location.hash==='#compare') render(); else syncCmp(); return; }
+  if(t.classList.contains('ffilter')){ const k=t.dataset.k,v=t.dataset.v; finder[k]=finder[k].includes(v)?finder[k].filter(x=>x!==v):[...finder[k],v]; t.setAttribute('aria-pressed',finder[k].includes(v)); updateFinder(); return; }
+  if(t.id==='finderReset'){ finder={f:[],origin:[]}; document.querySelectorAll('.ffilter').forEach(c=>c.setAttribute('aria-pressed','false')); updateFinder(); return; }
+  if(t.id==='finderGo'){ go(finder); return; }
+  if(t.dataset.preset){ go(PRESETS[+t.dataset.preset]); return; }
+  if(t.dataset.cat!==undefined && t.classList.contains('cat')){ track('category_click',{category:CATS[+t.dataset.cat].origin?.[0]||CATS[+t.dataset.cat].type?.[0]||'women'}); go(CATS[+t.dataset.cat]); return; }
+  if(t.classList.contains('sfilter')){ const k=t.dataset.k,v=t.dataset.v; S[k]=S[k].includes(v)?S[k].filter(x=>x!==v):[...S[k],v]; t.setAttribute('aria-pressed',S[k].includes(v)); track('filter_use',{filter:v}); renderGrid(); return; }
+  if(t.dataset.remove){ const v=t.dataset.remove; ['f','origin','type','buy'].forEach(k=>S[k]=S[k].filter(x=>x!==v)); document.querySelectorAll(`.sfilter[data-v="${CSS.escape(v)}"]`).forEach(c=>c.setAttribute('aria-pressed','false')); renderGrid(); return; }
+  if(t.hasAttribute('data-clearall')){ const sort=S.sort; S=emptyState(); S.sort=sort; render(); return; }
+  if(t.dataset.ans){ quiz.a[quiz.step]=t.dataset.ans; quiz.step++; if(quiz.step===3) track('quiz_complete',{answers:quiz.a.join('|')}); render(); window.scrollTo(0,0); return; }
+  if(t.id==='qBack'){ quiz.step=Math.max(0,quiz.step-1); render(); return; }
+  if(t.id==='qRetry'){ quiz={step:0,a:[]}; render(); window.scrollTo(0,0); return; }
+  if(t.id==='qAll'){ const [g,,fit]=quiz.a; const f=[]; if(g==='m')f.push('남성'); if(g==='w')f.push('여성'); const fm={muscle:'머슬핏',over:'오버핏',comp:'컴프레션'}[fit]; if(fm)f.push(fm); const sp={pl:'스트렝스/싱글렛',run:'러닝/HYROX/크로스트레이닝'}[quiz.a[1]]; if(sp)f.push(sp); go({f}); return; }
+  if(t.id==='qCopy'){ copyText(document.getElementById('shareTxt').textContent); track('quiz_share_copy'); return; }
+  if(t.id==='dmCopy'){ copyText(document.getElementById('dmTxt').textContent); return; }
+  if(t.id==='subAgain'){ subDone=null; render(); return; }
+  if(t.dataset.rmimg){ removeImg(t.dataset.rmimg); return; }
+});
+document.addEventListener('submit',e=>{ if(e.target.id==='subForm'){ e.preventDefault(); submitBrand(); } });
+document.addEventListener('input',e=>{ if(e.target.id==='q'){ S.q=e.target.value.trim(); renderGrid(); logSearch(S.q,BRANDS.filter(b=>match(b,S)).length); } });
+document.addEventListener('change',e=>{
+  if(e.target.id==='sort'){ S.sort=e.target.value; renderGrid(); }
+  if(e.target.id==='imgIn' && e.target.files[0]) uploadImg(e.target.dataset.brand, e.target.files[0]);
+});
+function sresHTML(q){
+  const t=T(), n=norm(q);
+  if(!n){ return `<div class="sres-h">${t.sHot}</div><div class="hot in">${(lang==='en'?HOT_Q_EN:HOT_Q).map(w=>`<button type="button" class="hotq" data-q="${esc(w)}">${esc(w)}</button>`).join('')}</div>`; }
+  const r=searchBrands(q);
+  if(!r.length) return `<p class="snone">${esc(t.sNone(q))}</p>`;
+  return r.slice(0,7).map(({b,name})=>`<a class="srow" href="#b-${b.id}" data-sres="${esc(b.en)}">${thumb(b,'thumb sm')}<span class="sname"><b>${esc(b.en)}</b><small>${esc(b.ko)} · ${esc(trOne(b.origin))} · ${esc(trOne(b.type))}</small></span><span class="stag">${name?t.sTagN:t.sTagM}</span><span class="srk">${T().rank(b.rank2,false)}</span></a>`).join('')
+    + `<button type="button" class="sall" data-sall="${esc(q)}">${t.sAll(r.length)}</button>`;
+}
+let sTimer=null;
+function logSearch(q,n){ clearTimeout(sTimer); if(norm(q).length<2) return; sTimer=setTimeout(()=>track('search',{search_term:q,results:n}),900); }
+function searchAll(q){ closeSearch(); const st=emptyState(); st.q=q.trim(); track('search_submit',{search_term:st.q,results:searchBrands(st.q).length}); go(st); }
+function openSearch(q){ const o=document.getElementById('sOver'), i=document.getElementById('gq'); i.placeholder=T().sPh; i.value=q||''; document.getElementById('gres').innerHTML=sresHTML(i.value); o.hidden=false; document.documentElement.style.overflow='hidden'; setTimeout(()=>i.focus(),20); track('search_open'); }
+function closeSearch(){ const o=document.getElementById('sOver'); if(o.hidden) return; o.hidden=true; document.documentElement.style.overflow=''; }
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a,.sover'); if(!t) { const h=document.getElementById('hres'); if(h && !e.target.closest('#hForm')) h.hidden=true; return; }
+  if(t.id==='sOpen'){ openSearch(''); return; }
+  if(t.id==='sClose' || t.id==='sOver' && e.target===t){ closeSearch(); return; }
+  if(t.dataset.q!==undefined){ const box=t.closest('#sOver'); if(box){ const i=document.getElementById('gq'); i.value=t.dataset.q; document.getElementById('gres').innerHTML=sresHTML(i.value); i.focus(); } else searchAll(t.dataset.q); return; }
+  if(t.dataset.sall!==undefined){ searchAll(t.dataset.sall); return; }
+  if(t.dataset.sres){ track('search_result_click',{brand:t.dataset.sres}); closeSearch(); return; }
+  const h=document.getElementById('hres'); if(h && !e.target.closest('#hForm')) h.hidden=true;
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='gq'){ const v=e.target.value; document.getElementById('gres').innerHTML=sresHTML(v); logSearch(v,searchBrands(v).length); }
+  if(e.target.id==='hq'){ const v=e.target.value, h=document.getElementById('hres'); h.innerHTML=sresHTML(v); h.hidden=!norm(v); logSearch(v,searchBrands(v).length); }
+});
+document.addEventListener('submit',e=>{ if(e.target.id==='hForm'){ e.preventDefault(); const v=document.getElementById('hq').value; if(norm(v)) searchAll(v); } });
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ closeSearch(); const h=document.getElementById('hres'); if(h) h.hidden=true; }
+  if(e.key==='Enter' && e.target.id==='gq'){ e.preventDefault(); if(norm(e.target.value)) searchAll(e.target.value); }
+  if(e.key==='/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||'')){ e.preventDefault(); openSearch(''); }
+});
+document.addEventListener('focusin',e=>{ if(e.target.id==='hq'){ const h=document.getElementById('hres'); if(norm(e.target.value)){ h.innerHTML=sresHTML(e.target.value); h.hidden=false; } } });
+window.addEventListener('hashchange',()=>closeSearch());
+window.addEventListener('hashchange',route);
+route();
+
+/* ---------- images & submissions (light up when the viewer supports them) ---------- */
+async function uploadImg(id, file){
+  const t=T(); flash(t.uploading);
+  try{
+    const r=await ASSETS.upload(file);
+    const old=IMGS[id];
+    await DB.doc('brandimg/'+id).set({asset:r.id, at:new Date().toISOString()});
+    IMGS={...IMGS,[id]:r.id};
+    if(old) ASSETS.delete(old).catch(()=>{});
+    render();
+  }catch(e){ flash(t.upFail); }
+}
+async function removeImg(id){
+  const old=IMGS[id]; if(!old) return;
+  try{ await DB.doc('brandimg/'+id).delete(); const n={...IMGS}; delete n[id]; IMGS=n; ASSETS.delete(old).catch(()=>{}); render(); }catch(e){ flash(T().upFail); }
+}
+(async()=>{
+  if(!window.claude?.use) return;
+  try{ DB=await window.claude.use('db'); }catch(e){ DB=null; }
+  try{ USER=await window.claude.use('user'); }catch(e){ USER=null; }
+  try{ ASSETS=await window.claude.use('assets'); }catch(e){ ASSETS=null; }
+  try{ canEditFlag = USER ? !!(await USER.canEdit()) : false; }catch(e){ canEditFlag=false; }
+  if(!DB) return;
+  DB.collection('brandimg').onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>{ const v=d.data(); if(v&&typeof v.asset==='string'&&/^[0-9a-f]{32}$/.test(v.asset)) m[d.id]=v.asset; });
+    if(JSON.stringify(m)!==JSON.stringify(IMGS)){ IMGS=m; const a=document.activeElement; if(!(a&&a.id==='q')) render(); else renderGrid(); }
+  },()=>{});
+  if(canEditFlag){
+    DB.collection('submissions').orderBy('at','desc').limit(200).onSnapshot(snap=>{
+      SUBS=snap.docs.map(d=>d.data()); if(location.hash==='#submit' && !document.getElementById('subForm')?.contains(document.activeElement)) render();
+    },()=>{});
+  }
+  if(ASSETS && /^#b-/.test(location.hash)) render();
+})();
+</script>
