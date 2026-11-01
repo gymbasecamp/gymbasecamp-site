@@ -14,6 +14,15 @@ def cov(r):
             if k in F and v in LV:
                 out[k] = LV[v]
     return out
+def shops(r):
+    # 국내 구매처: '코오롱몰(공식 판매처)|https://...;KREAM(리셀)|https://...'
+    out = []
+    for part in (r.get('국내 구매처') or '').split(';'):
+        if '|' in part:
+            n, u = [x.strip() for x in part.split('|', 1)]
+            if n and u.startswith('https://'):
+                out.append([n, u])
+    return out
 rows = list(csv.DictReader(open(sys.argv[1], encoding='utf-8')))
 out = []
 for r in rows:
@@ -25,7 +34,7 @@ for r in rows:
     out.append(dict(id=slug, en=en, ko=ko, origin=r['국내/해외'], url=r['공식몰'], gender=r['남성/여성'],
         style=r['주요 스타일'], price=r['가격대'], items=r['대표 상품'], ig=r['인스타그램'], desc=r['특징'],
         cat=r.get('대표 카테고리') or '헬스·보디빌딩', score=int(float(r['현재 점수 (20)'] or 0)), rank=int(float(r['현재 순위'] or 99)), type=r['브랜드 유형'],
-        sport=r['핵심 운동'], vibe=r['스타일 성향'], group=r['사이트 그룹'], buy=r['구매 방식'],
+        sport=r['핵심 운동'], vibe=r['스타일 성향'], group=r['사이트 그룹'], buy=r['구매 방식'], shops=shops(r),
         f=[k for k in F if r.get(k) == 'Y'], cov=cov(r)))
 json.dump(out, open(os.path.join(D, 'data/brands.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 print(len(out), 'brands written')
