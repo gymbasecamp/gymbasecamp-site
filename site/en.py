@@ -213,6 +213,8 @@ DESC = {
 "vanquish-fitness":"UK fitness brand making active streetwear plus muscle-fit and compression pieces for in and out of the gym.",
 "volante":"Korean athleisure and training brand centered on high-quality compression wear for men and women.",
 "alo":"LA yoga and athleisure brand. The men's line centers on performance shorts, tanks and joggers. A six-floor flagship in Dosan Park, Seoul has been reported.",
+"on":"Swiss running brand. Opened its first Korean stores at The Hyundai Seoul and Lotte World Mall in November 2025, selling shoes and apparel across running and training.",
+"decathlon":"French multisport brand. Its KIPRUN running line covers beginner to high-performance shoes plus singlets and technical apparel.",
 "youngla":"LA lifestyle and gymwear brand with bodybuilding and compression lines and collabs such as Gold's Gym and UFC.",
 "nobull":"Global sports brand with a broad range of training and functional performance products.",
 "ten-thousand":"Focused on men's performance trainingwear, organized by Training, Running, Lifting and HYROX.",
