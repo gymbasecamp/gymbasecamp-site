@@ -30,7 +30,7 @@ h1,h2,h3{text-wrap:balance;margin:0;padding:0;color:inherit;font-family:inherit;
 .top .wrap{display:flex;align-items:center;gap:14px;padding-block:12px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:10px;margin-right:auto;color:var(--on-dark)}
 .logo:hover{color:var(--on-dark)}
-.logo-mark{width:28px;height:28px;flex:none}
+.logo-img{display:block;height:21px;width:auto;max-width:52vw;object-fit:contain;flex:none}
 .logo b{font-family:var(--display);font-weight:900;font-size:23px;letter-spacing:.04em;line-height:1}
 .nav{display:flex;gap:2px;flex-wrap:wrap}
 .nav a{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.08em;padding:6px 9px;color:var(--on-dark-muted)}
@@ -330,7 +330,7 @@ footer.gbfoot a{color:var(--on-dark);font-weight:600}
   .nav::-webkit-scrollbar{display:none}
   .nav a{font-size:15px;padding:6px 8px;white-space:nowrap}
   .top .wrap{padding-block:10px 4px}
-  .logo b{font-size:20px}
+  .logo-img{height:17px}
   .top .wrap{gap:8px}
   .cat{padding:18px 12px 20px 12px}
   .cat .n{font-size:42px}
