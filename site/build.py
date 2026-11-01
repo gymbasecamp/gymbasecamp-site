@@ -67,6 +67,13 @@ rank_js = open(P('rank_v2.js'), encoding='utf-8').read().split('if(typeof module
 react_path = P('data/react.json')
 REACT = json.load(open(react_path, encoding='utf-8')) if os.path.exists(react_path) else {}
 app = app.replace('/*__RANK_V2__*/', rank_js).replace('__REACT__', safe(REACT))
+import datetime as _dt
+_hp = P('data/rank_history.json')
+_H = json.load(open(_hp, encoding='utf-8')) if os.path.exists(_hp) else {}
+_t = (_dt.datetime.now(_dt.timezone.utc) + _dt.timedelta(hours=9)).strftime('%Y-%m-%d')
+_ds = sorted(d for d in _H if d < _t)
+PREV = {'d': _ds[-1], 'r': {k: v[1:3] for k, v in _H[_ds[-1]].items()}} if _ds else {'d': '', 'r': {}}
+app = app.replace('__PREV__', safe(PREV))
 app = app.replace('__DATA__', safe(B)).replace('__TOK__', safe(ns['TOK']))
 
 FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">'
