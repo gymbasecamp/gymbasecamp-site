@@ -4,6 +4,16 @@ Only rows with 사이트 공개 == '공개' are published."""
 import csv, json, re, sys, os
 D = os.path.dirname(os.path.abspath(__file__))
 F = ['남성','여성','머슬핏','오버핏','컴프레션','슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','아우터','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝']
+LV = {'주력':'M','많음':'H','일부':'L','없음':'X'}
+def cov(r):
+    # 커버리지 column: '남성=주력;오버핏=많음;레깅스=없음' (공식몰 카테고리별 상품 수 기준). Missing -> {}
+    out = {}
+    for part in (r.get('커버리지') or '').split(';'):
+        if '=' in part:
+            k, v = [x.strip() for x in part.split('=', 1)]
+            if k in F and v in LV:
+                out[k] = LV[v]
+    return out
 rows = list(csv.DictReader(open(sys.argv[1], encoding='utf-8')))
 out = []
 for r in rows:
@@ -16,6 +26,6 @@ for r in rows:
         style=r['주요 스타일'], price=r['가격대'], items=r['대표 상품'], ig=r['인스타그램'], desc=r['특징'],
         score=int(float(r['현재 점수 (20)'] or 0)), rank=int(float(r['현재 순위'] or 99)), type=r['브랜드 유형'],
         sport=r['핵심 운동'], vibe=r['스타일 성향'], group=r['사이트 그룹'], buy=r['구매 방식'],
-        f=[k for k in F if r.get(k) == 'Y']))
+        f=[k for k in F if r.get(k) == 'Y'], cov=cov(r)))
 json.dump(out, open(os.path.join(D, 'data/brands.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 print(len(out), 'brands written')
