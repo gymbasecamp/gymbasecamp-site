@@ -1,4 +1,13 @@
 TOK = {
+"헤비웨이트 티":"heavyweight tees",
+"캡":"caps",
+"오버핏 후드":"oversized hoodies",
+"오버핏 티셔츠":"oversized tees",
+"아메리칸":"American",
+"럭비저지":"rugby jersey",
+"헬스용품":"gym gear",
+"반바지":"shorts",
+"럭비 저지":"rugby jerseys",
 "트레이닝 팬츠":"training pants",
 "헬스 슬리브리스":"gym sleeveless",
 "트랙 팬츠":"track pants",
@@ -236,4 +245,8 @@ DESC = {
 "barbellworks":"Korean brand since 2024 selling barbell and gorilla graphic tank tops, Bermuda and training pants, heavyweight sweats and a gym duffel on Musinsa.",
 "retromuscle":"Vintage and retro apparel inspired by 80s golden-era bodybuilding, with pump covers, tank tops, tracksuits and a women's collection.",
 "elitefts":"Strength brand offering training equipment, bands, gear and education since 1998, also selling tees, tanks, compression, shorts, competition singlets and a women's line.",
+"gacksung":"Korean brand under the slogan 'awaken to a stronger you', selling functional gymwear alongside lifting supports and straps, with men's and women's apparel sections.",
+"powerhouse-gym":"Powerhouse Gym gymwear store run by Korean company Powerhouse Company, with ORIGINAL, AMERICAN, DIRTY CLUB and TRIBAL lines plus hoodies, women's and gear sections.",
+"tuffwraps":"Florida-based lifting brand selling wrist wraps, belts, straps and sleeves alongside men's and women's pump covers, oversized tees, hoodies and tanks.",
+"represent-247":"The gym and running line from fashion label Represent, built on moisture-wicking stretch fabrics and a slim raglan fit, with stores in London, Manchester, LA and Bondi.",
 }
