@@ -246,11 +246,16 @@ function breakdown(b){
   return `<div class="bd">${rows.map(([k,m])=>`<div class="bd-row"><span>${t.bd[k]}</span><i><b style="width:${Math.min(100,p[k]/m*100)}%"></b></i><em>${p[k]}<small>/${m}</small></em></div>`).join('')}</div>`;
 }
 function initials(b){ const w=b.en.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/); return (w.length>1?w[0][0]+w[1][0]:b.en.replace(/[^A-Za-z0-9]/g,'').slice(0,2)).toUpperCase(); }
+const NOLOGO=/(^|\.)(musinsa\.com|kolonmall\.com|29cm\.co\.kr|ssg\.com|wconcept\.co\.kr|kream\.co\.kr|coupang\.com|naver\.com)$/;
+function logoDomain(b){ try{ const d=new URL(b.url).hostname.replace(/^www\./,''); return NOLOGO.test(d)?'':d; }catch(e){ return ''; } }
+function igLinks(s){ const hs=(s||'').match(/@[A-Za-z0-9._]+/g)||[]; return hs.map(x=>`<a href="https://www.instagram.com/${esc(x.slice(1))}/" target="_blank" rel="noopener" data-track="ig_click" data-brand="">${esc(x)} ↗</a>`).join(' '); }
 function thumb(b, cls='thumb'){
   const bg=TYPE_COLOR[b.type]||'#2B2B29';
   const src=IMGS[b.id]?'/_blob/'+IMGS[b.id]:(IMG_URLS[b.id]||'');
   const img=src?`<img src="${esc(src)}" alt="${esc(b.en)}" loading="lazy" onerror="this.remove()">`:'';
-  return `<span class="${cls}" style="background:${bg}" aria-hidden="${img?'false':'true'}">${initials(b)}${img?`<span style="position:absolute;inset:0">${img}</span>`:''}</span>`;
+  const ld=!img?logoDomain(b):'';
+  const logo=ld?`<span class="blogo"><img src="https://www.google.com/s2/favicons?domain=${esc(ld)}&sz=128" alt="${esc(b.en)} logo" loading="lazy" referrerpolicy="no-referrer" onload="if(this.naturalWidth<48)this.parentNode.remove()" onerror="this.parentNode.remove()"></span>`:'';
+  return `<span class="${cls}" style="background:${bg}" aria-hidden="${img||logo?'false':'true'}">${initials(b)}${img?`<span style="position:absolute;inset:0">${img}</span>`:''}${logo}</span>`;
 }
 
 function inCmp(id){ return cmp.includes(id); }
@@ -448,7 +453,7 @@ function viewDetail(b){
           ${row(t.fBuy,esc(lb(b.buy)))}
           ${(b.shops&&b.shops.length)?row(t.fShops,b.shops.map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener nofollow" data-track="shop_click" data-brand="${esc(b.en)}">${esc(n)} ↗</a>`).join('<br>')):''}
           ${row(t.fUrl,`<a href="${esc(b.url)}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${esc(b.url.replace(/^https?:\/\//,''))}</a>`)}
-          ${b.ig && b.ig!=='확인 필요'?row('Instagram',esc(b.ig)):''}
+          ${igLinks(b.ig)?row('Instagram',igLinks(b.ig).replace(/data-brand=""/g,`data-brand="${esc(b.en)}"`)):''}
         </dl>
       </div>
       <div style="min-width:0">

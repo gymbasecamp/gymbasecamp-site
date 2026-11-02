@@ -370,3 +370,7 @@ footer.gbfoot a{color:var(--on-dark);font-weight:600}
 .mv.up{color:#1a7f37}
 .mv.dn{color:#b42318}
 .mv.new{background:var(--ink);color:#fff;border-radius:3px;padding:0 4px}
+
+.blogo{position:absolute;inset:0;display:grid;place-items:center;background:#fff}
+.blogo img{width:62%!important;height:62%!important;object-fit:contain!important}
+.d-img .blogo img{width:min(128px,40%)!important;height:auto!important;aspect-ratio:1}
