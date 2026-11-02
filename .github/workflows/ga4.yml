@@ -1,0 +1,33 @@
+name: GA4 daily pull
+on:
+  schedule:
+    - cron: '7 22 * * *'   # 07:07 KST, before the morning data tasks
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    if: ${{ vars.GA4_PROPERTY_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: pip install google-auth requests
+      - name: Pull GA4
+        env:
+          GA4_SA_JSON: ${{ secrets.GA4_SA_JSON }}
+          GA4_PROPERTY_ID: ${{ vars.GA4_PROPERTY_ID }}
+        run: |
+          cd site
+          python3 -I csv2json.py data/brands.csv
+          python3 ga4_fetch.py
+          sh build_all.sh
+      - name: Commit
+        run: |
+          git config user.name "gymbasecamp-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add site/data/ga_daily.json site/data/react.json dist/gb.js
+          git diff --cached --quiet || (git commit -m "GA4 데이터 갱신 $(date -u +%F)" && git push)
