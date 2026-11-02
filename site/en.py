@@ -218,6 +218,8 @@ DESC = {
 "venum":"French combat-sports brand from Paris offering MMA, boxing, Muay Thai and BJJ fightwear plus training apparel, including the UFC by Venum line.",
 "2xu":"Melbourne-founded compression sportswear brand (2005) focused on compression gear for running, triathlon and training.",
 "asics":"Japanese running brand. ASICS Korea runs an official online store selling running shoes and running apparel such as tanks, shorts and jackets.",
+"gymreapers":"Lifting gear brand founded in 2014, selling knee sleeves, wraps and belts alongside tees, tanks, singlets, shorts and joggers plus a women's line.",
+"gym-generation":"Old-school bodybuilding style made modern: pump covers, tank tops, stringers, gym pants and women's tops and leggings.",
 "youngla":"LA lifestyle and gymwear brand with bodybuilding and compression lines and collabs such as Gold's Gym and UFC.",
 "nobull":"Global sports brand with a broad range of training and functional performance products.",
 "ten-thousand":"Focused on men's performance trainingwear, organized by Training, Running, Lifting and HYROX.",
