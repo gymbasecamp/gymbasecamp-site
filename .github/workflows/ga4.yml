@@ -8,7 +8,6 @@ permissions:
 jobs:
   pull:
     runs-on: ubuntu-latest
-    if: ${{ vars.GA4_PROPERTY_ID != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -19,8 +18,9 @@ jobs:
       - name: Pull GA4
         env:
           GA4_SA_JSON: ${{ secrets.GA4_SA_JSON }}
-          GA4_PROPERTY_ID: ${{ vars.GA4_PROPERTY_ID }}
+          GA4_PROPERTY_ID: '560548034'
         run: |
+          if [ -z "$GA4_SA_JSON" ]; then echo 'GA4_SA_JSON secret not set yet - skip'; exit 0; fi
           cd site
           python3 -I csv2json.py data/brands.csv
           python3 ga4_fetch.py
