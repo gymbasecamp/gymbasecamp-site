@@ -29,5 +29,5 @@ jobs:
         run: |
           git config user.name "gymbasecamp-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add site/data/ga_daily.json site/data/react.json dist/gb.js
+          git add -A site/data dist
           git diff --cached --quiet || (git commit -m "GA4 데이터 갱신 $(date -u +%F)" && git push)
