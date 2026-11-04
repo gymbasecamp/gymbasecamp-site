@@ -1,1 +1,50 @@
-{}
+{
+"asics": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 2
+},
+"battract": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 1
+},
+"borntowin": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
+},
+"bysec": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 1
+},
+"carmid": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
+},
+"darc-sport": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
+},
+"muscolo": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 3
+},
+"overwhelm": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 1
+}
+}
