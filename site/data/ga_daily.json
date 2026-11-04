@@ -5,21 +5,21 @@
    "brand_view": 1,
    "click": 1,
    "filter_use": 1,
-   "first_visit": 1,
+   "first_visit": 2,
    "form_start": 1,
    "form_submit": 1,
    "official_click": 1,
-   "page_view": 3,
-   "scroll": 3,
+   "page_view": 4,
+   "scroll": 4,
    "search": 1,
    "search_submit": 1,
-   "session_start": 2,
+   "session_start": 3,
    "user_engagement": 1
   },
-  "sessions": 2,
+  "sessions": 3,
   "sources": {
    "(direct)": 1,
-   "instagram": 1
+   "instagram": 2
   },
   "top_brands_28d": [
    [
@@ -63,6 +63,6 @@
     1
    ]
   ],
-  "users": 2
+  "users": 3
  }
 }
