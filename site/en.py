@@ -219,6 +219,7 @@ DESC = {
 "on":"Swiss running brand. Opened its first Korean stores at The Hyundai Seoul and Lotte World Mall in November 2025, selling shoes and apparel across running and training.",
 "decathlon":"French multisport brand. Its KIPRUN running line covers beginner to high-performance shoes plus singlets and technical apparel.",
 "black-combat":"Official apparel of Korean MMA promotion Black Combat, with fight trunks, performance tights and track jerseys plus a casual Peace line.",
+"wannabezfit":"Korean women's fitness-wear brand (\"Beyond Fitness Wear\") focused on shaping leggings, fitness tops and bra tops for gym, pilates and yoga.",
 "venum":"French combat-sports brand from Paris offering MMA, boxing, Muay Thai and BJJ fightwear plus training apparel, including the UFC by Venum line.",
 "2xu":"Melbourne-founded compression sportswear brand (2005) focused on compression gear for running, triathlon and training.",
 "asics":"Japanese running brand. ASICS Korea runs an official online store selling running shoes and running apparel such as tanks, shorts and jackets.",
