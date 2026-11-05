@@ -19,9 +19,9 @@
 },
 "bysec": {
 "compare": 0,
-"official": 0,
+"official": 1,
 "quiz": 0,
-"view": 1
+"view": 2
 },
 "carmid": {
 "compare": 0,
@@ -37,9 +37,9 @@
 },
 "muscolo": {
 "compare": 0,
-"official": 1,
+"official": 2,
 "quiz": 0,
-"view": 3
+"view": 4
 },
 "overwhelm": {
 "compare": 0,
