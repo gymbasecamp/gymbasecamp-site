@@ -178,6 +178,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"lululemon":"Canadian yoga and athleisure brand with leggings, men's training shorts and running gear; Korean online store and stores.",
+"puma":"German all-round sports brand with running and training apparel sold via its Korean official store.",
+"compressport":"Swiss compression apparel brand for running, trail and triathlon racing.",
 "hdex":"Korean activewear brand with a strong weight-training and gymwear identity.",
 "carmid":"Presents itself as a premium gymwear and muscle-fit brand built around weight training.",
 "brunk":"Bodybuilding-leaning gymwear brand with 'BIG MUSCLE BIG MIND / FOR WORKOUTS' up front.",
