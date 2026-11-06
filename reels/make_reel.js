@@ -7,7 +7,7 @@
 const {chromium}=require('playwright');const fs=require('fs');const path=require('path');
 const ep=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));const OUT=process.argv[3];fs.mkdirSync(OUT+'/png',{recursive:true});
 const logo='data:image/png;base64,'+fs.readFileSync(path.join(__dirname,'logo.png')).toString('base64');
-const RED='#E0392F';
+const RED='#E0392F';const LOGO=process.env.LOGO==='1';
 // 틱톡/인스타 안전영역: 위 200px, 아래 520px, 오른쪽 150px는 UI에 가려짐 → 글자는 x 80~930, y 200~1400
 const css=`*{margin:0;box-sizing:border-box}body{width:1080px;height:1920px;background:#0E0E0E;color:#F2F1EE;font-family:'Inter Display','Noto Sans CJK KR',sans-serif;overflow:hidden;position:relative}
 .ko{font-family:'Noto Sans CJK KR'}.red{color:${RED}}
@@ -41,12 +41,13 @@ ep.items.forEach((b,i)=>{
  const w=Math.max(4,Math.round((b.s-40)/50*100));
  const nm=b.en.length>12?96:b.en.length>9?118:146;
  S['b'+i]=page(`${head}<div style="position:absolute;top:330px;left:80px;right:150px">
- <div style="display:flex;align-items:baseline;gap:18px"><span class="red ko" style="font-weight:900;font-size:${big.length>2?72:170}px;line-height:.95;letter-spacing:-.03em">${big}</span><span class="ko" style="font-weight:800;font-size:42px;color:#A2A19C">${b.bigSub||'위'}</span></div>
+ <div style="display:flex;align-items:baseline;gap:18px"><span class="red ko" style="font-weight:900;font-size:${big.length>2?72:170}px;line-height:.95;letter-spacing:-.03em">${big}</span><span class="ko" style="font-weight:800;font-size:42px;color:#A2A19C">${b.bigSub||'위'}</span>${LOGO?`<div style="margin-left:auto;align-self:center;width:170px;height:170px;flex:none;background:#fff;border-radius:22px;display:flex;align-items:center;justify-content:center;font:800 30px 'Inter Display';color:#c9c8c3;letter-spacing:.08em">LOGO</div>`:''}</div>
  <div style="margin-top:40px;font-weight:900;font-size:${nm}px;line-height:.95;letter-spacing:-.03em">${b.en}</div>
- <div class="ko" style="margin-top:20px;font-weight:700;font-size:48px;color:#D6D5D0">${b.ko}${b.ig?` <span style="font-weight:500;font-size:32px;color:#7a7975;margin-left:8px">${b.ig}</span>`:''}</div>
- <div style="margin-top:46px;display:flex;align-items:baseline;gap:12px"><span style="font-weight:900;font-size:100px">${b.s}</span><span style="font-weight:600;font-size:36px;color:#A2A19C">/ 100</span></div>
+ <div class="ko" style="margin-top:20px;font-weight:700;font-size:48px;color:#D6D5D0">${b.ko}</div>
+ ${b.ig?`<div style="margin-top:22px;display:inline-block;border:3px solid ${RED};padding:8px 22px;font-weight:800;font-size:46px;color:#fff">${b.ig.split(' / ')[0]}</div>`:''}
+ <div style="margin-top:36px;display:flex;align-items:baseline;gap:12px"><span style="font-weight:900;font-size:100px">${b.s}</span><span style="font-weight:600;font-size:36px;color:#A2A19C">/ 100</span></div>
  <div style="margin-top:14px;height:12px;background:#2c2c2a"><div style="height:12px;width:${w}%;background:${RED}"></div></div>
- <div class="ko" style="margin-top:40px;font-size:38px;line-height:1.7;color:#D6D5D0">
+ <div class="ko" style="margin-top:34px;font-size:38px;line-height:1.7;color:#D6D5D0">
  <div><span style="color:#7a7975;display:inline-block;width:130px">대표</span>${b.p}</div>
  <div><span style="color:#7a7975;display:inline-block;width:130px">가격</span>${b.price}</div>
  <div><span style="color:#7a7975;display:inline-block;width:130px">구매</span>${b.buy}</div></div></div>${sig}`);

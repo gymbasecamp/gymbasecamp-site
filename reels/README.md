@@ -12,6 +12,8 @@
 | 색 | 검정 #0E0E0E · 빨강 #E0392F · 흰 #F2F1EE |
 | 안전영역 | 위 200px · 아래 520px · 오른쪽 150px 비움 (인스타·틱톡 UI) |
 
+로고 자리 버전: `LOGO=1 node reels/make_reel.js ...` → 카드마다 흰 칸(오른쪽 위), 편집 앱에서 지훈이 로고를 얹는다.
+
 ## 만드는 법
 ```
 node reels/make_reel.js reels/episodes/ep02.json /tmp/ep02
