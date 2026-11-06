@@ -22,9 +22,9 @@ const tag=`BASECAMP RANK EP.${String(ep.ep).padStart(2,'0')}`;
 const head=`<div class="top"><span class="tag">${tag}</span><img src="${logo}"></div>`;
 const sig=`<div class="sig"><span><b>운동복, 감 말고 점수로.</b></span><span>${ep.date} · 광고 아님</span></div>`;
 const S={};
-S.hook=page(`${head}<div style="position:absolute;top:400px;left:80px;right:150px">
-<div class="ko" style="font-weight:900;font-size:${ep.hookSize||104}px;line-height:1.14;letter-spacing:-.03em">${ep.hook}</div>
-<div class="ko" style="margin-top:50px;font-weight:500;font-size:40px;color:#A2A19C;line-height:1.5">${ep.sub}</div></div>${sig}`);
+S.hook=page(`${head}<div style="position:absolute;top:290px;bottom:560px;left:80px;right:150px;display:flex;flex-direction:column;justify-content:center">
+<div class="ko" style="font-weight:900;font-size:${Math.min(150,Math.floor(840/Math.max(...ep.hook.replace(/<[^>]+>/g,'\n').split('\n').filter(x=>x.trim()).map(x=>x.length))))}px;line-height:1.08;letter-spacing:-.04em">${ep.hook}</div>
+<div class="ko" style="margin-top:56px;font-weight:600;font-size:46px;color:#B9B8B3;line-height:1.5">${ep.sub}</div></div>${sig}`);
 ep.items.forEach((b,i)=>{
  const big=b.big??String(b.r);
  if(b.type==='point'){
@@ -39,18 +39,18 @@ ep.items.forEach((b,i)=>{
   <div class="red" style="font-weight:900;font-size:${big.length>2?(big.length>5?120:170):460}px;line-height:1;letter-spacing:-.04em;text-align:center" class="ko">${big}</div>
   <div class="ko" style="font-weight:800;font-size:64px;color:#A2A19C;margin-top:14px">${b.bigSub||'위'}</div></div>${sig}`);
  const w=Math.max(4,Math.round((b.s-40)/50*100));
- const nm=b.en.length>12?96:b.en.length>9?118:146;
- S['b'+i]=page(`${head}<div style="position:absolute;top:330px;left:80px;right:150px">
+ const nm=Math.min(186,Math.floor(850/(b.en.length*0.68)));
+ S['b'+i]=page(`${head}<div style="position:absolute;top:280px;left:80px;right:150px">
  <div style="display:flex;align-items:baseline;gap:18px"><span class="red ko" style="font-weight:900;font-size:${big.length>2?(big.length>5?56:72):170}px;line-height:.95;letter-spacing:-.03em;white-space:nowrap">${big}</span><span class="ko" style="font-weight:800;font-size:42px;color:#A2A19C;white-space:nowrap">${b.bigSub||'위'}</span>${b.logo?`<div style="margin-left:auto;align-self:center;flex:none;width:${b.logoBg==="none"?370:340}px;height:${b.logoBg==="none"?150:170}px;border-radius:20px;background:${b.logoBg==='none'?'transparent':(b.logoBg||'#fff')};display:flex;align-items:center;justify-content:${b.logoBg==='none'?'flex-end':'center'};padding:${b.logoBg==='none'?0:16}px;border:${b.logoBg==='none'?'none':'2px solid #2c2c2a'}"><img src="data:image/png;base64,${fs.readFileSync(b.logo).toString('base64')}" style="width:100%;height:100%;object-fit:contain;object-position:${b.logoBg==='none'?'right center':'center'}"></div>`:LOGO?`<div style="margin-left:auto;align-self:center;width:170px;height:170px;flex:none;background:#fff;border-radius:22px;display:flex;align-items:center;justify-content:center;font:800 30px 'Inter Display';color:#c9c8c3;letter-spacing:.08em">LOGO</div>`:''}</div>
  <div style="margin-top:40px;font-weight:900;font-size:${nm}px;line-height:.95;letter-spacing:-.03em">${b.en}</div>
- <div class="ko" style="margin-top:20px;font-weight:700;font-size:48px;color:#D6D5D0">${b.ko}</div>
+ <div class="ko" style="margin-top:18px;font-weight:700;font-size:56px;color:#D6D5D0">${b.ko}</div>
  ${b.ig?`<div style="margin-top:22px;display:inline-block;border:3px solid ${RED};padding:8px 22px;font-weight:800;font-size:46px;color:#fff">${b.ig.split(' / ')[0]}</div>`:''}
- <div style="margin-top:36px;display:flex;align-items:baseline;gap:12px"><span style="font-weight:900;font-size:100px">${b.s}</span><span style="font-weight:600;font-size:36px;color:#A2A19C">/ 100</span></div>
- <div style="margin-top:14px;height:12px;background:#2c2c2a"><div style="height:12px;width:${w}%;background:${RED}"></div></div>
- <div class="ko" style="margin-top:34px;font-size:38px;line-height:1.7;color:#D6D5D0">
- <div><span style="color:#7a7975;display:inline-block;width:130px">대표</span>${b.p}</div>
- <div><span style="color:#7a7975;display:inline-block;width:130px">가격</span>${b.price}</div>
- <div><span style="color:#7a7975;display:inline-block;width:130px">구매</span>${b.buy}</div></div></div>${sig}`);
+ <div style="margin-top:36px;display:flex;align-items:baseline;gap:12px"><span style="font-weight:900;font-size:150px;line-height:1">${b.s}</span><span style="font-weight:700;font-size:44px;color:#A2A19C">/ 100</span></div>
+ <div style="margin-top:16px;height:18px;background:#2c2c2a"><div style="height:18px;width:${w}%;background:${RED}"></div></div>
+ <div class="ko" style="margin-top:28px;font-size:42px;line-height:1.6;color:#E6E5E1">
+ <div><span style="color:#7a7975;display:inline-block;width:140px">대표</span>${b.p}</div>
+ <div><span style="color:#7a7975;display:inline-block;width:140px">가격</span>${b.price}</div>
+ <div><span style="color:#7a7975;display:inline-block;width:140px">구매</span>${b.buy}</div></div></div>${sig}`);
 });
 S.end=page(`<div style="position:absolute;top:330px;left:80px;right:150px">
 <div class="ko" style="font-weight:800;font-size:44px;color:#A2A19C">운동복 사기 전, 들르는 곳</div>

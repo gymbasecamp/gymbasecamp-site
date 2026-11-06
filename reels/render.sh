@@ -4,12 +4,12 @@ set -e
 O="$1"; N=$(cat "$O/n.txt"); cd "$O"
 E="-c:v libx264 -crf 18 -preset veryfast -pix_fmt yuv420p -r 30"
 : > list.txt
-ffmpeg -y -loglevel error -framerate 30 -i png/hook.png -vf "format=yuv420p,loop=-1:1,trim=duration=2.4" $E t.mp4 && mv t.mp4 s_h.mp4 && echo "file s_h.mp4" >> list.txt
+ffmpeg -y -loglevel error -framerate 30 -i png/hook.png -vf "format=yuv420p,loop=-1:1,trim=duration=2.4,setpts=PTS-STARTPTS,zoompan=z='max(1.0\,1.10-0.10*on/8)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30" $E t.mp4 && mv t.mp4 s_h.mp4 && echo "file s_h.mp4" >> list.txt
 i=$((N-1)); k=0
 while [ $k -lt $N ]; do
   D=2.2; [ $k -eq $((N-1)) ] && D=2.8
   ffmpeg -y -loglevel error -framerate 30 -i png/n$k.png -framerate 30 -i png/b$k.png -filter_complex \
-  "[0]format=yuv420p,loop=-1:1,trim=duration=0.7,setpts=PTS-STARTPTS,zoompan=z='max(1.0,1.14-0.14*on/6)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30,trim=duration=0.7[a];[1]format=yuv420p,loop=-1:1,trim=duration=$D,setpts=PTS-STARTPTS[b];[a][b]xfade=transition=slideleft:duration=0.15:offset=0.55" $E t.mp4 && mv t.mp4 s_$k.mp4 && echo "file s_$k.mp4" >> list.txt
+  "[0]format=yuv420p,loop=-1:1,trim=duration=0.7,setpts=PTS-STARTPTS,zoompan=z='max(1.0,1.14-0.14*on/6)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30,trim=duration=0.7[a];[1]format=yuv420p,loop=-1:1,trim=duration=$D,setpts=PTS-STARTPTS,zoompan=z='1+0.02*on/($D*30)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30[b];[a][b]xfade=transition=slideleft:duration=0.15:offset=0.55" $E t.mp4 && mv t.mp4 s_$k.mp4 && echo "file s_$k.mp4" >> list.txt
   k=$((k+1))
 done
 ffmpeg -y -loglevel error -framerate 30 -i png/end.png -vf "format=yuv420p,loop=-1:1,trim=duration=4.2,setpts=PTS-STARTPTS,zoompan=z='max(1.0\,1.08-0.08*on/8)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30" $E t.mp4 && mv t.mp4 s_e.mp4 && echo "file s_e.mp4" >> list.txt
