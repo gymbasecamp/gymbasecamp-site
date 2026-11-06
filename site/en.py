@@ -198,6 +198,8 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"lorna-jane":"Australian women's activewear brand founded by Lorna Jane Clarkson in 1989, known for leggings, sports bras and bike shorts.",
+"tracksmith":"Boston running apparel brand founded in 2014, known for the Van Cortlandt singlet and classic-style running shorts and tees.",
 "bsmd":"Korean men's gymwear brand since 2016, selling muscle-fit gym tanks, training shorts and wide training pants on Musinsa.",
 "black-monster-fit":"Korean gymwear brand running since 2008, making its own gym tanks, training shorts and pants plus a rash guard line.",
 "gold-s-gym":"Official apparel store of the Gold's Gym bodybuilding gym chain, built around Muscle Joe stringers and tanks.",
