@@ -12,7 +12,7 @@ while [ $k -lt $N ]; do
   "[0]format=yuv420p,loop=-1:1,trim=duration=0.7,setpts=PTS-STARTPTS,zoompan=z='max(1.0,1.14-0.14*on/6)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30,trim=duration=0.7[a];[1]format=yuv420p,loop=-1:1,trim=duration=$D,setpts=PTS-STARTPTS[b];[a][b]xfade=transition=slideleft:duration=0.15:offset=0.55" $E t.mp4 && mv t.mp4 s_$k.mp4 && echo "file s_$k.mp4" >> list.txt
   k=$((k+1))
 done
-ffmpeg -y -loglevel error -framerate 30 -i png/end.png -vf "format=yuv420p,loop=-1:1,trim=duration=3,setpts=PTS-STARTPTS,zoompan=z='max(1.0\,1.08-0.08*on/8)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30" $E t.mp4 && mv t.mp4 s_e.mp4 && echo "file s_e.mp4" >> list.txt
+ffmpeg -y -loglevel error -framerate 30 -i png/end.png -vf "format=yuv420p,loop=-1:1,trim=duration=4.2,setpts=PTS-STARTPTS,zoompan=z='max(1.0\,1.08-0.08*on/8)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30" $E t.mp4 && mv t.mp4 s_e.mp4 && echo "file s_e.mp4" >> list.txt
 ffmpeg -y -loglevel error -f concat -i list.txt -c copy v.mp4
 # 시그니처 사운드: 순위 공개마다 '쿵'(저음+금속성), 엔딩에 더블 '쿵'
 T=2.4; EXPR=""; k=0

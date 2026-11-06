@@ -27,6 +27,14 @@ S.hook=page(`${head}<div style="position:absolute;top:400px;left:80px;right:150p
 <div class="ko" style="margin-top:50px;font-weight:500;font-size:40px;color:#A2A19C;line-height:1.5">${ep.sub}</div></div>${sig}`);
 ep.items.forEach((b,i)=>{
  const big=b.big??String(b.r);
+ if(b.type==='point'){
+  S['n'+i]=page(`${head}<div style="position:absolute;top:200px;bottom:520px;left:80px;right:150px;display:flex;flex-direction:column;align-items:center;justify-content:center"><div class="red" style="font-weight:900;font-size:380px;line-height:1;letter-spacing:-.04em">${big}</div></div>${sig}`);
+  S['b'+i]=page(`${head}<div style="position:absolute;top:360px;left:80px;right:150px">
+  <div class="red" style="font-weight:900;font-size:120px;line-height:1">${big}</div>
+  <div class="ko" style="margin-top:40px;font-weight:900;font-size:${b.size||92}px;line-height:1.15;letter-spacing:-.03em">${b.title}</div>
+  <div class="ko" style="margin-top:44px;font-weight:500;font-size:42px;line-height:1.6;color:#C9C8C3">${b.body}</div></div>${sig}`);
+  return;
+ }
  S['n'+i]=page(`${head}<div style="position:absolute;top:200px;bottom:520px;left:80px;right:150px;display:flex;flex-direction:column;align-items:center;justify-content:center">
   <div class="red" style="font-weight:900;font-size:${big.length>2?(big.length>5?120:170):460}px;line-height:1;letter-spacing:-.04em;text-align:center" class="ko">${big}</div>
   <div class="ko" style="font-weight:800;font-size:64px;color:#A2A19C;margin-top:14px">${b.bigSub||'위'}</div></div>${sig}`);
@@ -43,12 +51,17 @@ ep.items.forEach((b,i)=>{
  <div><span style="color:#7a7975;display:inline-block;width:130px">가격</span>${b.price}</div>
  <div><span style="color:#7a7975;display:inline-block;width:130px">구매</span>${b.buy}</div></div></div>${sig}`);
 });
-S.end=page(`<div style="position:absolute;top:470px;left:80px;right:150px">
-<div class="ko" style="font-weight:800;font-size:46px;color:#A2A19C">운동복, 감 말고 점수로.</div>
-<img src="${logo}" style="width:850px;margin-top:40px">
-<div class="ko" style="margin-top:70px;font-weight:900;font-size:80px;line-height:1.2;letter-spacing:-.03em">${ep.cta}</div>
-<div style="margin-top:70px;display:inline-block;background:${RED};color:#fff;padding:24px 46px;font-weight:800;font-size:50px">gymbasecamp.kr</div>
-<div class="ko" style="margin-top:26px;font-weight:600;font-size:36px;color:#A2A19C">프로필 링크 · 다음 편은 팔로우하고 보기</div></div>`);
+S.end=page(`<div style="position:absolute;top:330px;left:80px;right:150px">
+<div class="ko" style="font-weight:800;font-size:44px;color:#A2A19C">운동복 사기 전, 들르는 곳</div>
+<img src="${logo}" style="width:850px;margin-top:34px">
+<div class="ko" style="margin-top:56px;font-weight:900;font-size:64px;line-height:1.25;letter-spacing:-.03em">${ep.cta}</div>
+<div class="ko" style="margin-top:46px;font-size:40px;line-height:1.85;color:#D6D5D0">
+<div><span class="red" style="font-weight:900">✓</span> 국내·해외 운동복 <b style="color:#fff">${ep.total||96}개 브랜드</b> 한곳에</div>
+<div><span class="red" style="font-weight:900">✓</span> 감 말고 <b style="color:#fff">100점 점수</b>로 종목별 순위</div>
+<div><span class="red" style="font-weight:900">✓</span> 우리는 안 팔아요 → <b style="color:#fff">공식몰로 바로</b></div>
+<div><span class="red" style="font-weight:900">✓</span> 광고는 <b style="color:#fff">순위에 절대 안 섞음</b></div></div>
+<div style="margin-top:56px;display:inline-block;background:${RED};color:#fff;padding:22px 44px;font-weight:800;font-size:48px">gymbasecamp.kr</div>
+<div class="ko" style="margin-top:22px;font-weight:600;font-size:34px;color:#A2A19C">프로필 링크 · 다음 편은 팔로우하고 보기</div></div>`);
 (async()=>{const br=await chromium.launch();const pg=await br.newPage({viewport:{width:1080,height:1920}});
 for(const [k,h] of Object.entries(S)){await pg.setContent(h);await pg.waitForTimeout(120);await pg.screenshot({path:`${OUT}/png/${k}.png`});}
 await br.close();fs.writeFileSync(OUT+'/n.txt',String(ep.items.length));console.log('frames',Object.keys(S).length)})();
