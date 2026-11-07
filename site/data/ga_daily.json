@@ -190,5 +190,65 @@
    ]
   ],
   "users": 5
+ },
+ "2026-11-07": {
+  "events": {
+   "first_visit": 11,
+   "page_view": 12,
+   "quiz_complete": 1,
+   "quiz_open": 3,
+   "scroll": 11,
+   "session_start": 12
+  },
+  "sessions": 12,
+  "sources": {
+   "(data not available)": 1,
+   "(direct)": 3,
+   "(not set)": 3,
+   "instagram": 8
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    2,
+    4
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "asics",
+    0,
+    2
+   ],
+   [
+    "battract",
+    0,
+    1
+   ],
+   [
+    "overwhelm",
+    0,
+    1
+   ]
+  ],
+  "users": 11
  }
 }

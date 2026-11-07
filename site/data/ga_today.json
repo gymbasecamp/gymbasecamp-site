@@ -1,20 +1,17 @@
 {
- "date": "2026-11-07",
+ "date": "2026-11-08",
  "events": {
-  "first_visit": 9,
-  "page_view": 10,
-  "quiz_complete": 1,
-  "quiz_open": 3,
-  "scroll": 9,
-  "session_start": 10
+  "first_visit": 2,
+  "page_view": 3,
+  "quiz_open": 2,
+  "scroll": 3,
+  "session_start": 3,
+  "user_engagement": 1
  },
- "sessions": 10,
+ "sessions": 3,
  "sources": {
-  "(data not available)": 1,
-  "(direct)": 3,
-  "(not set)": 3,
-  "instagram": 6
+  "(direct)": 3
  },
- "updated_kst": "2026-11-07 22:57",
- "users": 9
+ "updated_kst": "2026-11-08 07:33",
+ "users": 2
 }
