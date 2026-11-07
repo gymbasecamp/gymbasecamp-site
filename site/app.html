@@ -309,33 +309,44 @@ function chipGroup(label, key, opts, st, cls='sfilter'){
 const FEATURED = ['hdex','borntowin','bysec','gymshark','youngla','under-armour'];
 const CATN = ['헬스·보디빌딩','요가·필라테스·레깅스','스트렝스·파워리프팅','크로스핏·HYROX','러닝','격투기','컴프레션·기능성','종합 스포츠'];
 const CATS = CATN.map(c=>({cat:[c]}));
+function chapterTop(cat){ return BRANDS.filter(b=>b.cat===cat).sort((x,y)=>x.rankT-y.rankT)[0]; }
 function viewHome(){
+  const t=T(); const n=BRANDS.length; const ko=lang==='ko';
+  const ch=CATN.map((c,i)=>({c,i,b:chapterTop(c)})).filter(x=>x.b);
+  return `
+  <section class="nx" id="nx">
+    <canvas id="aura" aria-hidden="true"></canvas>
+    <div class="nx-hero">
+      <h1 class="nx-h">${ko?'운동복,<br>감 말고 점수로':'Gymwear,<br>by the score'}</h1>
+      <p class="nx-sub">${ko?`국내외 ${n}개 운동복 브랜드를 100점으로 채점했습니다.<br>종목마다, 정점에 선 브랜드를 소개합니다.`:`${n} gymwear brands from Korea and abroad, scored out of 100.<br>For every sport, the brand at the top.`}</p>
+      <div class="nx-cue" aria-hidden="true"><span></span></div>
+    </div>
+    ${ch.map(({c,i,b},k)=>`
+    <article class="nx-ch" data-k="${k}">
+      <div class="nx-in">
+        <p class="nx-cat">${esc(lb(c))}</p>
+        <p class="nx-no">${k+1} / ${ch.length}</p>
+        <h2 class="nx-brand">${esc(b.en)}</h2>
+        <p class="nx-ko">${esc(b.ko)}</p>
+        <div class="nx-rule"></div>
+        <p class="nx-score">${b.v2.total}<span>${ko?'100점 만점':'out of 100'}</span></p>
+        <p class="nx-desc">${esc(desc(b))}</p>
+        <div class="nx-act">
+          <a class="nx-btn" href="#b-${b.id}" data-track="chapter_brand" data-brand="${esc(b.en)}">${ko?'브랜드 보기':'View brand'}</a>
+          <button class="nx-btn ghost cat" type="button" data-cat="${i}">${ko?'이 종목 전체 순위':'Full ranking'}</button>
+        </div>
+      </div>
+    </article>`).join('')}
+  </section>
+  ${viewHomeRest()}`;
+}
+function viewHomeRest(){
   const t=T(); const nKR=BRANDS.filter(b=>b.origin==='국내').length;
   const n10=Math.floor(BRANDS.length/10)*10;
   const kStore=BRANDS.filter(b=>b.buy==='국내 공식몰').length, oShip=BRANDS.filter(b=>b.buy==='해외 직배송').length;
   const feat=FEATURED.map(id=>byId[id]).filter(Boolean);
   return `
-  <section class="hero on-dark"><div class="wrap">
-    <div>
-      <div class="eyebrow">Gymwear brand index · Korea</div>
-      <h1>${t.heroT(n10)}</h1>
-      <p class="lede">${t.heroL(n10)}</p>
-      <form class="hsearch" id="hForm" role="search">
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg>
-        <input id="hq" class="sinput" type="search" autocomplete="off" enterkeyhint="search" placeholder="${esc(t.sPh)}" aria-label="${esc(t.sPh)}">
-        <div class="sres drop" id="hres" hidden></div>
-      </form>
-      <div class="hot">${(lang==='en'?HOT_Q_EN:HOT_Q).slice(0,5).map(w=>`<button type="button" class="hotq" data-q="${esc(w)}">${esc(w)}</button>`).join('')}</div>
-      <div class="cta-row">
-        <a class="btn inv lg" href="#brands" data-track="cta_browse" data-brand="hero">${t.browse}</a>
-        <a class="btn ghost-dark lg" href="#quiz" data-track="quiz_start_home">${t.quizShort}</a>
-      </div>
-      <div class="stats">
-        <div class="stat"><b>${nKR}</b><span>${t.kr}</span></div>
-        <div class="stat"><b>${BRANDS.length-nKR}</b><span>${t.intl}</span></div>
-        <div class="stat"><b>${FILTERS.length}</b><span>${t.nf}</span></div>
-      </div>
-    </div>
+  <section class="nx-find"><div class="wrap"><div class="nx-find-h"><h2>${lang==='ko'?'조건으로 찾기':'Find by what you wear'}</h2><p>${lang==='ko'?'핏과 아이템을 고르면 맞는 브랜드만 남습니다.':'Pick a fit and items; only matching brands remain.'}</p></div>
     <div class="finder">
       <div class="finder-h"><h2>${t.finderH}</h2><button class="clear" id="finderReset" type="button">${t.reset}</button></div>
       ${chipGroup(t.who,'f',['남성','여성'],finder,'ffilter')}
@@ -633,6 +644,71 @@ function viewAbout(){
 }
 
 /* ---------- router ---------- */
+
+/* NOIR aura: spotlight, dust and a slowly turning weight plate, drawn on canvas (no external libs) */
+let AURA=null;
+function stopAura(){ if(AURA){ cancelAnimationFrame(AURA.raf); window.removeEventListener('scroll',AURA.onScroll); window.removeEventListener('resize',AURA.onResize); AURA=null; } }
+function initAura(){
+  stopAura(); const cv=document.getElementById('aura'); if(!cv) return;
+  const ctx=cv.getContext('2d'); const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dpr=Math.min(2,window.devicePixelRatio||1); let W=0,H=0;
+  const A={raf:0,prog:0,k:0}; AURA=A;
+  const dust=Array.from({length:140},()=>({x:Math.random(),y:Math.random(),z:.3+Math.random()*.7,v:.00004+Math.random()*.00012,p:Math.random()*6.28}));
+  const tones=[[255,232,198],[214,226,255],[255,214,190],[226,236,255],[255,238,214],[218,214,255],[255,224,200],[228,232,240]];
+  A.onResize=()=>{ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); };
+  A.onScroll=()=>{ const nx=document.getElementById('nx'); if(!nx) return; const r=nx.getBoundingClientRect(); const tot=Math.max(1,r.height-innerHeight); A.prog=Math.min(1,Math.max(0,-r.top/tot)); const chs=nx.querySelectorAll('.nx-ch'); let k=-1; chs.forEach((c,i)=>{ const q=c.getBoundingClientRect(); if(q.top<innerHeight*.6) k=i; c.classList.toggle('on',q.top<innerHeight*.75&&q.bottom>innerHeight*.25); }); A.k=k; };
+  A.onResize(); A.onScroll(); window.addEventListener('resize',A.onResize); window.addEventListener('scroll',A.onScroll,{passive:true});
+  let tone=[255,232,198]; const t0=performance.now();
+  function plate(cx,cy,R,th){
+    const c=Math.cos(th), s=Math.sin(th), w=Math.max(.035,Math.abs(c)), T=R*.16*Math.abs(s);
+    // rim thickness (side)
+    if(T>1){ const g=ctx.createLinearGradient(cx-R*w-T,0,cx+R*w+T,0); g.addColorStop(0,'#0a0a0a'); g.addColorStop(.5,`rgba(${tone[0]},${tone[1]},${tone[2]},.22)`); g.addColorStop(1,'#050505');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.ellipse(cx+(s>0?T/2:-T/2),cy,R*w+T/2,R,0,0,Math.PI*2); ctx.fill(); }
+    // face
+    const hx=cx+R*w*(.55*Math.sin(th*1.7)); const g2=ctx.createRadialGradient(hx,cy-R*.7,R*.05,cx,cy,R*1.05);
+    g2.addColorStop(0,`rgba(${tone[0]},${tone[1]},${tone[2]},.55)`); g2.addColorStop(.35,'#2a2724'); g2.addColorStop(.8,'#0d0c0b'); g2.addColorStop(1,'#030303');
+    ctx.fillStyle=g2; ctx.beginPath(); ctx.ellipse(cx,cy,R*w,R,0,0,Math.PI*2); ctx.fill();
+    ctx.save(); ctx.translate(cx,cy); ctx.scale(w,1);
+    ctx.strokeStyle=`rgba(${tone[0]},${tone[1]},${tone[2]},.20)`; ctx.lineWidth=1.2/w;
+    [0.93,0.72,0.34].forEach(f=>{ ctx.beginPath(); ctx.arc(0,0,R*f,0,Math.PI*2); ctx.stroke(); });
+    const hub=ctx.createRadialGradient(0,-R*.12,0,0,0,R*.3); hub.addColorStop(0,`rgba(${tone[0]},${tone[1]},${tone[2]},.45)`); hub.addColorStop(1,'#111');
+    ctx.fillStyle=hub; ctx.beginPath(); ctx.arc(0,0,R*.3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(0,0,R*.12,0,Math.PI*2); ctx.fill();
+    if(c>0){ ctx.fillStyle=`rgba(${tone[0]},${tone[1]},${tone[2]},${.35*c})`; ctx.font=`300 ${R*.075}px Inter, "Inter Display", sans-serif`; ctx.textAlign='center';
+      const word='GYM  BASECAMP'; const rad=R*.82; const span=1.25; for(let i=0;i<word.length;i++){ const a=-Math.PI/2-span/2+span*i/(word.length-1); ctx.save(); ctx.rotate(a+Math.PI/2); ctx.fillText(word[i],0,-rad); ctx.restore(); }
+      ctx.font=`300 ${R*.06}px Inter, "Inter Display", sans-serif`; ctx.fillText('20 KG',0,R*.62); }
+    ctx.restore();
+  }
+  function frame(now){
+    const t=(now-t0)/1000; const k=Math.max(0,A.k); const tgt=A.k<0?[255,232,198]:tones[k%tones.length];
+    tone=tone.map((v,i)=>v+(tgt[i]-v)*.04);
+    ctx.globalCompositeOperation='source-over'; ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+    const cx=W/2, top=-H*.05;
+    // light cone
+    ctx.globalCompositeOperation='lighter';
+    const cone=ctx.createLinearGradient(0,0,0,H); cone.addColorStop(0,`rgba(${tone[0]},${tone[1]},${tone[2]},.20)`); cone.addColorStop(.75,`rgba(${tone[0]},${tone[1]},${tone[2]},.03)`); cone.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=cone; ctx.beginPath(); const wTop=W*.06, wBot=Math.max(W*.7,H*.55); ctx.moveTo(cx-wTop,top); ctx.lineTo(cx+wTop,top); ctx.lineTo(cx+wBot,H); ctx.lineTo(cx-wBot,H); ctx.closePath(); ctx.fill();
+    const glow=ctx.createRadialGradient(cx,0,0,cx,0,H*.55); glow.addColorStop(0,`rgba(${tone[0]},${tone[1]},${tone[2]},.22)`); glow.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
+    // floor pool
+    const pool=ctx.createRadialGradient(cx,H*.9,0,cx,H*.9,W*.5); pool.addColorStop(0,`rgba(${tone[0]},${tone[1]},${tone[2]},.07)`); pool.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=pool; ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation='source-over';
+    // plate
+    const R=Math.min(W*.26,H*.17,240); const th=reduce?0.5:(t*.35+A.prog*9);
+    const py=H*((W<700?.27:.36)+.015*Math.sin(t*.6));
+    A.dim=(A.dim||1)+(((A.k>=0)?.45:1)-(A.dim||1))*.05; ctx.globalAlpha=A.dim; plate(cx,py,R,th); ctx.globalAlpha=1;
+    // dust
+    ctx.globalCompositeOperation='lighter';
+    dust.forEach(d=>{ if(!reduce){ d.y-=d.v*16*d.z; d.x+=Math.sin(t*.3+d.p)*.00008; if(d.y<-.02){d.y=1.02;d.x=Math.random();} }
+      const x=d.x*W, y=d.y*H; const inCone=Math.max(0,1-Math.abs(x-cx)/(wTop+(wBot-wTop)*(y/H)+1)); const a=(.08+.5*inCone)*d.z*(.6+.4*Math.sin(t*1.3+d.p));
+      ctx.fillStyle=`rgba(${tone[0]},${tone[1]},${tone[2]},${a})`; ctx.beginPath(); ctx.arc(x,y,.6+d.z*1.4,0,6.283); ctx.fill(); });
+    ctx.globalCompositeOperation='source-over';
+    // vignette
+    const vg=ctx.createRadialGradient(cx,H*.45,Math.min(W,H)*.25,cx,H*.5,Math.max(W,H)*.75); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.85)'); ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+    if(!reduce) A.raf=requestAnimationFrame(frame);
+  }
+  A.raf=requestAnimationFrame(frame);
+}
+
 const app=document.getElementById('app');
 function chrome(){
   const t=T();
@@ -655,6 +731,7 @@ function render(){
   else if(h==='submit'){ app.innerHTML=viewSubmit(); key='about'; }
   else if(h==='about'){ app.innerHTML=viewAbout(); key='about'; }
   else { app.innerHTML=viewHome(); updateFinder(); }
+  if(key==='home') initAura(); else stopAura();
   document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===key) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   syncCmp();
 }

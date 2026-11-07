@@ -76,11 +76,11 @@ PREV = {'d': _ds[-1], 'r': {k: v[1:3] for k, v in _H[_ds[-1]].items()}} if _ds e
 app = app.replace('__PREV__', safe(PREV))
 app = app.replace('__DATA__', safe(B)).replace('__TOK__', safe(ns['TOK']))
 
-FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">'
+FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+KR:wght@300;400;500;600&family=Inter:wght@200;300;400&display=swap">'
 snippet = f'<!-- GYM BASECAMP landing (built {__import__("datetime").date.today()}) -->\n{FONTS}\n<style>{css}</style>\n{app}'
 
 DESC = '국내외 짐웨어 브랜드 50+ 한곳에서. 머슬핏, 오버핏, 컴프레션, 애슬레저까지 나에게 맞는 운동복 브랜드를 발견하세요.'
-page_css = '<style>html,body{margin:0;background:#F2F1EE}</style>'
+page_css = '<style>html,body{margin:0;background:#000}</style>'
 standalone = f'''<!doctype html>
 <html lang="ko">
 <head>
@@ -90,7 +90,7 @@ standalone = f'''<!doctype html>
 <meta name="description" content="{DESC}">
 <meta property="og:title" content="GYM BASECAMP">
 <meta property="og:description" content="{DESC}">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#000000">
 {page_css}
 </head>
 <body>
