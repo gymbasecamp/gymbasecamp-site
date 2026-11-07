@@ -199,6 +199,9 @@ TOK = {
 }
 DESC = {
 "lorna-jane":"Australian women's activewear brand founded by Lorna Jane Clarkson in 1989, known for leggings, sports bras and bike shorts.",
+"fairtex":"Thai Muay Thai brand that grew from Philip Wong's Fairtex garment factory, known for fight shorts, rash guards and compression wear.",
+"sweaty-betty":"London women's activewear brand founded in Notting Hill in 1998, known for its bestselling Power leggings and sports bras.",
+"mizuno":"Japanese sports brand founded in Osaka in 1906, offering running and training apparel alongside its Wave Rider shoes.",
 "tracksmith":"Boston running apparel brand founded in 2014, known for the Van Cortlandt singlet and classic-style running shorts and tees.",
 "bsmd":"Korean men's gymwear brand since 2016, selling muscle-fit gym tanks, training shorts and wide training pants on Musinsa.",
 "black-monster-fit":"Korean gymwear brand running since 2008, making its own gym tanks, training shorts and pants plus a rash guard line.",
