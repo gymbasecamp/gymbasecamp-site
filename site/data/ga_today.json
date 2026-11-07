@@ -1,17 +1,17 @@
 {
  "date": "2026-11-07",
  "events": {
-  "first_visit": 5,
-  "page_view": 5,
+  "first_visit": 6,
+  "page_view": 6,
   "scroll": 4,
-  "session_start": 5
+  "session_start": 6
  },
- "sessions": 5,
+ "sessions": 6,
  "sources": {
   "(data not available)": 1,
-  "(direct)": 1,
+  "(direct)": 2,
   "instagram": 3
  },
- "updated_kst": "2026-11-07 13:50",
- "users": 5
+ "updated_kst": "2026-11-07 17:10",
+ "users": 6
 }
