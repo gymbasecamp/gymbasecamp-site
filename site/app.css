@@ -374,3 +374,19 @@ footer.gbfoot a{color:var(--on-dark);font-weight:600}
 .blogo{position:absolute;inset:0;display:grid;place-items:center;background:#fff}
 .blogo img{width:62%!important;height:62%!important;object-fit:contain!important}
 .d-img .blogo img{width:min(128px,40%)!important;height:auto!important;aspect-ratio:1}
+
+/* === 2026-11-08 디자인 개선: 릴스와 같은 검정+빨강 시스템, 각진 브루탈리즘, 숫자 강조 === */
+:root{--r:0px;--accent:#E0392F}
+.chip,.hotq{border-radius:0}
+.plates i{border-radius:0}
+.hero{position:relative;background-color:var(--ink);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--accent)}
+.hero h1{font-weight:800;letter-spacing:-.035em}
+.hero h1 em{color:var(--accent);font-family:var(--body);font-weight:800;font-size:1em;letter-spacing:-.035em}
+.hero .lede b{color:var(--on-dark);font-family:var(--mono)}
+.rank{color:var(--accent);font-weight:600}
+.plates i.on{background:var(--accent)}
+.meter span b{color:var(--ink);font-family:var(--display);font-size:16px;font-weight:900;letter-spacing:0}
+.score-big b{font-size:96px;color:var(--accent)}
+.mv.new{background:var(--accent);border-radius:0}
+.score-big{flex-wrap:wrap;column-gap:10px}.score-big span{white-space:nowrap}

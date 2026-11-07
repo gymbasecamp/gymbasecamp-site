@@ -71,7 +71,7 @@ const L = {
   presetsH:'많이 찾는 조합', presetsP:'운동하는 사람들이 실제로 찾는 조건을 한 번에 적용합니다.', nBrands:n=>`${n}개 브랜드 →`,
   typesH:'브랜드 유형', typesP:'운동 성격에 따라 6가지로 나눴습니다.',
   browse:'브랜드 둘러보기', quizShort:'30초 추천 테스트',
-  heroT:n=>`국내외 짐웨어 브랜드 <em>${n}+</em> 한곳에서`, heroL:'머슬핏, 오버핏, 컴프레션, 애슬레저까지<br>나에게 맞는 운동복 브랜드를 발견하세요.',
+  heroT:n=>`운동복,<br>감 말고 <em>점수로.</em>`, heroL:n=>`국내외 운동복 브랜드 <b>${n}+</b>개를 100점으로 채점했어요.<br>헬스·요가·러닝·격투기, 종목별 순위가 매일 바뀝니다.`,
   catsH:'카테고리 탐색', catsP:'어디서부터 볼지 고르세요.',
   cats:['웨이트룸을 위한 짐웨어와 짐 스트리트','레깅스·스포츠브라·스튜디오 웨어','파워리프팅·싱글렛·리프팅 기어 의류','WOD·HYROX를 위한 기능성 트레이닝웨어','러닝 전문 브랜드 (추가 중)','복싱·MMA 트레이닝웨어 (추가 중)','컴프레션·이너·기능성 웨어','나이키·아디다스 등 종합 스포츠'], fCat:'운동 카테고리',
   featH:'대표 브랜드', featP:'국내외에서 많이 찾는 짐웨어 브랜드입니다.',
@@ -111,7 +111,7 @@ const L = {
   presetsH:'Popular searches', presetsP:'Common combinations, applied in one tap.', nBrands:n=>`${n} brands →`,
   typesH:'Brand types', typesP:'Six groups by training style.',
   browse:'Browse brands', quizShort:'30-second quiz',
-  heroT:n=>`<em>${n}+</em> gymwear brands from Korea and abroad, in one place`, heroL:'Muscle fit, oversized, compression, athleisure.<br>Find the activewear brand that fits you.',
+  heroT:n=>`Gymwear,<br>by <em>score</em>, not guesswork.`, heroL:n=>`<b>${n}+</b> brands from Korea and abroad, scored out of 100.<br>Rankings by sport, updated daily.`,
   catsH:'Browse by category', catsP:'Pick a place to start.',
   cats:['Gymwear and gym street for the weight room','Leggings, sports bras and studio wear','Powerlifting, singlets and lifting apparel','Functional training wear for WODs and HYROX','Running brands (adding now)','Boxing and MMA training wear (adding now)','Compression and base layers','Nike, adidas and other multisport brands'], fCat:'Sport',
   featH:'Featured brands', featP:'Gymwear brands people search for most, in Korea and abroad.',
@@ -319,7 +319,7 @@ function viewHome(){
     <div>
       <div class="eyebrow">Gymwear brand index · Korea</div>
       <h1>${t.heroT(n10)}</h1>
-      <p class="lede">${t.heroL}</p>
+      <p class="lede">${t.heroL(n10)}</p>
       <form class="hsearch" id="hForm" role="search">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg>
         <input id="hq" class="sinput" type="search" autocomplete="off" enterkeyhint="search" placeholder="${esc(t.sPh)}" aria-label="${esc(t.sPh)}">
