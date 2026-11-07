@@ -57,3 +57,12 @@ H[day] = {'users': int(users), 'sessions': int(sessions), 'sources': src, 'event
 for d in sorted(H)[:-180]: del H[d]
 json.dump(H, open(hp, 'w', encoding='utf-8'), ensure_ascii=False, sort_keys=True, indent=1)
 print(f'{day}: users {int(users)}, sessions {int(sessions)}, sources {src}, brand views 28d {sum(v["view"] for v in react.values())}')
+
+# 오늘(KST) 진행 중 수치 — 몇 시간마다 갱신, 확정치는 다음 날 ga_daily.json
+tt = report([], ['activeUsers', 'sessions'], 'today', 'today')
+tu, ts = (tt[0] if tt else [0, 0])
+tsrc = {s: int(n) for s, n in report(['sessionSource'], ['sessions'], 'today', 'today')}
+tev = {e: int(n) for e, n in report(['eventName'], ['eventCount'], 'today', 'today')}
+json.dump({'date': kst.strftime('%Y-%m-%d'), 'updated_kst': kst.strftime('%Y-%m-%d %H:%M'), 'users': int(tu), 'sessions': int(ts), 'sources': tsrc, 'events': tev},
+          open(P('data/ga_today.json'), 'w', encoding='utf-8'), ensure_ascii=False, sort_keys=True, indent=1)
+print(f'today so far: users {int(tu)}, sessions {int(ts)}, sources {tsrc}')
