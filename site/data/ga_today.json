@@ -2,16 +2,17 @@
  "date": "2026-11-07",
  "events": {
   "first_visit": 6,
-  "page_view": 6,
-  "scroll": 4,
-  "session_start": 6
+  "page_view": 7,
+  "scroll": 7,
+  "session_start": 7
  },
- "sessions": 6,
+ "sessions": 7,
  "sources": {
   "(data not available)": 1,
-  "(direct)": 2,
+  "(direct)": 3,
+  "(not set)": 3,
   "instagram": 3
  },
- "updated_kst": "2026-11-07 17:10",
+ "updated_kst": "2026-11-07 19:51",
  "users": 6
 }
