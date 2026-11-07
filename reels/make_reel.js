@@ -9,7 +9,7 @@ const ep=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));const OUT=process.a
 const logo='data:image/png;base64,'+fs.readFileSync(path.join(__dirname,'logo.png')).toString('base64');
 const RED='#E0392F';const LOGO=process.env.LOGO==='1';
 // 틱톡/인스타 안전영역: 위 200px, 아래 520px, 오른쪽 150px는 UI에 가려짐 → 글자는 x 80~930, y 200~1400
-const css=`*{margin:0;box-sizing:border-box}body{width:1080px;height:1920px;background:#0E0E0E;color:#F2F1EE;font-family:'Inter Display','Noto Sans CJK KR',sans-serif;overflow:hidden;position:relative}
+const css=`*{margin:0;box-sizing:border-box}body{width:1080px;height:1920px;background:#0E0E0E url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\");color:#F2F1EE;font-family:'Inter Display','Noto Sans CJK KR',sans-serif;overflow:hidden;position:relative}
 .ko{font-family:'Noto Sans CJK KR'}.red{color:${RED}}
 .bar{position:absolute;left:0;top:0;bottom:0;width:18px;background:${RED}}
 .top{position:absolute;top:210px;left:80px;right:150px;display:flex;justify-content:space-between;align-items:center}
@@ -22,9 +22,12 @@ const tag=`BASECAMP RANK EP.${String(ep.ep).padStart(2,'0')}`;
 const head=`<div class="top"><span class="tag">${tag}</span><img src="${logo}"></div>`;
 const sig=`<div class="sig"><span><b>운동복, 감 말고 점수로.</b></span><span>${ep.date} · 광고 아님</span></div>`;
 const S={};
-S.hook=page(`${head}<div style="position:absolute;top:290px;bottom:560px;left:80px;right:150px;display:flex;flex-direction:column;justify-content:center">
-<div class="ko" style="font-weight:900;font-size:${Math.min(150,Math.floor(840/Math.max(...ep.hook.replace(/<[^>]+>/g,'\n').split('\n').filter(x=>x.trim()).map(x=>x.length))))}px;line-height:1.08;letter-spacing:-.04em">${ep.hook}</div>
-<div class="ko" style="margin-top:56px;font-weight:600;font-size:46px;color:#B9B8B3;line-height:1.5">${ep.sub}</div></div>${sig}`);
+const hookLines=ep.hook.split('<br>');
+const hookPage=k=>page(`${head}<div style="position:absolute;top:290px;bottom:560px;left:80px;right:150px;display:flex;flex-direction:column;justify-content:center">
+<div class="ko" style="font-weight:900;font-size:${Math.min(150,Math.floor(840/Math.max(...hookLines.map(x=>x.replace(/<[^>]+>/g,'').length))))}px;line-height:1.08;letter-spacing:-.04em">${hookLines.map((l,i)=>`<div style="visibility:${i<k?'visible':'hidden'}">${l}</div>`).join('')}</div>
+<div class="ko" style="margin-top:56px;font-weight:600;font-size:46px;color:#B9B8B3;line-height:1.5;visibility:${k>=hookLines.length?'visible':'hidden'}">${ep.sub}</div></div>${sig}`);
+S.hook=hookPage(hookLines.length);
+for(let k=1;k<hookLines.length;k++) S['hook_'+k]=hookPage(k);
 ep.items.forEach((b,i)=>{
  const big=b.big??String(b.r);
  if(b.type==='point'){
@@ -65,4 +68,4 @@ S.end=page(`<div style="position:absolute;top:330px;left:80px;right:150px">
 <div class="ko" style="margin-top:22px;font-weight:600;font-size:34px;color:#A2A19C">프로필 링크 · 다음 편은 팔로우하고 보기</div></div>`);
 (async()=>{const br=await chromium.launch();const pg=await br.newPage({viewport:{width:1080,height:1920}});
 for(const [k,h] of Object.entries(S)){await pg.setContent(h);await pg.waitForTimeout(120);await pg.screenshot({path:`${OUT}/png/${k}.png`});}
-await br.close();fs.writeFileSync(OUT+'/n.txt',String(ep.items.length));console.log('frames',Object.keys(S).length)})();
+await br.close();fs.writeFileSync(OUT+'/n.txt',String(ep.items.length));fs.writeFileSync(OUT+'/hk.txt',String(hookLines.length));console.log('frames',Object.keys(S).length)})();
