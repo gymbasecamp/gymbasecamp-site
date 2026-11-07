@@ -1,0 +1,32 @@
+name: Reels auto publish
+on:
+  schedule:
+    - cron: '37 10 * * *'   # 19:37 KST
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['.github/publish-run']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests
+      - name: Publish today's reel
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: python3 reels/publish.py
+      - name: Commit log
+        run: |
+          git config user.name "gymbasecamp-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A reels
+          git diff --cached --quiet || (git commit -m "릴스 업로드 기록 $(date -u +%F)" && git push)
