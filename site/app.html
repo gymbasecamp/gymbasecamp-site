@@ -208,7 +208,7 @@ function searchBrands(q){
   return out.sort((x,y)=>y.sc-x.sc||x.b.rank2-y.b.rank2).map(x=>({b:x.b,name:x.sc>=150}));
 }
 let S = emptyState();
-let finder = {f:[],origin:[]};
+let finder = {f:[],origin:[],cat:[],buy:[]};
 let quiz = {step:0, a:[]};
 let cmp = [];
 try{ cmp = JSON.parse(localStorage.getItem('gb_cmp')||'[]').filter(id=>byId[id]).slice(0,4); }catch(e){ cmp=[]; }
@@ -349,10 +349,13 @@ function viewHomeRest(){
   <section class="nx-find"><div class="wrap"><div class="nx-find-h"><h2>${lang==='ko'?'조건으로 찾기':'Find by what you wear'}</h2><p>${lang==='ko'?'핏과 아이템을 고르면 맞는 브랜드만 남습니다.':'Pick a fit and items; only matching brands remain.'}</p></div>
     <div class="finder">
       <div class="finder-h"><h2>${t.finderH}</h2><button class="clear" id="finderReset" type="button">${t.reset}</button></div>
+      ${chipGroup(lang==='ko'?'어떤 운동을 하나요':'Your sport','cat',CATN,finder,'ffilter')}
       ${chipGroup(t.who,'f',['남성','여성'],finder,'ffilter')}
       ${chipGroup(t.fit,'f',['머슬핏','오버핏','컴프레션'],finder,'ffilter')}
       ${chipGroup(t.item,'f',['슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝'],finder,'ffilter')}
+      ${chipGroup(lang==='ko'?'어디서 살 수 있나요':'Where to buy','buy',['국내 공식몰','국내 판매처','해외 직배송'],finder,'ffilter')}
       ${chipGroup(t.nat,'origin',['국내','해외'],finder,'ffilter')}
+      <div class="fprev" id="finderPrev" aria-live="polite"></div>
       <div class="finder-go"><span class="count"><b id="finderN">0</b> ${t.brandsN}</span><button class="btn" id="finderGo" type="button">${t.seeBrands}</button></div>
     </div>
   </div></section>
@@ -751,7 +754,15 @@ function route(){
   if(h!=='submit'){ subDone=null; }
   render(); window.scrollTo(0,0);
 }
-function updateFinder(){ const n=BRANDS.filter(b=>match(b,finder)).length; const el=document.getElementById('finderN'); if(el) el.textContent=n; }
+function updateFinder(){
+  const hit=BRANDS.filter(b=>match(b,finder)); const el=document.getElementById('finderN'); if(el) el.textContent=hit.length;
+  const pv=document.getElementById('finderPrev'); if(!pv) return; const ko=lang==='ko';
+  const any=['f','origin','cat','buy'].some(k=>(finder[k]||[]).length);
+  if(!any){ pv.innerHTML=`<p class="fprev-h">${ko?'조건을 고르면 점수가 높은 순서로 바로 보여드려요.':'Pick anything and the top-scoring matches appear here.'}</p>`; return; }
+  if(!hit.length){ pv.innerHTML=`<p class="fprev-h">${ko?'모든 조건을 만족하는 브랜드가 없어요. 조건을 하나 빼보세요.':'No brand matches every condition. Try removing one.'}</p>`; return; }
+  const top=hit.slice().sort((a,b)=>b.v2.total-a.v2.total).slice(0,3);
+  pv.innerHTML=`<p class="fprev-h">${ko?'지금 조건의 상위 브랜드':'Top matches right now'}</p>`+top.map((b,i)=>`<a class="fprev-r" href="#b-${b.id}" data-track="finder_preview" data-brand="${esc(b.en)}"><span class="fprev-n">${i+1}</span><span class="fprev-b"><b>${esc(b.en)}</b><small>${esc(b.ko)} · ${esc(lb(b.cat))}</small></span><span class="fprev-s">${b.v2.total}</span></a>`).join('');
+}
 function go(state){ S=Object.assign(emptyState(),JSON.parse(JSON.stringify(state))); track('filter_use',{filters:[...S.f,...S.origin,...S.cat,...S.type,...S.buy].join('|')}); if(location.hash==='#brands') route(); else location.hash='brands'; }
 
 document.addEventListener('click',e=>{
@@ -762,7 +773,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.cmprm){ cmp=cmp.filter(x=>x!==t.dataset.cmprm); saveCmp(); render(); return; }
   if(t.id==='cmpClear'||t.id==='trayClear'){ cmp=[]; saveCmp(); if(location.hash==='#compare') render(); else syncCmp(); return; }
   if(t.classList.contains('ffilter')){ const k=t.dataset.k,v=t.dataset.v; finder[k]=finder[k].includes(v)?finder[k].filter(x=>x!==v):[...finder[k],v]; t.setAttribute('aria-pressed',finder[k].includes(v)); updateFinder(); return; }
-  if(t.id==='finderReset'){ finder={f:[],origin:[]}; document.querySelectorAll('.ffilter').forEach(c=>c.setAttribute('aria-pressed','false')); updateFinder(); return; }
+  if(t.id==='finderReset'){ finder={f:[],origin:[],cat:[],buy:[]}; document.querySelectorAll('.ffilter').forEach(c=>c.setAttribute('aria-pressed','false')); updateFinder(); return; }
   if(t.id==='finderGo'){ go(finder); return; }
   if(t.dataset.preset){ go(PRESETS[+t.dataset.preset]); return; }
   if(t.dataset.cat!==undefined && t.classList.contains('cat')){ track('category_click',{category:CATN[+t.dataset.cat]}); go(CATS[+t.dataset.cat]); return; }

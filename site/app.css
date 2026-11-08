@@ -479,3 +479,16 @@ input,textarea,select{color:var(--ink);background:#0b0a09}
 footer.gbfoot{background:#05060a}
 .nx-hero{padding-top:15vh}
 .nx-in{background:linear-gradient(rgba(7,8,13,0),rgba(7,8,13,.72) 22%,rgba(7,8,13,.88));padding-top:70px}
+
+/* finder: 종목·구매처 조건 + 실시간 상위 3개 미리보기 */
+.fprev{margin-top:18px;border-top:1px solid #232636;padding-top:14px;display:flex;flex-direction:column;gap:2px}
+.fprev-h{font-family:var(--serif);font-size:13.5px;color:var(--muted);margin-bottom:8px}
+.fprev-r{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid #1a1c28}
+.fprev-r:last-child{border-bottom:0}
+.fprev-r:hover b,.fprev-r:focus b{text-decoration:underline;text-underline-offset:3px}
+.fprev-n{font-family:var(--serif);font-weight:300;font-size:20px;color:var(--brass)}
+.fprev-b{display:flex;flex-direction:column;min-width:0}
+.fprev-b b{font-family:var(--wide);font-weight:300;letter-spacing:.08em;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fprev-b small{font-size:12.5px;color:var(--muted)}
+.fprev-s{font-family:var(--serif);font-weight:300;font-size:26px}
+.finder-go{border-top:0}
