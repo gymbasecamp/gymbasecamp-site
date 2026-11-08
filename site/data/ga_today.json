@@ -1,17 +1,22 @@
 {
  "date": "2026-11-08",
  "events": {
-  "first_visit": 2,
-  "page_view": 3,
+  "brand_click": 1,
+  "brand_view": 1,
+  "click": 1,
+  "first_visit": 3,
+  "outbound_link_click": 1,
+  "page_view": 4,
   "quiz_open": 2,
-  "scroll": 3,
-  "session_start": 3,
+  "scroll": 4,
+  "session_start": 4,
+  "shop_click": 1,
   "user_engagement": 1
  },
- "sessions": 3,
+ "sessions": 4,
  "sources": {
-  "(direct)": 3
+  "(direct)": 4
  },
- "updated_kst": "2026-11-08 07:33",
- "users": 2
+ "updated_kst": "2026-11-08 11:12",
+ "users": 3
 }
