@@ -1,5 +1,5 @@
 {
- "at": "2026-11-08T16:38:25.488633",
+ "at": "2026-11-08T16:41:28.242720",
  "token_set": true,
  "uid_set": true,
  "token_kind": "EAB",
@@ -10,5 +10,7 @@
    "quota_usage": 0
   }
  ],
- "publish_limit_error": null
+ "publish_limit_error": null,
+ "online_followers": null,
+ "online_err": "(#10) Application does not have permission for this action"
 }
