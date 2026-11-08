@@ -48,7 +48,9 @@ const RANK_V2 = (function(){
     rows.sort((x,y)=>y.p.total-x.p.total||y.p.user-x.p.user||y.p.focus-x.p.focus||y.p.info-x.p.info||((react&&react.clicks&&(react.clicks[y.b.id]||0))-(react&&react.clicks&&(react.clicks[x.b.id]||0)))||x.b.en.localeCompare(y.b.en));
     rows.forEach((r,i)=>{r.b.v2=r.p; r.b.rank2=i+1;});
     const tc={}; rows.forEach(r=>{const k=r.b.cat||r.b.type||''; tc[k]=(tc[k]||0)+1; r.b.rankT=tc[k];});
-    const cc={}; rows.forEach(r=>{r.b.rk={}; (r.b.cats||[r.b.cat]).forEach(c=>{cc[c]=(cc[c]||0)+1; r.b.rk[c]=cc[c];});});
+    // 겸 카테고리(대표 아닌 종목): 그 종목 전문이 아니므로 특화도 점수 절반만 인정 (2026-11-08 지훈 승인, 옵션 B)
+    const byC={}; rows.forEach(r=>{r.b.rk={}; r.b.rs={}; (r.b.cats||[r.b.cat]).forEach(c=>{const s=c===r.b.cat?r.p.total:r1(r.p.total-r.p.focus*0.5); r.b.rs[c]=s; (byC[c]=byC[c]||[]).push(r);});});
+    Object.keys(byC).forEach(c=>byC[c].sort((x,y)=>y.b.rs[c]-x.b.rs[c]||x.b.rank2-y.b.rank2).forEach((r,i)=>r.b.rk[c]=i+1));
     return rows;
   }
   return {parts,rank,reactFromCounts};

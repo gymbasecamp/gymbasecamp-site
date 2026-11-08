@@ -176,7 +176,9 @@ const PRESETS = [
 
 const byId = Object.fromEntries(BRANDS.map(b=>[b.id,b]));
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const rankLabel = b => { const c=(typeof S!=='undefined'&&S&&S.cat&&S.cat.length===1&&b.rk&&b.rk[S.cat[0]])?S.cat[0]:b.cat; return `${lb(c)} ${T().rank(c===b.cat?b.rankT:b.rk[c], false)}`; };
+const ctxCat = b => (typeof S!=='undefined'&&S&&S.cat&&S.cat.length===1&&b.rk&&b.rk[S.cat[0]])?S.cat[0]:b.cat;
+const scoreOf = b => { const c=ctxCat(b); return c===b.cat?b.v2.total:b.rs[c]; };
+const rankLabel = b => { const c=ctxCat(b); return c===b.cat?`${lb(b.cat)} ${T().rank(b.rankT, false)}`:`${lb(c)} ${T().rank(b.rk[c], false)} · ${lang==='en'?'also':'겸'}`; };
 const mv = (b,i) => { if(!PREV.d) return ''; const p=PREV.r[b.id]; if(!p) return `<span class="mv new">NEW</span>`; const d=p[i||0]-(i?b.rankT:b.rank2); return d>0?`<span class="mv up" title="${PREV.d}">▲${d}</span>`:d<0?`<span class="mv dn" title="${PREV.d}">▼${-d}</span>`:''; };
 
 /* Analytics hook: pushes to GA4/GTM dataLayer once the WordPress site loads a tag. */
@@ -234,6 +236,7 @@ function sorted(list, how){
   const a=[...list];
   if(how==='name') return a.sort((x,y)=>x.en.localeCompare(y.en));
   if(how==='kr') return a.sort((x,y)=>(x.origin==='국내'?0:1)-(y.origin==='국내'?0:1)||x.rank2-y.rank2);
+  if(S&&S.cat&&S.cat.length===1){ const c=S.cat[0]; return a.sort((x,y)=>((x.rk&&x.rk[c])||999)-((y.rk&&y.rk[c])||999)||x.rank2-y.rank2); }
   return a.sort((x,y)=>x.rank2-y.rank2);
 }
 
@@ -242,7 +245,7 @@ function plates(score){
   for(let i=0;i<20;i++){ const ht=[18,18,16,16,14][i%5]; h+=`<i class="${i<score?'on':''}" style="height:${ht}px"></i>`; }
   return h+'</span>';
 }
-function meter(b){ return `<span class="meter" title="${b.v2.total} / 100">${plates(Math.round(b.v2.total/5))}<span><b>${b.v2.total}</b>/100</span></span>`; }
+function meter(b){ const v=scoreOf(b); return `<span class="meter" title="${v} / 100">${plates(Math.round(v/5))}<span><b>${v}</b>/100</span></span>`; }
 function breakdown(b){
   const t=T(); const p=b.v2; const rows=[["focus",25],["range",20],["access",20],["info",10],["editor",5],["user",20]];
   return `<div class="bd">${rows.map(([k,m])=>`<div class="bd-row"><span>${t.bd[k]}</span><i><b style="width:${Math.min(100,p[k]/m*100)}%"></b></i><em>${p[k]}<small>/${m}</small></em></div>`).join('')}</div>`;
