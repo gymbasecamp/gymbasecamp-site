@@ -1,0 +1,34 @@
+name: IG token check
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['.github/ig-check']
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests
+      - name: Check token (no posting)
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+        run: |
+          python3 - <<'PY'
+          import os,json,requests,datetime
+          t=os.environ.get('IG_TOKEN',''); u=os.environ.get('IG_USER_ID','')
+          G='https://graph.facebook.com/v21.0' if t.startswith('EAA') else 'https://graph.instagram.com/v21.0'
+          out={'at':datetime.datetime.utcnow().isoformat(),'token_set':bool(t),'uid_set':bool(u),'token_kind':t[:3] if t else ''}
+          if t and u:
+              r=requests.get(f'{G}/{u}',params={'fields':'username','access_token':t},timeout=30).json()
+              out['username']=r.get('username'); out['error']=(r.get('error') or {}).get('message')
+              r2=requests.get(f'{G}/{u}/content_publishing_limit',params={'access_token':t},timeout=30).json()
+              out['publish_limit']=r2.get('data'); out['publish_limit_error']=(r2.get('error') or {}).get('message')
+          os.makedirs('reels/posted',exist_ok=True); json.dump(out,open('reels/posted/ig-check.json','w'),ensure_ascii=False,indent=1); print(out)
+          PY
+      - run: |
+          git config user.name "gymbasecamp-bot"; git config user.email "actions@users.noreply.github.com"
+          git add reels/posted/ig-check.json && git commit -m "IG 토큰 점검" && git push || true
