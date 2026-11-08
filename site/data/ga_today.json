@@ -3,20 +3,23 @@
  "events": {
   "brand_click": 1,
   "brand_view": 1,
+  "category_click": 1,
   "click": 1,
-  "first_visit": 5,
+  "filter_use": 1,
+  "first_visit": 7,
   "outbound_link_click": 1,
-  "page_view": 6,
+  "page_view": 9,
   "quiz_open": 2,
-  "scroll": 6,
-  "session_start": 6,
+  "scroll": 8,
+  "session_start": 9,
   "shop_click": 1,
-  "user_engagement": 1
+  "user_engagement": 2
  },
- "sessions": 6,
+ "sessions": 9,
  "sources": {
-  "(direct)": 6
+  "(direct)": 8,
+  "instagram": 1
  },
- "updated_kst": "2026-11-08 14:00",
- "users": 5
+ "updated_kst": "2026-11-08 17:11",
+ "users": 7
 }
