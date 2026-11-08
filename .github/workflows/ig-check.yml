@@ -20,7 +20,7 @@ jobs:
           python3 - <<'PY'
           import os,json,requests,datetime
           t=os.environ.get('IG_TOKEN',''); u=os.environ.get('IG_USER_ID','')
-          G='https://graph.facebook.com/v21.0' if t.startswith('EAA') else 'https://graph.instagram.com/v21.0'
+          G='https://graph.facebook.com/v21.0' if not t.startswith('IG') else 'https://graph.instagram.com/v21.0'
           out={'at':datetime.datetime.utcnow().isoformat(),'token_set':bool(t),'uid_set':bool(u),'token_kind':t[:3] if t else ''}
           if t and u:
               r=requests.get(f'{G}/{u}',params={'fields':'username','access_token':t},timeout=30).json()

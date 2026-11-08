@@ -21,7 +21,7 @@ def instagram():
     tok, uid = os.environ.get('IG_TOKEN'), os.environ.get('IG_USER_ID')
     if not (tok and uid): return 'skip: IG secrets not set'
     # IGAA = 인스타 로그인 토큰 / EAA = 페이스북(시스템 사용자) 토큰
-    G = 'https://graph.facebook.com/v21.0' if tok.startswith('EAA') else 'https://graph.instagram.com/v21.0'
+    G = 'https://graph.facebook.com/v21.0' if not tok.startswith('IG') else 'https://graph.instagram.com/v21.0'
     r = requests.post(f'{G}/{uid}/media', data={'media_type': 'REELS', 'video_url': public_url,
         'caption': item['caption'], 'share_to_feed': 'true', 'access_token': tok}, timeout=60).json()
     if 'id' not in r: return f'error create: {r}'
