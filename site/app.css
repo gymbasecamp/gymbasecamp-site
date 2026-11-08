@@ -457,3 +457,25 @@ input,textarea,select{color:var(--ink);background:#0b0a09}
 .pill.kr{background:transparent;color:var(--brass);border-color:#3a3226}
 .thumb{background:#14120f!important;color:var(--ink)!important}
 .card h3{font-size:21px;letter-spacing:.08em;overflow-wrap:anywhere;word-break:normal}
+
+/* ===== DUSK (2026-11-08): 필름 사진 같은 노을·블루아워 도시, 따뜻한 앰버 빛 + 깊은 남색 그림자 ===== */
+:root{--paper:#07080d;--surface:#0e1018;--sunk:#151826;--ink:#F3E9DC;--ink2:#E2D5C3;--muted:#A79A8B;--line:#232636;
+--on-dark:#F3E9DC;--on-dark-muted:#A79A8B;--line-dark:#232636;--accent:#E39A63;--brass:#E8B07A;background:#07080d}
+.top{background:rgba(7,8,13,.62)}
+.nx{background:#07080d}
+.nx::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.5;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.nx-hero{justify-content:flex-start;padding-top:20vh}
+.nx-h{text-shadow:0 2px 30px rgba(0,0,0,.45)}
+.nx-sub{color:#E7D7C4;text-shadow:0 1px 14px rgba(0,0,0,.6)}
+.nx-cue{display:none}
+.nx-ch{align-items:flex-end;padding-bottom:6vh}
+.nx-in{background:linear-gradient(rgba(7,8,13,0),rgba(7,8,13,.55) 30%,rgba(7,8,13,.75));padding:40px 20px 28px;margin:0 -24px;width:calc(100% + 48px);max-width:none}
+.nx-rule{background:var(--accent)}
+.nx-cat{color:var(--brass)}
+.nx-desc{color:#C9BBAA}
+.card,.panel,.finder{background:#0e1018;border-color:#232636}
+.pill{background:#151826;border-color:#232636}
+.nx-find,.final,.value{background:#07080d}
+footer.gbfoot{background:#05060a}
+.nx-hero{padding-top:15vh}
+.nx-in{background:linear-gradient(rgba(7,8,13,0),rgba(7,8,13,.72) 22%,rgba(7,8,13,.88));padding-top:70px}
