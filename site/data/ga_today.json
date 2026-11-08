@@ -9,19 +9,20 @@
   "first_visit": 8,
   "official_click": 1,
   "outbound_link_click": 1,
-  "page_view": 11,
+  "page_view": 13,
   "quiz_complete": 1,
   "quiz_open": 3,
-  "scroll": 10,
-  "session_start": 11,
+  "scroll": 12,
+  "session_start": 13,
   "shop_click": 1,
   "user_engagement": 2
  },
- "sessions": 11,
+ "sessions": 13,
  "sources": {
-  "(direct)": 10,
-  "instagram": 1
+  "(direct)": 11,
+  "instagram": 1,
+  "l.instagram.com": 1
  },
- "updated_kst": "2026-11-08 19:52",
+ "updated_kst": "2026-11-08 22:56",
  "users": 8
 }
