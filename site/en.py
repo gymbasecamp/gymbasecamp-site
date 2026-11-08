@@ -198,6 +198,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"rogue-fitness":"Columbus, Ohio training equipment maker founded by Bill Henniger in 2006 and official supplier to the CrossFit Games, with its own tees, shorts and singlets.",
+"skins":"Australian compression sportswear brand started in 1996 by physiologist Brad Duffy, known for its SERIES compression tights and tops.",
+"live":"Brazilian premium women's activewear brand founded in 2002 in Jaraguá do Sul by Joice and Gabriel Sens, known for leggings and sports bras.",
 "lorna-jane":"Australian women's activewear brand founded by Lorna Jane Clarkson in 1989, known for leggings, sports bras and bike shorts.",
 "fairtex":"Thai Muay Thai brand that grew from Philip Wong's Fairtex garment factory, known for fight shorts, rash guards and compression wear.",
 "sweaty-betty":"London women's activewear brand founded in Notting Hill in 1998, known for its bestselling Power leggings and sports bras.",
