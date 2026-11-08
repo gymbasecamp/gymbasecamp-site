@@ -4,19 +4,19 @@
   "brand_click": 1,
   "brand_view": 1,
   "click": 1,
-  "first_visit": 3,
+  "first_visit": 5,
   "outbound_link_click": 1,
-  "page_view": 4,
+  "page_view": 6,
   "quiz_open": 2,
-  "scroll": 4,
-  "session_start": 4,
+  "scroll": 6,
+  "session_start": 6,
   "shop_click": 1,
   "user_engagement": 1
  },
- "sessions": 4,
+ "sessions": 6,
  "sources": {
-  "(direct)": 4
+  "(direct)": 6
  },
- "updated_kst": "2026-11-08 11:12",
- "users": 3
+ "updated_kst": "2026-11-08 14:00",
+ "users": 5
 }
