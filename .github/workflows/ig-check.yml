@@ -27,6 +27,8 @@ jobs:
               out['username']=r.get('username'); out['error']=(r.get('error') or {}).get('message')
               r2=requests.get(f'{G}/{u}/content_publishing_limit',params={'access_token':t},timeout=30).json()
               out['publish_limit']=r2.get('data'); out['publish_limit_error']=(r2.get('error') or {}).get('message')
+              r3=requests.get(f'{G}/{u}/insights',params={'metric':'online_followers','period':'lifetime','access_token':t},timeout=30).json()
+              out['online_followers']=r3.get('data'); out['online_err']=(r3.get('error') or {}).get('message')
           os.makedirs('reels/posted',exist_ok=True); json.dump(out,open('reels/posted/ig-check.json','w'),ensure_ascii=False,indent=1); print(out)
           PY
       - run: |
