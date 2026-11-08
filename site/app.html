@@ -313,37 +313,124 @@ const FEATURED = ['hdex','borntowin','bysec','gymshark','youngla','under-armour'
 const CATN = ['헬스·보디빌딩','요가·필라테스·레깅스','스트렝스·파워리프팅','크로스핏·HYROX','러닝','격투기','컴프레션·기능성','종합 스포츠'];
 const CATS = CATN.map(c=>({cat:[c]}));
 function chapterTop(cat){ return BRANDS.filter(b=>b.rk&&b.rk[cat]).sort((x,y)=>x.rk[cat]-y.rk[cat])[0]; }
+/* ===== BASECAMP RANGE (버전 2, 2026-11-09): 종목마다 하나의 봉우리, 정상엔 1위. 봉우리를 누르면 순위, 조건을 고르면 맞는 봉우리로 날아간다 ===== */
+const EV_SHORT={'헬스·보디빌딩':'헬스','요가·필라테스·레깅스':'요가·필라테스','스트렝스·파워리프팅':'파워리프팅','크로스핏·HYROX':'크로스핏·HYROX','러닝':'러닝','격투기':'격투기','컴프레션·기능성':'컴프레션','종합 스포츠':'종합 스포츠'};
+const EV_SHORT_EN={'헬스·보디빌딩':'Bodybuilding','요가·필라테스·레깅스':'Yoga·Pilates','스트렝스·파워리프팅':'Powerlifting','크로스핏·HYROX':'CrossFit·HYROX','러닝':'Running','격투기':'Combat','컴프레션·기능성':'Compression','종합 스포츠':'All-sport'};
+const evS=c=>lang==='en'?(EV_SHORT_EN[c]||c):(EV_SHORT[c]||c);
+const EV_CHIPS=[['gender',['남성','여성']],['fit',['머슬핏','오버핏','컴프레션']],['item',['슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','아우터','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝']],['buy',['국내 공식몰','국내 판매처','해외 직배송']]];
+let EVF={f:[],buy:[]};
+function evCatList(c){ return BRANDS.filter(b=>b.rk&&b.rk[c]).sort((x,y)=>x.rk[c]-y.rk[c]); }
+function evScore(b,c){ return (b.rs&&b.rs[c]!=null)?b.rs[c]:b.v2.total; }
+function evPeaks(){
+  const tops=CATN.map(c=>({c,b:evCatList(c)[0],n:evCatList(c).length})).filter(x=>x.b).sort((a,b)=>evScore(b.b,b.c)-evScore(a.b,a.c));
+  const order=[]; tops.forEach((p,i)=>{ if(i%2) order.push(p); else order.unshift(p); }); // 가장 높은 봉우리가 가운데
+  const lo=Math.min(...tops.map(p=>evScore(p.b,p.c))), hi=Math.max(...tops.map(p=>evScore(p.b,p.c)));
+  return order.map((p,i)=>({...p,x:520+i*420,y:Math.round(1010-(evScore(p.b,p.c)-lo)/(hi-lo||1)*560)}));
+}
 function viewHome(){
-  const t=T(); const n=BRANDS.length; const ko=lang==='ko';
-  const ch=CATN.map((c,i)=>({c,i,b:chapterTop(c)})).filter(x=>x.b);
+  const n=BRANDS.length, ko=lang==='ko';
+  const chip=(k,v)=>`<button type="button" class="ev-chip" data-evk="${k}" data-evv="${esc(v)}" aria-pressed="false">${esc(trOne?trOne(v):v)}</button>`;
   return `
-  <section class="nx" id="nx">
-    <canvas id="aura" aria-hidden="true"></canvas><div class="nx-film" aria-hidden="true"></div>
-    <div class="nx-hero">
-      <h1 class="nx-h">${ko?'운동복,<br>감 말고 점수로':'Gymwear,<br>by the score'}</h1>
-      <p class="nx-sub">${ko?`국내외 ${n}개 운동복 브랜드를 100점으로 채점했습니다.<br>종목마다, 정점에 선 브랜드를 소개합니다.`:`${n} gymwear brands from Korea and abroad, scored out of 100.<br>For every sport, the brand at the top.`}</p>
-      <div class="nx-cue" aria-hidden="true"><span></span></div>
-    </div>
-    ${ch.map(({c,i,b},k)=>`
-    <article class="nx-ch" data-k="${k}">
-      <div class="nx-in">
-        <p class="nx-pre">A GYM BASECAMP RANKING</p>
-        <p class="nx-cat">${esc(lb(c))}</p>
-        <p class="nx-no">${k+1} / ${ch.length}</p>
-        <h2 class="nx-brand">${esc(b.en)}</h2>
-        <p class="nx-ko">${esc(b.ko)}</p>
-        <div class="nx-rule"></div>
-        <p class="nx-score">${b.v2.total}<span>${ko?'100점 만점':'out of 100'}</span></p>
-        <p class="nx-desc">${esc(desc(b))}</p>
-        <div class="nx-act">
-          <a class="nx-btn" href="#b-${b.id}" data-track="chapter_brand" data-brand="${esc(b.en)}">${ko?'브랜드 보기':'View brand'}</a>
-          <button class="nx-btn ghost cat" type="button" data-cat="${i}">${ko?'이 종목 전체 순위':'Full ranking'}</button>
-        </div>
-      </div>
-    </article>`).join('')}
+  <section class="ev" id="ev">
+    <canvas id="evc" aria-hidden="true"></canvas>
+    <div class="ev-pks" id="evPks"></div>
+    <header class="ev-hero" id="evHero">
+      <p class="ev-eye">BASECAMP RANGE · ${ko?'운동복 브랜드 순위':'GYMWEAR RANKING'}</p>
+      <h1 class="ev-h">${ko?'운동복,<br>감 말고 <em>점수로</em>':'Gymwear,<br>by the <em>score</em>'}</h1>
+      <p class="ev-sub">${ko?`${n}개 브랜드를 8개 종목 봉우리에 올렸습니다.<br>정상엔 그 종목 1위만 섭니다.`:`${n} brands placed on 8 sport peaks.<br>Only the #1 stands on each summit.`}</p>
+      <ul class="ev-facts"><li><b>${n}</b>${ko?'개 브랜드':' brands'}</li><li><b>100</b>${ko?'점 채점':'-pt score'}</li><li>${ko?'공식몰로 <b>바로</b>':'<b>Direct</b> to store'}</li><li>${ko?'광고는 순위에 <b>안 섞음</b>':'<b>No ads</b> in ranks'}</li></ul>
+      <div class="ev-act"><button type="button" class="ev-btn" data-ev="find">${ko?'내 정상 찾기':'Find my summit'}</button><span class="ev-hint">${ko?'봉우리를 누르면 종목 순위':'Tap a peak for its ranking'}</span></div>
+    </header>
+    <div class="ev-nav" id="evNav"></div>
+    <aside class="ev-panel" id="evPanel" aria-live="polite" hidden></aside>
+    <template id="evFindT">
+      <div class="ev-ph"><p class="ev-pc">${ko?'조건으로 찾기':'FIND BY WHAT YOU WEAR'}</p><h2>${ko?'내 정상 찾기':'Find my summit'}</h2><button type="button" class="ev-x" data-ev="close" aria-label="close">×</button></div>
+      ${EV_CHIPS.map(([k,vs])=>`<p class="ev-gl">${ko?{gender:'누가 입나요',fit:'원하는 핏',item:'필요한 아이템',buy:'어디서 살까요'}[k]:{gender:'Who',fit:'Fit',item:'Items',buy:'Where to buy'}[k]}</p><div class="ev-chips">${vs.map(v=>chip(k,v)).join('')}</div>`).join('')}
+      <div class="ev-go"><span id="evCnt"></span><button type="button" class="ev-btn" data-ev="go">${ko?'정상 찾기 →':'Find →'}</button></div>
+    </template>
   </section>
   ${viewHomeRest()}`;
 }
+let EVR=null;
+function stopRange(){ if(EVR){ cancelAnimationFrame(EVR.raf); window.removeEventListener('resize',EVR.onResize); EVR=null; } }
+function initRange(){
+  stopRange(); const root=document.getElementById('ev'); if(!root) return;
+  const cv=document.getElementById('evc'), ctx=cv.getContext('2d'), pks=document.getElementById('evPks'), panel=document.getElementById('evPanel'), hero=document.getElementById('evHero'), nav=document.getElementById('evNav');
+  const P=evPeaks(), WW=520*2+420*(P.length-1), WH=1700; const R={raf:0,cam:{x:WW/2,y:900,z:.3},to:null,sel:null,mode:null}; EVR=R;
+  let s=19; const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
+  const noise=(steps)=>{const n=new Float32Array(WW); for(const [st,a] of steps){ let p=rnd()-.5,q=rnd()-.5; for(let x=0;x<WW;x++){ if(x%st===0){p=q;q=rnd()-.5;} const t=(x%st)/st; n[x]+=(p+(q-p)*t*t*(3-2*t))*a; } } return n;};
+  const ridge=(lift,sl,amp)=>{ const h=new Float32Array(WW), nz=noise([[280,amp],[110,amp*.45],[40,amp*.16],[12,amp*.05]]); for(let x=0;x<WW;x++){ let m=1e9; P.forEach((p,i)=>{ const k=sl*(.82+.36*(((i*53)%9)/9)); m=Math.min(m,p.y+lift+Math.abs(x-p.x)*k); }); h[x]=m+nz[x]*Math.min(1,Math.max(.25,(m-300)/500)); } return h; };
+  const mk=(h,o)=>{ const c=document.createElement('canvas'); c.width=WW; c.height=WH; const g=c.getContext('2d'); const im=g.createImageData(WW,WH), d=im.data;
+    const sn=noise([[60,1],[19,.5]]), sl2=noise([[300,1]]);
+    for(let x=0;x<WW;x++){ let a=0; for(let k=-26;k<=26;k++){ const i=Math.min(WW-2,Math.max(1,x+k)); a+=h[i+1]-h[i-1]; } const lit=Math.max(0,Math.min(1,.5-a/53*.85));
+      const y0=Math.max(0,Math.floor(h[x])); const snowLine=o.snow+70*sl2[x]; const depth=o.depth*(.55+.9*(sn[x]+.5));
+      const sb=Math.min(snowLine,h[x]+depth);
+      for(let y=y0;y<WH;y++){ let r,gg,b; const tY=(y-y0)/(WH-y0);
+        if(y<sb){ const f=(y-y0)/Math.max(1,sb-y0); r=o.sL[0]*lit+o.sS[0]*(1-lit); gg=o.sL[1]*lit+o.sS[1]*(1-lit); b=o.sL[2]*lit+o.sS[2]*(1-lit); const dk=1-.12*f; r*=dk; gg*=dk; b*=dk; }
+        else { r=o.rL[0]*lit+o.rS[0]*(1-lit); gg=o.rL[1]*lit+o.rS[1]*(1-lit); b=o.rL[2]*lit+o.rS[2]*(1-lit); }
+        const hz=Math.min(1,Math.max(0,(y-o.hz0)/(WH-o.hz0))); r=r*(1-hz)+o.hc[0]*hz; gg=gg*(1-hz)+o.hc[1]*hz; b=b*(1-hz)+o.hc[2]*hz;
+        const i=(y*WW+x)*4; d[i]=r; d[i+1]=gg; d[i+2]=b; d[i+3]=255; } }
+    g.putImageData(im,0,0); if('filter' in g){ const c2=document.createElement('canvas'); c2.width=WW; c2.height=WH; const g2=c2.getContext('2d'); g2.filter='blur(1.1px)'; g2.drawImage(c,0,0); return c2; } return c; };
+  const far=mk(ridge(-150,.62,150),{snow:900,depth:420,sL:[236,196,208],sS:[150,150,190],rL:[150,118,140],rS:[78,80,118],hz0:700,hc:[52,52,86]});
+  const mid=mk(ridge(-30,.85,110),{snow:960,depth:300,sL:[250,214,206],sS:[116,124,168],rL:[84,64,70],rS:[36,38,60],hz0:850,hc:[24,24,42]});
+  const main=mk(ridge(0,1.02,80),{snow:1040,depth:240,sL:[255,226,212],sS:[104,116,162],rL:[72,52,54],rS:[20,22,36],hz0:1000,hc:[7,8,15]});
+  let W=0,H=0,dpr=1, mobile=false;
+  const fit=()=>{ // overview camera
+    const top=P.reduce((a,p)=>p.y<a.y?p:a);
+    if(mobile) { const z=Math.min(1,W/1150); return {x:top.x,y:top.y+H*.30/z,z}; }
+    const z=Math.min(W/(WW*.9),H/1350); return {x:WW/2,y:top.y+H*.30/z,z}; };
+  const focus=p=>{ if(mobile){ const z=Math.min(1.25,W/700); return {x:p.x,y:p.y+H*.25/z,z}; } const z=Math.min(1.25,(W-460)/1100); return {x:p.x+230/z,y:p.y+H*.12/z,z}; };
+  const sky=()=>{ const g=ctx.createLinearGradient(0,0,0,H*dpr); g.addColorStop(0,'#070b1d'); g.addColorStop(.35,'#232a52'); g.addColorStop(.6,'#7d6584'); g.addColorStop(.78,'#d9998a'); g.addColorStop(1,'#f0bd96'); ctx.fillStyle=g; ctx.fillRect(0,0,W*dpr,H*dpr);
+    ctx.fillStyle='rgba(255,255,255,.7)'; for(let i=0;i<140;i++){ const x=(i*137.508%1)*W*dpr, y=((i*61.803)%1)*H*dpr*.4, r=(i%5===0?1.6:.9)*dpr; ctx.globalAlpha=.25+.6*((i*7)%10)/10; ctx.fillRect(x,y,r,r);} ctx.globalAlpha=1; };
+  const draw=()=>{ const C=R.cam; ctx.setTransform(1,0,0,1,0,0); sky();
+    const L=(img,par)=>{ const z=C.z*dpr, cx=C.x*par+WW/2*(1-par); ctx.drawImage(img,(0-cx)*z+W*dpr/2,(0-C.y)*z+H*dpr/2,WW*z,WH*z); };
+    L(far,.55); ctx.fillStyle='rgba(240,190,170,.10)'; ctx.fillRect(0,(900-C.y)*C.z*dpr+H*dpr/2,W*dpr,60*C.z*dpr); L(mid,.8); L(main,1);
+    const by=(WH-C.y)*C.z*dpr+H*dpr/2; if(by<H*dpr){ ctx.fillStyle='rgb(7,8,15)'; ctx.fillRect(0,by-2,W*dpr,H*dpr-by+2); }
+    // selected peak glow
+    if(R.sel){ const p=R.sel; const x=((p.x-C.x)*C.z+W/2)*dpr, y=((p.y-C.y)*C.z+H/2)*dpr; ctx.save(); ctx.globalCompositeOperation='lighter'; const g=ctx.createRadialGradient(x,y,0,x,y,360*dpr*C.z); g.addColorStop(0,'rgba(255,190,120,.45)'); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=g; ctx.fillRect(x-400*dpr,y-400*dpr,800*dpr,800*dpr); ctx.restore(); }
+    // labels
+    const det=C.z>(mobile?.62:.5);
+    P.forEach((p,i)=>{ const el=pks.children[i]; const x=(p.x-C.x)*C.z+W/2, y=(p.y-C.y)*C.z+H/2; el.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`; el.classList.toggle('det',det); el.classList.toggle('on',R.sel===p); el.style.visibility=(x<-260||x>W+260)?'hidden':'visible'; });
+  };
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const fly=(to,ms)=>{ cancelAnimationFrame(R.raf); const from={...R.cam}; const t0=performance.now(); const far=Math.abs(to.x-from.x)*Math.min(from.z,to.z)>W*.8; const mz=far?Math.min(from.z,to.z)*.6:0;
+    const step=now=>{ const k=Math.min(1,(now-t0)/ms), e=ease(k); R.cam.x=from.x+(to.x-from.x)*e; R.cam.y=from.y+(to.y-from.y)*e; let lz=Math.log(from.z)+(Math.log(to.z)-Math.log(from.z))*e; if(mz) lz=Math.min(lz,Math.log(from.z)+(Math.log(to.z)-Math.log(from.z))*e - (Math.log(Math.min(from.z,to.z))-Math.log(mz))*Math.sin(Math.PI*k)); R.cam.z=Math.exp(lz); draw(); if(k<1) R.raf=requestAnimationFrame(step); };
+    R.raf=requestAnimationFrame(step); };
+  const ko=lang==='ko';
+  pks.innerHTML=P.map((p,i)=>`<button type="button" class="ev-pk" data-evp="${i}"><span class="ev-flag"></span><span class="ev-card"><span class="ev-cc">${esc(evS(p.c))}<i>${ko?'1위':'#1'}</i></span><b>${esc(p.b.en)}</b><span class="ev-cs">${evScore(p.b,p.c)}</span><small>${esc(p.b.ko)}</small></span><span class="ev-mini">${esc(evS(p.c))}</span></button>`).join('');
+  nav.innerHTML=P.slice().sort((a,b)=>CATN.indexOf(a.c)-CATN.indexOf(b.c)).map(p=>`<button type="button" data-evp="${P.indexOf(p)}">${esc(evS(p.c))}</button>`).join('');
+  const openPanel=html=>{ panel.innerHTML=html; panel.hidden=false; requestAnimationFrame(()=>panel.classList.add('in')); root.classList.add('panel'); };
+  const closePanel=()=>{ panel.classList.remove('in'); root.classList.remove('panel'); R.sel=null; setTimeout(()=>{ if(!panel.classList.contains('in')) panel.hidden=true; },350); fly(fit(),1100); };
+  const rows=(list,c)=>list.map(b=>{ const sc=evScore(b,c); return `<li class="ev-row"><span class="ev-rn">${b.rk[c]}</span><a class="ev-rb" href="#b-${b.id}" data-track="range_brand" data-brand="${esc(b.en)}"><b>${esc(b.en)}</b><small>${esc(b.ko)} · ${esc(trOne?trOne(b.buy):b.buy)}${c!==b.cat?` · ${ko?'겸':'also'}`:''}</small><span class="ev-bar"><i style="width:${sc}%"></i></span></a><span class="ev-rs">${sc}</span><a class="ev-ro" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" aria-label="${ko?'공식몰':'store'}">↗</a></li>`; }).join('');
+  const showRank=p=>{ R.sel=p; track('range_peak',{category:p.c}); const list=evCatList(p.c);
+    openPanel(`<div class="ev-ph"><p class="ev-pc">${esc(lb(p.c))}</p><h2>${ko?'종목 순위':'Ranking'}</h2><p class="ev-pn">${ko?`${list.length}개 브랜드 · 100점 만점 점수순`:`${list.length} brands · by score`}</p><button type="button" class="ev-x" data-ev="close" aria-label="close">×</button></div><ol class="ev-list">${rows(list,p.c)}</ol><button type="button" class="ev-btn ghost" data-ev="find">${ko?'조건으로 다시 찾기':'Refine by what you wear'}</button>`);
+    fly(focus(p),1300); };
+  const cnt=()=>{ const m=BRANDS.filter(b=>EVF.f.every(k=>b.f.includes(k))&&(!EVF.buy.length||EVF.buy.includes(b.buy))); const e=document.getElementById('evCnt'); if(e) e.innerHTML=ko?`맞는 브랜드 <b>${m.length}</b>개`:`<b>${m.length}</b> brands match`; return m; };
+  const showFind=()=>{ R.sel=null; openPanel(document.getElementById('evFindT').innerHTML); panel.querySelectorAll('.ev-chip').forEach(c=>{ const k=c.dataset.evk==='buy'?'buy':'f'; c.setAttribute('aria-pressed',EVF[k].includes(c.dataset.evv)); }); cnt(); if(mobile) fly(fit(),900); };
+  const go=()=>{ const m=cnt().sort((a,b)=>b.v2.total-a.v2.total); track('range_find',{filters:[...EVF.f,...EVF.buy].join('|'),results:m.length}); if(!m.length) return;
+    const top=m[0], p=P.find(x=>x.c===top.cat)||P.find(x=>evCatList(x.c).includes(top)); R.sel=p;
+    openPanel(`<div class="ev-ph"><p class="ev-pc">${esc([...EVF.f,...EVF.buy].map(v=>trOne?trOne(v):v).join(' · ')||(ko?'전체':'All'))}</p><h2>${ko?'당신의 정상':'Your summit'}</h2><button type="button" class="ev-x" data-ev="close" aria-label="close">×</button></div>
+      <div class="ev-win"><p class="ev-pc">${esc(lb(top.cat))} ${ko?`봉우리 · ${top.rk[top.cat]}위`:`peak · #${top.rk[top.cat]}`}</p><h3>${esc(top.en)}</h3><p class="ev-wk">${esc(top.ko)} · <b>${top.v2.total}</b>${ko?'점':' pts'}</p><p class="ev-wd">${esc(desc?desc(top):top.desc)}</p>
+      <div class="ev-wa"><a class="ev-btn" href="${esc(ou(top.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(top.en)}">${ko?'공식몰 보기 ↗':'Official store ↗'}</a><a class="ev-btn ghost" href="#b-${top.id}" data-track="range_brand" data-brand="${esc(top.en)}">${ko?'자세히':'Details'}</a></div></div>
+      ${m.length>1?`<p class="ev-gl">${ko?'조건에 맞는 다음 후보':'Also matching'}</p><ol class="ev-list">${m.slice(1,5).map(b=>`<li class="ev-row"><span class="ev-rn">·</span><a class="ev-rb" href="#b-${b.id}"><b>${esc(b.en)}</b><small>${esc(b.ko)} · ${esc(lb(b.cat))}</small><span class="ev-bar"><i style="width:${b.v2.total}%"></i></span></a><span class="ev-rs">${b.v2.total}</span><a class="ev-ro" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">↗</a></li>`).join('')}</ol>`:''}
+      <button type="button" class="ev-btn ghost" data-ev="find">${ko?'조건 바꾸기':'Change filters'}</button>`);
+    fly(focus(p),1900); };
+  root.addEventListener('click',e=>{ const t=e.target.closest('button'); if(!t) return;
+    if(t.dataset.evp!==undefined){ showRank(P[+t.dataset.evp]); return; }
+    if(t.dataset.ev==='close'){ closePanel(); return; }
+    if(t.dataset.ev==='find'){ showFind(); return; }
+    if(t.dataset.ev==='go'){ go(); return; }
+    if(t.dataset.evk){ const k=t.dataset.evk==='buy'?'buy':'f', v=t.dataset.evv; EVF[k]=EVF[k].includes(v)?EVF[k].filter(x=>x!==v):[...EVF[k],v]; t.setAttribute('aria-pressed',EVF[k].includes(v)); cnt(); return; } });
+  // drag to pan (mobile 산맥 좌우 이동)
+  let drag=null; cv.addEventListener('pointerdown',e=>{ drag={x:e.clientX,cx:R.cam.x}; cancelAnimationFrame(R.raf); });
+  window.addEventListener('pointerup',()=>drag=null,{passive:true});
+  cv.addEventListener('pointermove',e=>{ if(!drag) return; R.cam.x=Math.max(300,Math.min(WW-300,drag.cx-(e.clientX-drag.x)/R.cam.z)); draw(); });
+  R.onResize=()=>{ W=root.clientWidth; H=cv.clientHeight; dpr=Math.min(2,window.devicePixelRatio||1); mobile=W<760; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); R.cam=R.sel?focus(R.sel):fit(); draw(); };
+  R.onResize(); window.addEventListener('resize',R.onResize);
+  // 첫 진입: 정상에서 산맥 전체로 천천히 물러나는 카메라
+  const f=fit(); R.cam={x:f.x,y:f.y-80/f.z,z:f.z*1.18}; draw(); setTimeout(()=>fly(f,2600),150);
+}
+
 function viewHomeRest(){
   const t=T(); const nKR=BRANDS.filter(b=>b.origin==='국내').length;
   const n10=Math.floor(BRANDS.length/10)*10;
@@ -829,7 +916,7 @@ function render(){
   else if(h==='submit'){ app.innerHTML=viewSubmit(); key='about'; }
   else if(h==='about'){ app.innerHTML=viewAbout(); key='about'; }
   else { app.innerHTML=viewHome(); updateFinder(); }
-  if(key==='home') initAura(); else stopAura();
+  stopAura(); if(key==='home') initRange(); else stopRange();
   document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===key) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   syncCmp();
 }

@@ -47,6 +47,16 @@ def scope_css(css):
                 return ''.join(res), i + 1
             j = css.index('{', i)
             prelude = css[i:j].strip()
+            if 'keyframes' in prelude:
+                d, k = 0, j
+                while True:
+                    if css[k] == '{': d += 1
+                    elif css[k] == '}':
+                        d -= 1
+                        if d == 0: break
+                    k += 1
+                res.append(prelude + css[j:k + 1]); i = k + 1
+                continue
             if prelude.startswith('@media') or prelude.startswith('@supports'):
                 inner, i = parse_block(j + 1)
                 res.append(prelude + '{' + inner + '}')
