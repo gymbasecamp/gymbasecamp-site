@@ -1,28 +1,22 @@
 {
- "date": "2026-11-08",
+ "date": "2026-11-09",
  "events": {
-  "brand_click": 1,
   "brand_view": 1,
-  "category_click": 1,
-  "click": 2,
-  "filter_use": 1,
-  "first_visit": 8,
+  "click": 1,
+  "finder_preview": 1,
+  "first_visit": 2,
   "official_click": 1,
-  "outbound_link_click": 1,
-  "page_view": 13,
-  "quiz_complete": 1,
-  "quiz_open": 3,
-  "scroll": 12,
-  "session_start": 13,
-  "shop_click": 1,
-  "user_engagement": 2
+  "page_view": 5,
+  "scroll": 3,
+  "session_start": 4,
+  "user_engagement": 1
  },
- "sessions": 13,
+ "sessions": 4,
  "sources": {
-  "(direct)": 11,
-  "instagram": 1,
-  "l.instagram.com": 1
+  "(direct)": 1,
+  "instagram.com": 1,
+  "l.instagram.com": 2
  },
- "updated_kst": "2026-11-08 22:56",
- "users": 8
+ "updated_kst": "2026-11-09 07:34",
+ "users": 4
 }

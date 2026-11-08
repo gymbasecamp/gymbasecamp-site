@@ -46,5 +46,17 @@
 "official": 0,
 "quiz": 0,
 "view": 1
+},
+"physical-garments": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 0
+},
+"reps-on-reps": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
 }
 }
