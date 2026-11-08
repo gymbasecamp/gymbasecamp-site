@@ -48,6 +48,7 @@ const RANK_V2 = (function(){
     rows.sort((x,y)=>y.p.total-x.p.total||y.p.user-x.p.user||y.p.focus-x.p.focus||y.p.info-x.p.info||((react&&react.clicks&&(react.clicks[y.b.id]||0))-(react&&react.clicks&&(react.clicks[x.b.id]||0)))||x.b.en.localeCompare(y.b.en));
     rows.forEach((r,i)=>{r.b.v2=r.p; r.b.rank2=i+1;});
     const tc={}; rows.forEach(r=>{const k=r.b.cat||r.b.type||''; tc[k]=(tc[k]||0)+1; r.b.rankT=tc[k];});
+    const cc={}; rows.forEach(r=>{r.b.rk={}; (r.b.cats||[r.b.cat]).forEach(c=>{cc[c]=(cc[c]||0)+1; r.b.rk[c]=cc[c];});});
     return rows;
   }
   return {parts,rank,reactFromCounts};

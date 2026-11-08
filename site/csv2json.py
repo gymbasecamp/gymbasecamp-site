@@ -36,5 +36,9 @@ for r in rows:
         cat=r.get('대표 카테고리') or '헬스·보디빌딩', score=int(float(r['현재 점수 (20)'] or 0)), rank=int(float(r['현재 순위'] or 99)), type=r['브랜드 유형'],
         sport=r['핵심 운동'], vibe=r['스타일 성향'], group=r['사이트 그룹'], buy=r['구매 방식'], shops=shops(r),
         f=[k for k in F if r.get(k) == 'Y'], cov=cov(r)))
+_ap = os.path.join(D, 'data/cat_also.json')
+ALSO = json.load(open(_ap, encoding='utf-8')) if os.path.exists(_ap) else {}
+for b in out:
+    b['cats'] = [b['cat']] + [c for c in ALSO.get(b['id'], []) if c != b['cat']]
 json.dump(out, open(os.path.join(D, 'data/brands.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 print(len(out), 'brands written')
