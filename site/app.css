@@ -492,3 +492,16 @@ footer.gbfoot{background:#05060a}
 .fprev-b small{font-size:12.5px;color:var(--muted)}
 .fprev-s{font-family:var(--serif);font-weight:300;font-size:26px}
 .finder-go{border-top:0}
+
+/* ===== NIGHTFALL (2026-11-09): 35mm 필름·나트륨 빛·실루엣 — 레터박스, 움직이는 그레인, 영화 크레딧 타이포 ===== */
+.nx-film{position:sticky;top:0;height:100vh;height:100svh;margin-top:-100vh;margin-top:-100svh;pointer-events:none;z-index:0;
+ background:linear-gradient(#000 0 5.5vh,transparent 5.5vh calc(100% - 5.5vh),#000 calc(100% - 5.5vh));}
+.nx-film::after{content:"";position:absolute;inset:-50%;opacity:.16;mix-blend-mode:overlay;animation:nxg .9s steps(6) infinite;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes nxg{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+.nx-pre{font-family:var(--wide);font-weight:400;font-size:10.5px;letter-spacing:.42em;color:#a89a88;margin-bottom:14px}
+.nx-brand{font-weight:300;letter-spacing:.2em;text-shadow:0 0 32px rgba(0,0,0,.9),0 0 2px rgba(255,180,120,.25)}
+.nx-score{color:#F6E7D2;text-shadow:0 0 40px rgba(227,154,99,.35)}
+.nx-cat{color:#E8A16A;letter-spacing:.12em}
+.nx-in p,.nx-in h2{text-shadow:0 1px 18px rgba(0,0,0,.95),0 0 3px rgba(0,0,0,.8)}
+@media (prefers-reduced-motion:reduce){.nx-film::after{animation:none}}
