@@ -1,10 +1,14 @@
 {
- "at": "2026-11-08T16:37:50.319082",
+ "at": "2026-11-08T16:38:25.488633",
  "token_set": true,
  "uid_set": true,
  "token_kind": "EAB",
- "username": null,
- "error": "Invalid OAuth access token - Cannot parse access token",
- "publish_limit": null,
- "publish_limit_error": "Invalid OAuth access token - Cannot parse access token"
+ "username": "gymbasecamp.kr",
+ "error": null,
+ "publish_limit": [
+  {
+   "quota_usage": 0
+  }
+ ],
+ "publish_limit_error": null
 }
