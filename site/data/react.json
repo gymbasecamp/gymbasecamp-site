@@ -37,9 +37,9 @@
 },
 "muscolo": {
 "compare": 0,
-"official": 2,
+"official": 3,
 "quiz": 0,
-"view": 4
+"view": 5
 },
 "overwhelm": {
 "compare": 0,
@@ -58,5 +58,11 @@
 "official": 1,
 "quiz": 0,
 "view": 1
+},
+"volante": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 0
 }
 }

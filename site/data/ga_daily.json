@@ -326,5 +326,80 @@
    ]
   ],
   "users": 11
+ },
+ "2026-11-09": {
+  "events": {
+   "brand_view": 1,
+   "click": 2,
+   "finder_preview": 1,
+   "first_visit": 23,
+   "official_click": 2,
+   "page_view": 28,
+   "range_peak": 4,
+   "scroll": 24,
+   "session_start": 27,
+   "user_engagement": 10
+  },
+  "sessions": 27,
+  "sources": {
+   "(direct)": 22,
+   "instagram": 1,
+   "instagram.com": 1,
+   "l.instagram.com": 2,
+   "m.facebook.com": 1
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    3,
+    5
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "reps-on-reps",
+    1,
+    1
+   ],
+   [
+    "physical-garments",
+    1,
+    0
+   ],
+   [
+    "volante",
+    1,
+    0
+   ],
+   [
+    "asics",
+    0,
+    2
+   ],
+   [
+    "battract",
+    0,
+    1
+   ]
+  ],
+  "users": 25
  }
 }

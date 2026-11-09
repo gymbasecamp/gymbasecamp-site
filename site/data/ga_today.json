@@ -1,23 +1,8 @@
 {
- "date": "2026-11-09",
- "events": {
-  "brand_view": 1,
-  "click": 2,
-  "finder_preview": 1,
-  "first_visit": 2,
-  "official_click": 2,
-  "page_view": 6,
-  "range_peak": 3,
-  "scroll": 4,
-  "session_start": 5,
-  "user_engagement": 1
- },
- "sessions": 5,
- "sources": {
-  "(direct)": 2,
-  "instagram.com": 1,
-  "l.instagram.com": 2
- },
- "updated_kst": "2026-11-09 23:25",
- "users": 4
+ "date": "2026-11-10",
+ "events": {},
+ "sessions": 0,
+ "sources": {},
+ "updated_kst": "2026-11-10 07:41",
+ "users": 0
 }
