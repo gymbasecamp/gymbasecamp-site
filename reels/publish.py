@@ -58,3 +58,5 @@ print(json.dumps(result, ensure_ascii=False))
 if any(str(v).startswith('ok') for k, v in result.items() if k in ('instagram', 'youtube')):
     json.dump(result, open(os.path.join(ROOT, 'reels/posted', day + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     os.replace(q, os.path.join(ROOT, 'reels/posted', day + '.queue.json'))
+else:
+    json.dump(result, open(os.path.join(ROOT, 'reels/posted', day + '.error.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
