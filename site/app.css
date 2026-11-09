@@ -529,7 +529,7 @@ footer.gbfoot{background:#05060a}
 .ev.panel .ev-hero{opacity:0;transform:translateY(-12px);pointer-events:none}
 .ev-eye{font:600 11px/1 'Inter',sans-serif;letter-spacing:.32em;color:#E8A16A}
 .ev-hero::before{content:"";position:absolute;inset:-60px -80px -40px -60px;background:radial-gradient(closest-side,rgba(5,6,12,.55),rgba(5,6,12,0));z-index:-1}
-.ev-h{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.6vw,76px);line-height:1.14;letter-spacing:-.02em;color:#F6EEE4;margin-top:16px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.ev-h{font-family:var(--serif);font-weight:500;font-size:clamp(34px,4.6vw,62px);line-height:1.14;letter-spacing:-.02em;color:#F6EEE4;margin-top:16px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
 .ev-h em{font-style:normal;color:#F2B48A}
 .ev-sub{margin-top:16px;font-family:var(--serif);font-size:clamp(14px,1.3vw,17px);line-height:1.85;color:#e3dbe6;text-shadow:0 1px 12px rgba(0,0,0,.7)}
 .ev-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;padding:0;list-style:none}
@@ -584,4 +584,19 @@ footer.gbfoot{background:#05060a}
  .ev-card b{font-size:18px}
  .ev-nav{top:96px;bottom:auto;left:0;right:0;max-width:none;padding:0 16px;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
  .ev-nav button{flex:none}
+}
+
+/* 2026-11-09 겹침 수정: 종목 버튼을 첫 화면 문구 아래로, 아이폰 하단 주소창 여백 */
+.ev-hero .ev-nav{position:static;max-width:none;justify-content:flex-start;margin-top:18px;padding:0}
+.ev-hero{bottom:calc(clamp(28px,6vh,72px) + env(safe-area-inset-bottom,0px))}
+@media (max-width:759px){
+ .ev-hero{left:0;right:0;padding:0 20px;bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+ .ev-eye{font-size:10px;letter-spacing:.22em}
+ .ev-h{font-size:32px;margin-top:10px}
+ .ev-sub{font-size:13px;line-height:1.7;margin-top:10px}
+ .ev-facts{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:12px}
+ .ev-facts li{flex:none}
+ .ev-act{margin-top:14px} .ev-hint{display:none}
+ .ev-hero .ev-nav{position:static;margin:12px -20px 0;padding:0 20px;flex-wrap:nowrap;overflow-x:auto}
+ .ev-btn{padding:13px 20px;font-size:14px}
 }
