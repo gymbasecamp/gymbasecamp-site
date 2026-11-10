@@ -1,8 +1,9 @@
 name: Reels auto publish
 on:
   schedule:
-    - cron: '37 10 * * *'   # 19:37 KST 릴스
-    - cron: '37 3 * * *'    # 12:37 KST 카드뉴스
+    - cron: '37 10 * * 1-5'   # 평일 19:37 KST 릴스
+    - cron: '37 1 * * 0,6'    # 주말 10:37 KST 릴스
+    - cron: '37 3 * * 1,3,5'  # 월·수·금 12:37 KST 카드뉴스
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -26,6 +27,7 @@ jobs:
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
         run: |
           if [ -s .github/publish-date ] && [ "${{ github.event_name }}" = "push" ]; then export PUBLISH_DATE=$(cat .github/publish-date); [ -s .github/publish-kind ] && export PUBLISH_KIND=$(cat .github/publish-kind); fi
+          case "${{ github.event.schedule }}" in "37 3 * * 1,3,5") export PUBLISH_KIND=card;; "") ;; *) export PUBLISH_KIND=reel;; esac
           python3 reels/publish.py
       - name: Commit log
         run: |

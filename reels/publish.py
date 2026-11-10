@@ -36,7 +36,20 @@ def instagram():
         if s.get('status_code') == 'ERROR': return f'error processing: {s}'
         time.sleep(15)
     p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
-    return f"ok {p.get('id')}" if 'id' in p else f'error publish: {p}'
+    if 'id' not in p: return f'error publish: {p}'
+    # 같은 영상을 스토리로도 알림 (실패해도 릴스 결과에는 영향 없음)
+    try:
+        r2 = requests.post(f'{G}/{uid}/media', data={'media_type': 'STORIES', 'video_url': public_url, 'access_token': tok}, timeout=60).json()
+        if 'id' in r2:
+            for _ in range(30):
+                s2 = requests.get(f'{G}/{r2["id"]}', params={'fields': 'status_code', 'access_token': tok}, timeout=30).json()
+                if s2.get('status_code') in ('FINISHED', 'ERROR'): break
+                time.sleep(10)
+            p2 = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': r2['id'], 'access_token': tok}, timeout=60).json()
+            result['story'] = f"ok {p2.get('id')}" if 'id' in p2 else f'error {p2}'
+        else: result['story'] = f'error {r2}'
+    except Exception as ex: result['story'] = f'error {ex}'
+    return f"ok {p.get('id')}"
 
 def carousel():
     tok, uid = os.environ.get('IG_TOKEN'), os.environ.get('IG_USER_ID')
