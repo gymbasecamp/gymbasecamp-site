@@ -8,11 +8,14 @@ import os, sys, json, time, datetime, requests
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 kst = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=9)
 day = os.environ.get('PUBLISH_DATE') or kst.strftime('%Y-%m-%d')
+# 카드뉴스: reels/queue/YYYY-MM-DD-card.json {"images":[...], "caption":...} — 낮 실행(KST 16시 전)이나 PUBLISH_KIND=card 일 때
+kind = os.environ.get('PUBLISH_KIND') or ('card' if kst.hour < 16 and not os.environ.get('PUBLISH_DATE') else 'reel')
+if kind == 'card': day = day + '-card'
 q = os.path.join(ROOT, 'reels/queue', day + '.json')
 if not os.path.exists(q):
     print('no queue for', day); sys.exit(0)
 item = json.load(open(q, encoding='utf-8'))
-video = item['video']; plats = item.get('platforms', ['instagram', 'youtube'])
+video = item.get('video', ''); plats = item.get('platforms', ['instagram', 'youtube'])
 sha = os.environ.get('GITHUB_SHA', 'main')
 public_url = f'https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{video}'
 result = {'date': day, 'video_url': public_url}
@@ -35,6 +38,27 @@ def instagram():
     p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
     return f"ok {p.get('id')}" if 'id' in p else f'error publish: {p}'
 
+def carousel():
+    tok, uid = os.environ.get('IG_TOKEN'), os.environ.get('IG_USER_ID')
+    if not (tok and uid): return 'skip: IG secrets not set'
+    G = 'https://graph.facebook.com/v21.0' if not tok.startswith('IG') else 'https://graph.instagram.com/v21.0'
+    kids = []
+    for im in item['images']:
+        u = f'https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{im}'
+        r = requests.post(f'{G}/{uid}/media', data={'image_url': u, 'is_carousel_item': 'true', 'access_token': tok}, timeout=60).json()
+        if 'id' not in r: return f'error item {im}: {r}'
+        kids.append(r['id'])
+    r = requests.post(f'{G}/{uid}/media', data={'media_type': 'CAROUSEL', 'children': ','.join(kids), 'caption': item['caption'], 'access_token': tok}, timeout=60).json()
+    if 'id' not in r: return f'error carousel: {r}'
+    cid = r['id']
+    for _ in range(20):
+        st = requests.get(f'{G}/{cid}', params={'fields': 'status_code', 'access_token': tok}, timeout=30).json()
+        if st.get('status_code') in ('FINISHED', None): break
+        if st.get('status_code') == 'ERROR': return f'error processing: {st}'
+        time.sleep(5)
+    p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
+    return f"ok {p.get('id')}" if 'id' in p else f'error publish: {p}'
+
 def youtube():
     cid, sec, ref = (os.environ.get(k) for k in ('YT_CLIENT_ID', 'YT_CLIENT_SECRET', 'YT_REFRESH_TOKEN'))
     if not (cid and sec and ref): return 'skip: YT secrets not set'
@@ -53,6 +77,7 @@ def youtube():
                       data=data, timeout=300).json()
     return f"ok {r.get('id')} ({r.get('status', {}).get('privacyStatus')})" if 'id' in r else f'error upload: {r}'
 
+if item.get('images'): result['instagram'] = carousel(); plats = []
 if 'instagram' in plats: result['instagram'] = instagram()
 if 'youtube' in plats: result['youtube'] = youtube()
 print(json.dumps(result, ensure_ascii=False))
