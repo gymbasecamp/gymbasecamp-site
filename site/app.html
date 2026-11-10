@@ -73,7 +73,7 @@ const L = {
   browse:'브랜드 둘러보기', quizShort:'30초 추천 테스트',
   heroT:n=>`운동복,<br>감 말고 <em>점수로.</em>`, heroL:n=>`국내외 운동복 브랜드 <b>${n}+</b>개를 100점으로 채점했어요.<br>헬스·요가·러닝·격투기, 종목별 순위가 매일 바뀝니다.`,
   catsH:'카테고리 탐색', catsP:'어디서부터 볼지 고르세요.',
-  cats:['웨이트룸을 위한 짐웨어와 짐 스트리트','레깅스·스포츠브라·스튜디오 웨어','파워리프팅·싱글렛·리프팅 기어 의류','WOD·HYROX를 위한 기능성 트레이닝웨어','러닝 전문 브랜드 (추가 중)','복싱·MMA 트레이닝웨어 (추가 중)','컴프레션·이너·기능성 웨어','나이키·아디다스 등 종합 스포츠'], fCat:'운동 카테고리',
+  cats:['웨이트룸을 위한 짐웨어와 짐 스트리트','레깅스·스포츠브라·스튜디오 웨어','파워리프팅·싱글렛·리프팅 기어 의류','크로스핏 WOD를 위한 기능성 트레이닝웨어','HYROX 달리기+8개 스테이션용 하이브리드 웨어','러닝 전문 브랜드 (추가 중)','복싱·MMA 트레이닝웨어 (추가 중)','컴프레션·이너·기능성 웨어','나이키·아디다스 등 종합 스포츠'], fCat:'운동 카테고리',
   featH:'대표 브랜드', featP:'국내외에서 많이 찾는 짐웨어 브랜드입니다.',
   valH:'운동복 브랜드를<br>하나씩 검색하지 마세요.', valP:'GYM BASECAMP에서 핏, 스타일, 운동 목적, 국내 구매 가능 여부를 한 번에 비교하세요.',
   val:[['FIT','핏','머슬핏 · 오버핏 · 컴프레션'],['STYLE','스타일','짐웨어 · 짐 스트리트 · 애슬레저'],['PURPOSE','운동 목적','보디빌딩 · 파워리프팅 · 러닝 · HYROX'],['BUY','국내 구매',(k,o)=>`국내 공식몰 ${k}곳 · 해외 직배송 ${o}곳`]],
@@ -113,7 +113,7 @@ const L = {
   browse:'Browse brands', quizShort:'30-second quiz',
   heroT:n=>`Gymwear,<br>by <em>score</em>, not guesswork.`, heroL:n=>`<b>${n}+</b> brands from Korea and abroad, scored out of 100.<br>Rankings by sport, updated daily.`,
   catsH:'Browse by category', catsP:'Pick a place to start.',
-  cats:['Gymwear and gym street for the weight room','Leggings, sports bras and studio wear','Powerlifting, singlets and lifting apparel','Functional training wear for WODs and HYROX','Running brands (adding now)','Boxing and MMA training wear (adding now)','Compression and base layers','Nike, adidas and other multisport brands'], fCat:'Sport',
+  cats:['Gymwear and gym street for the weight room','Leggings, sports bras and studio wear','Powerlifting, singlets and lifting apparel','Functional training wear for CrossFit WODs','Hybrid wear for HYROX running + 8 stations','Running brands (adding now)','Boxing and MMA training wear (adding now)','Compression and base layers','Nike, adidas and other multisport brands'], fCat:'Sport',
   featH:'Featured brands', featP:'Gymwear brands people search for most, in Korea and abroad.',
   valH:'Stop searching<br>brands one by one.', valP:'Compare fit, style, training purpose and whether you can buy in Korea, all in one place.',
   val:[['FIT','Fit','Muscle fit · Oversized · Compression'],['STYLE','Style','Gymwear · Gym street · Athleisure'],['PURPOSE','Training','Bodybuilding · Powerlifting · Running · HYROX'],['BUY','Buying in Korea',(k,o)=>`${k} Korean official stores · ${o} ship from abroad`]],
@@ -144,7 +144,7 @@ const L = {
   typeD:{'짐웨어 전문':'Made for the weight room','짐 스트리트':'Bodybuilding culture meets streetwear','애슬레저':'Leggings and activewear for gym and daily life','퍼포먼스 트레이닝':'Running, HYROX and technical fabrics','종합 스포츠':'Global sports brands with training lines','스트렝스 스포츠':'Powerlifting, singlets and lifting gear'}
  }
 };
-const LBL_EN = {'헬스·보디빌딩':'Gym · Bodybuilding','스트렝스·파워리프팅':'Strength · Powerlifting','크로스핏·HYROX':'CrossFit · HYROX','요가·필라테스·레깅스':'Yoga · Pilates · Leggings','러닝':'Running','격투기':'Combat sports','컴프레션·기능성':'Compression','종합 스포츠':'Multisport','남성':'Men','여성':'Women','머슬핏':'Muscle fit','오버핏':'Oversized','컴프레션':'Compression','슬리브리스/탱크':'Sleeveless / Tanks','쇼츠':'Shorts','팬츠/조거':'Pants / Joggers','레깅스':'Leggings','스포츠브라':'Sports bras','아우터':'Outerwear','펌프커버/헤비웨이트':'Pump covers / Heavyweight','스트렝스/싱글렛':'Strength / Singlets','러닝/HYROX/크로스트레이닝':'Running / HYROX / Cross-training',
+const LBL_EN = {'헬스·보디빌딩':'Gym · Bodybuilding','스트렝스·파워리프팅':'Strength · Powerlifting','크로스핏':'CrossFit','HYROX':'HYROX','요가·필라테스·레깅스':'Yoga · Pilates · Leggings','러닝':'Running','격투기':'Combat sports','컴프레션·기능성':'Compression','종합 스포츠':'Multisport','남성':'Men','여성':'Women','머슬핏':'Muscle fit','오버핏':'Oversized','컴프레션':'Compression','슬리브리스/탱크':'Sleeveless / Tanks','쇼츠':'Shorts','팬츠/조거':'Pants / Joggers','레깅스':'Leggings','스포츠브라':'Sports bras','아우터':'Outerwear','펌프커버/헤비웨이트':'Pump covers / Heavyweight','스트렝스/싱글렛':'Strength / Singlets','러닝/HYROX/크로스트레이닝':'Running / HYROX / Cross-training',
   '짐웨어 전문':'Gymwear specialist','짐 스트리트':'Gym street','애슬레저':'Athleisure','퍼포먼스 트레이닝':'Performance training','종합 스포츠':'Global sportswear','스트렝스 스포츠':'Strength sports',
   '국내 공식몰':'Korean official store','국내 판매처':'Korean retailer','해외 직배송':'Ships from abroad','해외 직구/확인 필요':'Overseas order (check shipping)','국내':'Korea','해외':'International'};
 
@@ -310,12 +310,12 @@ function chipGroup(label, key, opts, st, cls='sfilter'){
 
 /* ---------- views ---------- */
 const FEATURED = ['hdex','borntowin','bysec','gymshark','youngla','under-armour'];
-const CATN = ['헬스·보디빌딩','요가·필라테스·레깅스','스트렝스·파워리프팅','크로스핏·HYROX','러닝','격투기','컴프레션·기능성','종합 스포츠'];
+const CATN = ['헬스·보디빌딩','요가·필라테스·레깅스','스트렝스·파워리프팅','크로스핏','HYROX','러닝','격투기','컴프레션·기능성','종합 스포츠'];
 const CATS = CATN.map(c=>({cat:[c]}));
 function chapterTop(cat){ return BRANDS.filter(b=>b.rk&&b.rk[cat]).sort((x,y)=>x.rk[cat]-y.rk[cat])[0]; }
 /* ===== BASECAMP RANGE (버전 2, 2026-11-09): 종목마다 하나의 봉우리, 정상엔 1위. 봉우리를 누르면 순위, 조건을 고르면 맞는 봉우리로 날아간다 ===== */
-const EV_SHORT={'헬스·보디빌딩':'헬스','요가·필라테스·레깅스':'요가·필라테스','스트렝스·파워리프팅':'파워리프팅','크로스핏·HYROX':'크로스핏·HYROX','러닝':'러닝','격투기':'격투기','컴프레션·기능성':'컴프레션','종합 스포츠':'종합 스포츠'};
-const EV_SHORT_EN={'헬스·보디빌딩':'Bodybuilding','요가·필라테스·레깅스':'Yoga·Pilates','스트렝스·파워리프팅':'Powerlifting','크로스핏·HYROX':'CrossFit·HYROX','러닝':'Running','격투기':'Combat','컴프레션·기능성':'Compression','종합 스포츠':'All-sport'};
+const EV_SHORT={'헬스·보디빌딩':'헬스','요가·필라테스·레깅스':'요가·필라테스','스트렝스·파워리프팅':'파워리프팅','크로스핏':'크로스핏','HYROX':'HYROX','러닝':'러닝','격투기':'격투기','컴프레션·기능성':'컴프레션','종합 스포츠':'종합 스포츠'};
+const EV_SHORT_EN={'헬스·보디빌딩':'Bodybuilding','요가·필라테스·레깅스':'Yoga·Pilates','스트렝스·파워리프팅':'Powerlifting','크로스핏':'CrossFit','HYROX':'HYROX','러닝':'Running','격투기':'Combat','컴프레션·기능성':'Compression','종합 스포츠':'All-sport'};
 const evS=c=>lang==='en'?(EV_SHORT_EN[c]||c):(EV_SHORT[c]||c);
 const EV_CHIPS=[['gender',['남성','여성']],['fit',['머슬핏','오버핏','컴프레션']],['item',['슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','아우터','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝']],['buy',['국내 공식몰','국내 판매처','해외 직배송']]];
 let EVF={f:[],buy:[]};

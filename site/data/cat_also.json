@@ -1,3 +1,39 @@
-{"_note":"대표 카테고리 외에 '겸' 카테고리. 이 카테고리 목록·순위에도 같이 나온다(점수 공식 동일). 근거: 공식몰에 해당 종목 전용 라인이 있는 브랜드만.",
- "nike":["러닝"],"adidas":["러닝"],"under-armour":["러닝"],"puma":["러닝"],"mizuno":["러닝"],"decathlon":["러닝"],
- "lululemon":["러닝"],"2xu":["러닝"],"compressport":["러닝"]}
+{
+ "_note": "대표 카테고리 외에 '겸' 카테고리. 이 카테고리 목록·순위에도 같이 나온다(점수 공식 동일). 근거: 공식몰에 해당 종목 전용 라인이 있는 브랜드만.",
+ "nike": [
+  "러닝",
+  "HYROX"
+ ],
+ "adidas": [
+  "러닝"
+ ],
+ "under-armour": [
+  "러닝"
+ ],
+ "puma": [
+  "러닝",
+  "HYROX"
+ ],
+ "mizuno": [
+  "러닝"
+ ],
+ "decathlon": [
+  "러닝"
+ ],
+ "lululemon": [
+  "러닝"
+ ],
+ "2xu": [
+  "러닝"
+ ],
+ "compressport": [
+  "러닝"
+ ],
+ "reebok": [
+  "HYROX"
+ ],
+ "gymshark": [
+  "HYROX"
+ ],
+ "_note_hyrox": "2026-11-11 HYROX 분리. PUMA=HYROX 공식 의류·신발 파트너(Business Wire 2024·2025), GYMSHARK·NIKE=HYROX 의류 가이드(FashionBeans·rb100), REEBOK=HYROX 트레이닝 라인(기존 데이터)"
+}
