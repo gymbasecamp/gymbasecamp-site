@@ -198,6 +198,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"c3fit":"Japanese compression wear line from Goldwin built on its 3C (Compression, Conditioning, Comfort) technology, known for made-in-Japan long tights and calf sleeves.",
+"yokkao":"Muay Thai brand founded in Bangkok in 2010 by Philip Villa, known for fight shorts, rash guards and training apparel alongside its gloves.",
+"tala":"London women's activewear brand founded by Grace Beverley in 2019, known for recycled-fabric leggings, sports bras and studio sets.",
 "rogue-fitness":"Columbus, Ohio training equipment maker founded by Bill Henniger in 2006 and official supplier to the CrossFit Games, with its own tees, shorts and singlets.",
 "skins":"Australian compression sportswear brand started in 1996 by physiologist Brad Duffy, known for its SERIES compression tights and tops.",
 "live":"Brazilian premium women's activewear brand founded in 2002 in Jaraguá do Sul by Joice and Gabriel Sens, known for leggings and sports bras.",
