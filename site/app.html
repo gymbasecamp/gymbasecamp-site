@@ -339,7 +339,7 @@ function viewHome(){
       <h1 class="ev-h">${ko?'운동복,<br>감 말고 <em>점수로</em>':'Gymwear,<br>by the <em>score</em>'}</h1>
       <p class="ev-sub">${ko?`${n}개 브랜드를 ${CATN.length}개 종목 봉우리에 올렸습니다.<br>정상엔 그 종목 1위만 섭니다.`:`${n} brands placed on ${CATN.length} sport peaks.<br>Only the #1 stands on each summit.`}</p>
       <ul class="ev-facts"><li><b>${n}</b>${ko?'개 브랜드':' brands'}</li><li><b>100</b>${ko?'점 채점':'-pt score'}</li><li>${ko?'공식몰로 <b>바로</b>':'<b>Direct</b> to store'}</li><li>${ko?'광고는 순위에 <b>안 섞음</b>':'<b>No ads</b> in ranks'}</li></ul>
-      <div class="ev-act"><button type="button" class="ev-btn" data-ev="find">${ko?'내 정상 찾기':'Find my summit'}</button><span class="ev-hint">${ko?'봉우리나 종목을 누르면 순위':'Tap a peak or sport for its ranking'}</span></div>
+      <div class="ev-act"><button type="button" class="ev-btn" data-ev="find">${ko?'내 정상 찾기':'Find my summit'}</button><span class="ev-hint">${ko?'봉우리를 누르면 순위 · 밀어서 이동 · 두 손가락으로 확대':'Tap a peak · drag to move · pinch to zoom'}</span></div>
       <div class="ev-nav" id="evNav"></div>
     </header>
     <aside class="ev-panel" id="evPanel" aria-live="polite" hidden></aside>
@@ -403,7 +403,7 @@ function range3D(root,P,pks,getSel){
     return [x[0],y[0],z[0],0, x[1],y[1],z[1],0, x[2],y[2],z[2],0, -(x[0]*e[0]+x[1]*e[1]+x[2]*e[2]),-(y[0]*e[0]+y[1]*e[1]+y[2]*e[2]),-(z[0]*e[0]+z[1]*e[1]+z[2]*e[2]),1]; };
   const mul=(a,b)=>{ const o=new Array(16); for(let i=0;i<4;i++) for(let j=0;j<4;j++){ let s=0; for(let k=0;k<4;k++) s+=a[k*4+j]*b[i*4+k]; o[i*4+j]=s; } return o; };
   const G={cam:null,raf:0,W:1,H:1,mob:false,M:null,yaw:0};
-  const ov=()=>G.mob?{e:[0,1100,2500],c:[-420,330,-150],f:.95}:{e:[0,980,2950],c:[0,320,-200],f:.62};
+  const ov=()=>G.mob?{e:[0,1250,3300],c:[0,60,-150],f:1.05}:{e:[0,980,2950],c:[0,320,-200],f:.62};
   const pk=p=>{ const k=PK[P.indexOf(p)]; return G.mob?{e:[k.x+160,k.h+260,k.z+980],c:[k.x,k.h-30,k.z],f:.8}:{e:[k.x-260,k.h+170,k.z+900],c:[k.x+170,k.h-90,k.z],f:.62}; };
   const render=()=>{ const C=G.cam; const ca=Math.cos(G.yaw), sa=Math.sin(G.yaw); const ex=C.c[0]+(C.e[0]-C.c[0])*ca-(C.e[2]-C.c[2])*sa, ez=C.c[2]+(C.e[0]-C.c[0])*sa+(C.e[2]-C.c[2])*ca; const E=[ex,C.e[1],ez];
     const Mx=mul(persp(C.f,G.W/G.H,20,9000),look(E,C.c,[0,1,0])); G.M=Mx; gl.viewport(0,0,cv.width,cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
@@ -418,8 +418,22 @@ function range3D(root,P,pks,getSel){
   let it0=0; const idle=()=>{ it0=performance.now(); const base=G.yaw; const st=now=>{ G.yaw=base+Math.sin((now-it0)/5200)*.035; render(); G.raf=requestAnimationFrame(st); }; G.raf=requestAnimationFrame(st); };
   const resize=()=>{ const r=root.getBoundingClientRect(); G.W=r.width; G.H=r.height; G.mob=G.W<760; const d=Math.min(2,window.devicePixelRatio||1); cv.width=Math.round(G.W*d); cv.height=Math.round(G.H*d); if(G.cam) render(); };
   resize(); G.cam=ov(); const o=ov(); G.cam={e:[o.e[0],o.e[1]-260,o.e[2]-700],c:o.c,f:o.f}; render();
-  let drag=null; cv.addEventListener('pointerdown',e=>{ drag={x:e.clientX,y0:G.yaw}; }); window.addEventListener('pointerup',()=>drag=null,{passive:true});
-  cv.addEventListener('pointermove',e=>{ if(!drag) return; G.yaw=Math.max(-.5,Math.min(.5,drag.y0-(e.clientX-drag.x)/600)); });
+  // 터치: 한 손가락 좌우로 밀기=산맥 이동, 두 손가락=확대·축소(핀치). 데스크탑: 드래그=이동, 트랙패드 핀치(ctrl+휠)=확대
+  const ptr=new Map(); let g0=null;
+  const XMIN=PK[0].x-200, XMAX=PK[PK.length-1].x+200;
+  const pan=dxPx=>{ const d=Math.hypot(G.cam.e[0]-G.cam.c[0],G.cam.e[1]-G.cam.c[1],G.cam.e[2]-G.cam.c[2]); const k=dxPx*d*Math.tan(G.cam.f/2)*2/G.H; let nx=G.cam.c[0]-k; nx=Math.max(XMIN,Math.min(XMAX,nx)); const dd=nx-G.cam.c[0]; G.cam.c[0]+=dd; G.cam.e[0]+=dd; };
+  const zoom=f=>{ const v=[0,1,2].map(i=>G.cam.e[i]-G.cam.c[i]); const d=Math.hypot(...v); const nd=Math.max(420,Math.min(4200,d*f)); G.cam.e=[0,1,2].map(i=>G.cam.c[i]+v[i]*nd/d); if(G.mob){ const ty=60+(470-60)*(1-Math.max(0,Math.min(1,(nd-700)/2600))); const dy=ty-G.cam.c[1]; G.cam.c[1]+=dy; G.cam.e[1]+=dy; } };
+  const hold=()=>{ cancelAnimationFrame(G.raf); G.raf=0; G.yaw=0; };
+  const skip=e=>e.target.closest&&e.target.closest('a,input,.ev-panel,.ev-hero');
+  let moved=0; root.addEventListener('click',e=>{ if(moved>8&&e.target.closest('.ev-pk')){ e.stopPropagation(); e.preventDefault(); } moved=0; },true);
+  root.addEventListener('pointerdown',e=>{ if(skip(e)) return; ptr.set(e.pointerId,{x:e.clientX,y:e.clientY}); moved=0; hold(); g0=null; clearTimeout(root._tt); root.classList.add('touring'); });
+  root.addEventListener('pointermove',e=>{ if(!ptr.has(e.pointerId)) return; const pr=ptr.get(e.pointerId); const cur={x:e.clientX,y:e.clientY};
+    if(ptr.size===1){ pan(cur.x-pr.x); }
+    else if(ptr.size===2){ const o=[...ptr.entries()].find(([k])=>k!==e.pointerId)[1]; const dist=Math.hypot(cur.x-o.x,cur.y-o.y), pd=Math.hypot(pr.x-o.x,pr.y-o.y); if(pd>0) zoom(pd/dist); pan(((cur.x+o.x)-(pr.x+o.x))/2); }
+    moved+=Math.abs(cur.x-pr.x)+Math.abs(cur.y-pr.y); ptr.set(e.pointerId,cur); render(); });
+  const up=e=>{ ptr.delete(e.pointerId); if(!ptr.size){ idle(); clearTimeout(root._tt); root._tt=setTimeout(()=>root.classList.remove('touring'),2600); } };
+  root.addEventListener('pointerup',up); root.addEventListener('pointercancel',up);
+  root.addEventListener('wheel',e=>{ if(!e.ctrlKey||skip(e)) return; e.preventDefault(); hold(); zoom(Math.exp(e.deltaY*.01)); render(); clearTimeout(g0); g0=setTimeout(idle,400); },{passive:false});
   return {ov,pk,fly,render,resize,stop:()=>{cancelAnimationFrame(G.raf);},cv};
 }
 

@@ -620,3 +620,8 @@ footer.gbfoot{background:#05060a}
 .ev-bar i{background:var(--pt)}
 .ev-win{border-color:var(--pt);background:linear-gradient(160deg,rgba(255,106,61,.16),rgba(0,0,0,0))}
 .ev-nav button,.ev-facts li{border-radius:2px}
+
+.ev-gl{touch-action:pan-y}
+@media (max-width:759px){.ev-hint{display:block;font-size:11.5px;margin-top:2px;width:100%}}
+.ev,.ev *{touch-action:pan-y}.ev .ev-panel,.ev .ev-panel *{touch-action:auto}
+.ev.touring .ev-hero{opacity:.12;transition:opacity .35s}
