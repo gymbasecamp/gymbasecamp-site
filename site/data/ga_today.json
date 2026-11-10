@@ -1,8 +1,21 @@
 {
- "date": "2026-11-10",
- "events": {},
- "sessions": 0,
- "sources": {},
- "updated_kst": "2026-11-10 23:22",
- "users": 0
+ "date": "2026-11-11",
+ "events": {
+  "first_visit": 7,
+  "page_view": 7,
+  "range_find": 1,
+  "range_peak": 3,
+  "scroll": 7,
+  "session_start": 7,
+  "user_engagement": 2
+ },
+ "sessions": 7,
+ "sources": {
+  "(direct)": 2,
+  "(not set)": 1,
+  "instagram": 4,
+  "threads": 1
+ },
+ "updated_kst": "2026-11-11 07:37",
+ "users": 7
 }
