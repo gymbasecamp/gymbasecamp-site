@@ -23,7 +23,9 @@ jobs:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-        run: python3 reels/publish.py
+        run: |
+          if [ -s .github/publish-date ] && [ "${{ github.event_name }}" = "push" ]; then export PUBLISH_DATE=$(cat .github/publish-date); fi
+          python3 reels/publish.py
       - name: Commit log
         run: |
           git config user.name "gymbasecamp-bot"
