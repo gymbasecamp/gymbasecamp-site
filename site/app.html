@@ -337,7 +337,7 @@ function viewHome(){
     <header class="ev-hero" id="evHero">
       <p class="ev-eye">BASECAMP RANGE · ${ko?'운동복 브랜드 순위':'GYMWEAR RANKING'}</p>
       <h1 class="ev-h">${ko?'운동복,<br>감 말고 <em>점수로</em>':'Gymwear,<br>by the <em>score</em>'}</h1>
-      <p class="ev-sub">${ko?`${n}개 브랜드를 8개 종목 봉우리에 올렸습니다.<br>정상엔 그 종목 1위만 섭니다.`:`${n} brands placed on 8 sport peaks.<br>Only the #1 stands on each summit.`}</p>
+      <p class="ev-sub">${ko?`${n}개 브랜드를 ${CATN.length}개 종목 봉우리에 올렸습니다.<br>정상엔 그 종목 1위만 섭니다.`:`${n} brands placed on ${CATN.length} sport peaks.<br>Only the #1 stands on each summit.`}</p>
       <ul class="ev-facts"><li><b>${n}</b>${ko?'개 브랜드':' brands'}</li><li><b>100</b>${ko?'점 채점':'-pt score'}</li><li>${ko?'공식몰로 <b>바로</b>':'<b>Direct</b> to store'}</li><li>${ko?'광고는 순위에 <b>안 섞음</b>':'<b>No ads</b> in ranks'}</li></ul>
       <div class="ev-act"><button type="button" class="ev-btn" data-ev="find">${ko?'내 정상 찾기':'Find my summit'}</button><span class="ev-hint">${ko?'봉우리나 종목을 누르면 순위':'Tap a peak or sport for its ranking'}</span></div>
       <div class="ev-nav" id="evNav"></div>
@@ -351,8 +351,80 @@ function viewHome(){
   </section>
   ${viewHomeRest()}`;
 }
+/* BASECAMP RANGE 3D (v3, 2026-11-11): WebGL 지형 — 봉우리 높이=종목 1위 점수, 노을빛 측광·안개·눈선. 라이브러리 없이 순수 WebGL */
+function range3D(root,P,pks,getSel){
+  const cv=document.createElement('canvas'); cv.className='ev-gl'; cv.setAttribute('aria-hidden','true');
+  const gl=cv.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:false}); if(!gl) return null;
+  root.insertBefore(cv,root.firstChild);
+  const N=P.length, SPAN=420, X0=-(N-1)*SPAN/2;
+  const lo=Math.min(...P.map(p=>evScore(p.b,p.c))), hi=Math.max(...P.map(p=>evScore(p.b,p.c)));
+  let sd=77; const rnd=()=>{sd=(sd*16807)%2147483647;return (sd-1)/2147483646;};
+  const PK=P.map((p,i)=>({x:X0+i*SPAN, z:-60-120*rnd(), h:330+(evScore(p.b,p.c)-lo)/((hi-lo)||1)*420}));
+  const FAR=[]; for(let i=0;i<16;i++) FAR.push({x:-2300+i*300+120*rnd(), z:-1100-300*rnd(), h:260+260*rnd()});
+  // value noise
+  const perm=new Uint8Array(512); for(let i=0;i<256;i++) perm[i]=i; for(let i=255;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [perm[i],perm[j]]=[perm[j],perm[i]]; } for(let i=0;i<256;i++) perm[256+i]=perm[i];
+  const hv=(x,z)=>perm[(perm[x&255]+z)&255]/255;
+  const vn=(x,z)=>{ const xi=Math.floor(x), zi=Math.floor(z), xf=x-xi, zf=z-zi, u=xf*xf*(3-2*xf), v=zf*zf*(3-2*zf);
+    const a=hv(xi,zi), b=hv(xi+1,zi), c=hv(xi,zi+1), d=hv(xi+1,zi+1); return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v; };
+  const ridged=(x,z)=>{ let s=0,a=.5,f=1; for(let o=0;o<6;o++){ const n=1-Math.abs(vn(x*f,z*f)*2-1); s+=n*n*a; a*=.5; f*=2.03; } return s; };
+  const peak=(x,z,p,R)=>{ const d=Math.sqrt((x-p.x)**2+((z-p.z)*1.25)**2); return p.h*Math.exp(-Math.pow(d/R,1.3)); };
+  const Hf=(x,z)=>{ let m=0; for(const p of PK) m=Math.max(m,peak(x,z,p,330)); let f=0; for(const p of FAR) f=Math.max(f,peak(x,z,p,330));
+    const base=Math.max(m,f*.95); const r=ridged(x*.0042,z*.0042); return base*(.78+.34*r)+ 40*r - 30; };
+  PK.forEach(k=>{ let m=-1e9; for(let dx=-30;dx<=30;dx+=6) for(let dz=-30;dz<=30;dz+=6){ const y=Hf(k.x+dx,k.z+dz); if(y>m){m=y;} } k.top=m+4; });
+  // mesh
+  const NX=300, NZ=170, XA=-2600, XB=2600, ZA=-1700, ZB=900;
+  const nv=(NX+1)*(NZ+1), pos=new Float32Array(nv*3), nor=new Float32Array(nv*3), col=new Float32Array(nv*3), hs=new Float32Array(nv);
+  for(let j=0;j<=NZ;j++) for(let i=0;i<=NX;i++){ const x=XA+(XB-XA)*i/NX, z=ZA+(ZB-ZA)*j/NZ, k=j*(NX+1)+i; const y=Hf(x,z); hs[k]=y; pos[k*3]=x; pos[k*3+1]=y; pos[k*3+2]=z; }
+  const dx=(XB-XA)/NX, dz=(ZB-ZA)/NZ;
+  for(let j=0;j<=NZ;j++) for(let i=0;i<=NX;i++){ const k=j*(NX+1)+i; const l=hs[j*(NX+1)+Math.max(0,i-1)], r=hs[j*(NX+1)+Math.min(NX,i+1)], d=hs[Math.max(0,j-1)*(NX+1)+i], u=hs[Math.min(NZ,j+1)*(NX+1)+i];
+    let nx=(l-r)/(2*dx), ny=1, nz=(d-u)/(2*dz); const L=Math.hypot(nx,ny,nz); nx/=L; ny/=L; nz/=L; nor[k*3]=nx; nor[k*3+1]=ny; nor[k*3+2]=nz;
+    const y=hs[k], x=pos[k*3], z=pos[k*3+2]; const snowLine=300+90*(vn(x*.01,z*.01)-.5)*2; const snow=Math.max(0,Math.min(1,(y-snowLine)/60))*Math.max(0,Math.min(1,(ny-.35)/.25));
+    const rock=[.20,.15,.15], rock2=[.30,.22,.20], sn=[.95,.93,.94]; const t=vn(x*.03,z*.03); for(let c=0;c<3;c++) col[k*3+c]=(rock[c]*(1-t)+rock2[c]*t)*(1-snow)+sn[c]*snow; }
+  const idx=new Uint32Array(NX*NZ*6); let q=0; for(let j=0;j<NZ;j++) for(let i=0;i<NX;i++){ const a=j*(NX+1)+i, b=a+1, c=a+NX+1, d=c+1; idx[q++]=a; idx[q++]=c; idx[q++]=b; idx[q++]=b; idx[q++]=c; idx[q++]=d; }
+  const ext=gl.getExtension('OES_element_index_uint'); if(!ext) return null;
+  const VS=`attribute vec3 p;attribute vec3 n;attribute vec3 c;uniform mat4 M;varying vec3 vN;varying vec3 vC;varying vec3 vP;void main(){vN=n;vC=c;vP=p;gl_Position=M*vec4(p,1.);}`;
+  const FS=`precision highp float;varying vec3 vN;varying vec3 vC;varying vec3 vP;uniform vec3 E;uniform vec3 S;uniform float W;
+  void main(){vec3 n=normalize(vN);float d=max(dot(n,S),0.);vec3 sun=vec3(1.0,.62,.42)*1.55;vec3 sky=mix(vec3(.10,.10,.18),vec3(.42,.46,.72),n.y*.5+.5);
+  vec3 c=vC*(sky*.55+sun*d);float rim=pow(1.-max(dot(n,normalize(E-vP)),0.),3.);c+=vec3(1.,.55,.38)*rim*.18*W;
+  float dist=length(E-vP);float fog=1.-exp(-dist*0.00026);float hf=clamp((160.-vP.y)/260.,0.,1.)*.6;vec3 fc=mix(vec3(.86,.55,.52),vec3(.20,.17,.27),clamp(vP.y/700.,0.,1.));
+  c=mix(c,fc,clamp(fog*.8+hf*.45,0.,1.));gl_FragColor=vec4(pow(c,vec3(.92)),1.);}`;
+  const sh=(t,s)=>{ const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o); if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(o); return o; };
+  let prg; try{ prg=gl.createProgram(); gl.attachShader(prg,sh(gl.VERTEX_SHADER,VS)); gl.attachShader(prg,sh(gl.FRAGMENT_SHADER,FS)); gl.linkProgram(prg); }catch(e){ cv.remove(); return null; }
+  gl.useProgram(prg);
+  const buf=(arr,loc,sz)=>{ const b=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,b); gl.bufferData(gl.ARRAY_BUFFER,arr,gl.STATIC_DRAW); const l=gl.getAttribLocation(prg,loc); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l,sz,gl.FLOAT,false,0,0); };
+  buf(pos,'p',3); buf(nor,'n',3); buf(col,'c',3);
+  const ib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,idx,gl.STATIC_DRAW);
+  const uM=gl.getUniformLocation(prg,'M'), uE=gl.getUniformLocation(prg,'E'), uS=gl.getUniformLocation(prg,'S'), uW=gl.getUniformLocation(prg,'W');
+  const sN=(()=>{ const v=[-.75,.32,.45]; const l=Math.hypot(...v); return v.map(a=>a/l); })(); gl.uniform3fv(uS,sN); gl.uniform1f(uW,1);
+  gl.enable(gl.DEPTH_TEST);
+  // math
+  const persp=(f,a,n,fa)=>{ const t=1/Math.tan(f/2); return [t/a,0,0,0, 0,t,0,0, 0,0,(fa+n)/(n-fa),-1, 0,0,2*fa*n/(n-fa),0]; };
+  const look=(e,c,u)=>{ let z=[e[0]-c[0],e[1]-c[1],e[2]-c[2]]; let l=Math.hypot(...z); z=z.map(v=>v/l); let x=[u[1]*z[2]-u[2]*z[1],u[2]*z[0]-u[0]*z[2],u[0]*z[1]-u[1]*z[0]]; l=Math.hypot(...x); x=x.map(v=>v/l); const y=[z[1]*x[2]-z[2]*x[1],z[2]*x[0]-z[0]*x[2],z[0]*x[1]-z[1]*x[0]];
+    return [x[0],y[0],z[0],0, x[1],y[1],z[1],0, x[2],y[2],z[2],0, -(x[0]*e[0]+x[1]*e[1]+x[2]*e[2]),-(y[0]*e[0]+y[1]*e[1]+y[2]*e[2]),-(z[0]*e[0]+z[1]*e[1]+z[2]*e[2]),1]; };
+  const mul=(a,b)=>{ const o=new Array(16); for(let i=0;i<4;i++) for(let j=0;j<4;j++){ let s=0; for(let k=0;k<4;k++) s+=a[k*4+j]*b[i*4+k]; o[i*4+j]=s; } return o; };
+  const G={cam:null,raf:0,W:1,H:1,mob:false,M:null,yaw:0};
+  const ov=()=>G.mob?{e:[0,1100,2500],c:[-420,330,-150],f:.95}:{e:[0,980,2950],c:[0,320,-200],f:.62};
+  const pk=p=>{ const k=PK[P.indexOf(p)]; return G.mob?{e:[k.x+160,k.h+260,k.z+980],c:[k.x,k.h-30,k.z],f:.8}:{e:[k.x-260,k.h+170,k.z+900],c:[k.x+170,k.h-90,k.z],f:.62}; };
+  const render=()=>{ const C=G.cam; const ca=Math.cos(G.yaw), sa=Math.sin(G.yaw); const ex=C.c[0]+(C.e[0]-C.c[0])*ca-(C.e[2]-C.c[2])*sa, ez=C.c[2]+(C.e[0]-C.c[0])*sa+(C.e[2]-C.c[2])*ca; const E=[ex,C.e[1],ez];
+    const Mx=mul(persp(C.f,G.W/G.H,20,9000),look(E,C.c,[0,1,0])); G.M=Mx; gl.viewport(0,0,cv.width,cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    gl.uniformMatrix4fv(uM,false,new Float32Array(Mx)); gl.uniform3fv(uE,E); gl.drawElements(gl.TRIANGLES,idx.length,gl.UNSIGNED_INT,0);
+    const det=G.cam.f<.9&&(Math.hypot(C.e[0]-C.c[0],C.e[2]-C.c[2])<1400);
+    P.forEach((p,i)=>{ const k=PK[i]; const v=[k.x,k.top,k.z,1]; const x=Mx[0]*v[0]+Mx[4]*v[1]+Mx[8]*v[2]+Mx[12], y=Mx[1]*v[0]+Mx[5]*v[1]+Mx[9]*v[2]+Mx[13], w=Mx[3]*v[0]+Mx[7]*v[1]+Mx[11]*v[2]+Mx[15];
+      const sx=(x/w*.5+.5)*G.W, sy=(1-(y/w*.5+.5))*G.H; const el=pks.children[i]; if(!el) return; el.style.transform=`translate(${sx.toFixed(1)}px,${sy.toFixed(1)}px)`; el.style.visibility=(w<0||sx<-260||sx>G.W+260)?'hidden':'visible'; el.classList.toggle('det',det); el.classList.toggle('on',getSel()===p); }); };
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2, lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+  const fly=(to,ms)=>{ cancelAnimationFrame(G.raf); const fr=JSON.parse(JSON.stringify(G.cam)); const t0=performance.now(); const far=Math.abs(to.c[0]-fr.c[0])>600;
+    const st=now=>{ const k=Math.min(1,(now-t0)/ms), e=ease(k); G.cam={e:lerp(fr.e,to.e,e),c:lerp(fr.c,to.c,e),f:fr.f+(to.f-fr.f)*e}; if(far) G.cam.e[1]+=Math.sin(Math.PI*k)*420; render(); if(k<1) G.raf=requestAnimationFrame(st); else idle(); };
+    G.raf=requestAnimationFrame(st); };
+  let it0=0; const idle=()=>{ it0=performance.now(); const base=G.yaw; const st=now=>{ G.yaw=base+Math.sin((now-it0)/5200)*.035; render(); G.raf=requestAnimationFrame(st); }; G.raf=requestAnimationFrame(st); };
+  const resize=()=>{ const r=root.getBoundingClientRect(); G.W=r.width; G.H=r.height; G.mob=G.W<760; const d=Math.min(2,window.devicePixelRatio||1); cv.width=Math.round(G.W*d); cv.height=Math.round(G.H*d); if(G.cam) render(); };
+  resize(); G.cam=ov(); const o=ov(); G.cam={e:[o.e[0],o.e[1]-260,o.e[2]-700],c:o.c,f:o.f}; render();
+  let drag=null; cv.addEventListener('pointerdown',e=>{ drag={x:e.clientX,y0:G.yaw}; }); window.addEventListener('pointerup',()=>drag=null,{passive:true});
+  cv.addEventListener('pointermove',e=>{ if(!drag) return; G.yaw=Math.max(-.5,Math.min(.5,drag.y0-(e.clientX-drag.x)/600)); });
+  return {ov,pk,fly,render,resize,stop:()=>{cancelAnimationFrame(G.raf);},cv};
+}
+
 let EVR=null;
-function stopRange(){ if(EVR){ cancelAnimationFrame(EVR.raf); window.removeEventListener('resize',EVR.onResize); EVR=null; } }
+function stopRange(){ if(EVR){ if(EVR.g3) EVR.g3.stop(); cancelAnimationFrame(EVR.raf); window.removeEventListener('resize',EVR.onResize); EVR=null; } }
 function initRange(){
   stopRange(); const root=document.getElementById('ev'); if(!root) return;
   const cv=document.getElementById('evc'), ctx=cv.getContext('2d'), pks=document.getElementById('evPks'), panel=document.getElementById('evPanel'), hero=document.getElementById('evHero'), nav=document.getElementById('evNav');
@@ -375,14 +447,14 @@ function initRange(){
   const mid=mk(ridge(-30,.85,110),{snow:960,depth:300,sL:[250,214,206],sS:[116,124,168],rL:[84,64,70],rS:[36,38,60],hz0:850,hc:[24,24,42]});
   const main=mk(ridge(0,1.02,80),{snow:1040,depth:240,sL:[255,226,212],sS:[104,116,162],rL:[72,52,54],rS:[20,22,36],hz0:1000,hc:[7,8,15]});
   let W=0,H=0,dpr=1, mobile=false;
-  const fit=()=>{ // overview camera
+  let fit=()=>{ // overview camera
     const top=P.reduce((a,p)=>p.y<a.y?p:a);
     if(mobile) { const z=Math.min(1,W/1150); return {x:top.x,y:top.y+H*.30/z,z}; }
     const z=Math.min(W/(WW*.9),H/1350); return {x:WW/2,y:top.y+H*.38/z,z}; };
-  const focus=p=>{ if(mobile){ const z=Math.min(1.25,W/700); return {x:p.x,y:p.y+H*.25/z,z}; } const z=Math.min(1.25,(W-460)/1100); return {x:p.x+230/z,y:p.y+H*.12/z,z}; };
+  let focus=p=>{ if(mobile){ const z=Math.min(1.25,W/700); return {x:p.x,y:p.y+H*.25/z,z}; } const z=Math.min(1.25,(W-460)/1100); return {x:p.x+230/z,y:p.y+H*.12/z,z}; };
   const sky=()=>{ const g=ctx.createLinearGradient(0,0,0,H*dpr); g.addColorStop(0,'#070b1d'); g.addColorStop(.35,'#232a52'); g.addColorStop(.6,'#7d6584'); g.addColorStop(.78,'#d9998a'); g.addColorStop(1,'#f0bd96'); ctx.fillStyle=g; ctx.fillRect(0,0,W*dpr,H*dpr);
     ctx.fillStyle='rgba(255,255,255,.7)'; for(let i=0;i<140;i++){ const x=(i*137.508%1)*W*dpr, y=((i*61.803)%1)*H*dpr*.4, r=(i%5===0?1.6:.9)*dpr; ctx.globalAlpha=.25+.6*((i*7)%10)/10; ctx.fillRect(x,y,r,r);} ctx.globalAlpha=1; };
-  const draw=()=>{ const C=R.cam; ctx.setTransform(1,0,0,1,0,0); sky();
+  let draw=()=>{ const C=R.cam; ctx.setTransform(1,0,0,1,0,0); sky();
     const L=(img,par)=>{ const z=C.z*dpr, cx=C.x*par+WW/2*(1-par); ctx.drawImage(img,(0-cx)*z+W*dpr/2,(0-C.y)*z+H*dpr/2,WW*z,WH*z); };
     L(far,.55); ctx.fillStyle='rgba(240,190,170,.10)'; ctx.fillRect(0,(900-C.y)*C.z*dpr+H*dpr/2,W*dpr,60*C.z*dpr); L(mid,.8); L(main,1);
     const by=(WH-C.y)*C.z*dpr+H*dpr/2; if(by<H*dpr){ ctx.fillStyle='rgb(7,8,15)'; ctx.fillRect(0,by-2,W*dpr,H*dpr-by+2); }
@@ -393,9 +465,11 @@ function initRange(){
     P.forEach((p,i)=>{ const el=pks.children[i]; const x=(p.x-C.x)*C.z+W/2, y=(p.y-C.y)*C.z+H/2; el.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`; el.classList.toggle('det',det); el.classList.toggle('on',R.sel===p); el.style.visibility=(x<-260||x>W+260)?'hidden':'visible'; });
   };
   const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-  const fly=(to,ms)=>{ cancelAnimationFrame(R.raf); const from={...R.cam}; const t0=performance.now(); const far=Math.abs(to.x-from.x)*Math.min(from.z,to.z)>W*.8; const mz=far?Math.min(from.z,to.z)*.6:0;
+  let fly=(to,ms)=>{ cancelAnimationFrame(R.raf); const from={...R.cam}; const t0=performance.now(); const far=Math.abs(to.x-from.x)*Math.min(from.z,to.z)>W*.8; const mz=far?Math.min(from.z,to.z)*.6:0;
     const step=now=>{ const k=Math.min(1,(now-t0)/ms), e=ease(k); R.cam.x=from.x+(to.x-from.x)*e; R.cam.y=from.y+(to.y-from.y)*e; let lz=Math.log(from.z)+(Math.log(to.z)-Math.log(from.z))*e; if(mz) lz=Math.min(lz,Math.log(from.z)+(Math.log(to.z)-Math.log(from.z))*e - (Math.log(Math.min(from.z,to.z))-Math.log(mz))*Math.sin(Math.PI*k)); R.cam.z=Math.exp(lz); draw(); if(k<1) R.raf=requestAnimationFrame(step); };
     R.raf=requestAnimationFrame(step); };
+  let G3=null; try{ G3=range3D(root,P,pks,()=>R.sel); }catch(e){ G3=null; }
+  if(G3){ R.g3=G3; cv.style.display='none'; root.classList.add('is3d'); fit=()=>G3.ov(); focus=p=>G3.pk(p); draw=()=>G3.render(); fly=(to,ms)=>G3.fly(to,ms); window.addEventListener('resize',()=>G3.resize()); }
   const ko=lang==='ko';
   pks.innerHTML=P.map((p,i)=>`<button type="button" class="ev-pk" data-evp="${i}"><span class="ev-flag"></span><span class="ev-card"><span class="ev-cc">${esc(evS(p.c))}<i>${ko?'1위':'#1'}</i></span><b>${esc(p.b.en)}</b><span class="ev-cs">${evScore(p.b,p.c)}</span><small>${esc(p.b.ko)}</small></span><span class="ev-mini">${esc(evS(p.c))}</span></button>`).join('');
   nav.innerHTML=P.slice().sort((a,b)=>CATN.indexOf(a.c)-CATN.indexOf(b.c)).map(p=>`<button type="button" data-evp="${P.indexOf(p)}">${esc(evS(p.c))}</button>`).join('');
@@ -425,9 +499,10 @@ function initRange(){
   let drag=null; cv.addEventListener('pointerdown',e=>{ drag={x:e.clientX,cx:R.cam.x}; cancelAnimationFrame(R.raf); });
   window.addEventListener('pointerup',()=>drag=null,{passive:true});
   cv.addEventListener('pointermove',e=>{ if(!drag) return; R.cam.x=Math.max(300,Math.min(WW-300,drag.cx-(e.clientX-drag.x)/R.cam.z)); draw(); });
-  R.onResize=()=>{ W=root.clientWidth; H=cv.clientHeight; dpr=Math.min(2,window.devicePixelRatio||1); mobile=W<760; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); R.cam=R.sel?focus(R.sel):fit(); draw(); };
+  R.onResize=()=>{ if(G3) return; W=root.clientWidth; H=cv.clientHeight; dpr=Math.min(2,window.devicePixelRatio||1); mobile=W<760; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); R.cam=R.sel?focus(R.sel):fit(); draw(); };
   R.onResize(); window.addEventListener('resize',R.onResize);
   // 첫 진입: 정상에서 산맥 전체로 천천히 물러나는 카메라
+  if(G3){ draw(); setTimeout(()=>fly(fit(),3200),150); return; }
   const f=fit(); R.cam={x:f.x,y:f.y-80/f.z,z:f.z*1.18}; draw(); setTimeout(()=>fly(f,2600),150);
 }
 
