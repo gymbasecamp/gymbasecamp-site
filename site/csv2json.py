@@ -35,7 +35,7 @@ for r in rows:
         style=r['주요 스타일'], price=r['가격대'], items=r['대표 상품'], ig=r['인스타그램'], desc=r['특징'],
         cat=r.get('대표 카테고리') or '헬스·보디빌딩', score=int(float(r['현재 점수 (20)'] or 0)), rank=int(float(r['현재 순위'] or 99)), type=r['브랜드 유형'],
         sport=r['핵심 운동'], vibe=r['스타일 성향'], group=r['사이트 그룹'], buy=r['구매 방식'], shops=shops(r),
-        f=[k for k in F if r.get(k) == 'Y'], cov=cov(r)))
+        f=[k for k in F if r.get(k) == 'Y'], cov=cov(r), one=(r.get('브랜드 한줄') or '').strip(), story=(r.get('브랜드 스토리') or '').strip()))
 _ap = os.path.join(D, 'data/cat_also.json')
 ALSO = json.load(open(_ap, encoding='utf-8')) if os.path.exists(_ap) else {}
 for b in out:

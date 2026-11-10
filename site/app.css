@@ -637,3 +637,15 @@ footer.gbfoot{background:#05060a}
 .ev-xbar span{font-size:12px;color:#e8e1d8;text-shadow:0 1px 8px #000}
 .ev-hero{pointer-events:none}.ev-hero button,.ev-hero a,.ev-hero .ev-nav{pointer-events:auto}
 .ev-xb{white-space:nowrap}
+
+/* 브랜드 소개: 상단 한 줄 + 정보표 아래 스토리 타임라인 */
+.d-one{margin-top:10px;font-family:var(--serif);font-size:17px;color:#e9e2d8;line-height:1.6}
+.story{margin-top:40px;padding-top:28px;border-top:1px solid rgba(244,239,232,.14)}
+.story-eye{font:600 11px/1 'Inter',sans-serif;letter-spacing:.32em;color:#FF6A3D}
+.story h2{font-family:var(--serif);font-weight:500;font-size:28px;margin-top:10px}
+.story-tl{list-style:none;padding:0;margin:22px 0 0;border-left:1px solid rgba(255,106,61,.5)}
+.story-tl li{position:relative;padding:0 0 22px 22px}
+.story-tl li::before{content:"";position:absolute;left:-5px;top:6px;width:9px;height:9px;border-radius:50%;background:#FF6A3D}
+.story-tl b{font-size:13px;letter-spacing:.06em;color:#FF6A3D}
+.story-tl p{margin-top:6px;line-height:1.85;color:#ddd5cb;font-size:15px}
+.story-src{font-size:12px;color:#8f8a96}.story-src a{color:#bbb;margin-right:4px}

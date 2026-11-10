@@ -634,6 +634,13 @@ function viewPrivacy(){
   <p style="margin-top:28px;color:var(--muted)">English summary: We do not collect personal identifiers. Anonymous usage analytics via Google Analytics 4. The Instagram API is used only to publish to our own account @gymbasecamp.kr. Data deletion requests: Instagram DM @gymbasecamp.kr.</p>
   </div></section>`;
 }
+function storyHTML(b){
+  if(!b.story||lang!=='ko') return '';
+  const parts=b.story.split('||').map(x=>x.trim()).filter(Boolean); let src=[];
+  const items=parts.filter(x=>{ if(/^출처\s*:/.test(x)){ src=x.replace(/^출처\s*:/,'').split(/\s*;\s*/).filter(u=>/^https:\/\//.test(u)); return false; } return true; })
+    .map(x=>{ const i=x.indexOf(':'); return i>0?[x.slice(0,i).trim(),x.slice(i+1).trim()]:['',x]; });
+  return `<section class="story"><p class="story-eye">BRAND STORY</p><h2>${esc(b.en)}의 이야기</h2><ol class="story-tl">${items.map(([k,v])=>`<li><b>${esc(k)}</b><p>${esc(v)}</p></li>`).join('')}</ol>${src.length?`<p class="story-src">출처 ${src.map((u,i)=>`<a href="${esc(u)}" target="_blank" rel="noopener nofollow">[${i+1}]</a>`).join(' ')}</p>`:''}</section>`;
+}
 function viewDetail(b){
   const t=T();
   const same=sorted(BRANDS.filter(x=>x.type===b.type&&x.id!==b.id),'score').slice(0,3);
@@ -644,7 +651,7 @@ function viewDetail(b){
   <div class="wrap">
     <div class="crumb"><a href="#brands">← BRANDS</a> &nbsp;/&nbsp; ${esc(lb(b.type))}</div>
     <div class="d-head">
-      <div><h1 class="dsp">${esc(b.en)}</h1><div class="ko">${esc(b.ko)} · ${esc(lb(b.origin))} · <b>${rankLabel(b)}</b>${mv(b,1)}</div></div>
+      <div><h1 class="dsp">${esc(b.en)}</h1><div class="ko">${esc(b.ko)} · ${esc(lb(b.origin))} · <b>${rankLabel(b)}</b>${mv(b,1)}</div>${b.one&&lang==='ko'?`<p class="d-one">${esc(b.one)}</p>`:''}</div>
       <div class="d-actions">
         <button class="btn ghost" data-cmp="${b.id}" aria-pressed="false">${t.cmpAdd}</button>
         <a class="btn" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${t.officialGo}</a>
@@ -666,6 +673,7 @@ function viewDetail(b){
           ${row(t.fUrl,`<a href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${esc(b.url.replace(/^https?:\/\//,''))}</a>`)}
           ${igLinks(b.ig)?row('Instagram',igLinks(b.ig).replace(/data-brand=""/g,`data-brand="${esc(b.en)}"`)):''}
         </dl>
+        ${storyHTML(b)}
       </div>
       <div style="min-width:0">
         ${thumb(b,'d-img')}
