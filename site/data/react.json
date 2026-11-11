@@ -12,7 +12,7 @@
 "view": 1
 },
 "borntowin": {
-"compare": 0,
+"compare": 1,
 "official": 1,
 "quiz": 0,
 "view": 1
@@ -35,11 +35,29 @@
 "quiz": 0,
 "view": 1
 },
+"gymshark": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 2
+},
+"hdex": {
+"compare": 1,
+"official": 0,
+"quiz": 0,
+"view": 0
+},
 "muscolo": {
 "compare": 0,
 "official": 3,
 "quiz": 0,
 "view": 5
+},
+"nike": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 4
 },
 "overwhelm": {
 "compare": 0,
@@ -59,9 +77,27 @@
 "quiz": 0,
 "view": 1
 },
+"under-armour": {
+"compare": 1,
+"official": 0,
+"quiz": 0,
+"view": 0
+},
+"uvu": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 2
+},
 "volante": {
 "compare": 0,
 "official": 1,
+"quiz": 0,
+"view": 0
+},
+"youngla": {
+"compare": 1,
+"official": 0,
 "quiz": 0,
 "view": 0
 }

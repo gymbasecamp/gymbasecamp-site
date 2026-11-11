@@ -467,5 +467,82 @@
    ]
   ],
   "users": 1
+ },
+ "2026-11-11": {
+  "events": {
+   "brand_view": 7,
+   "compare_add": 4,
+   "filter_use": 1,
+   "first_visit": 8,
+   "page_view": 17,
+   "range_brand": 3,
+   "range_find": 1,
+   "range_peak": 15,
+   "scroll": 14,
+   "search_open": 1,
+   "search_result_click": 1,
+   "session_start": 11,
+   "user_engagement": 7
+  },
+  "sessions": 11,
+  "sources": {
+   "(direct)": 6,
+   "(not set)": 1,
+   "instagram": 4,
+   "threads": 1
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    3,
+    5
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "reps-on-reps",
+    1,
+    1
+   ],
+   [
+    "physical-garments",
+    1,
+    0
+   ],
+   [
+    "volante",
+    1,
+    0
+   ],
+   [
+    "nike",
+    0,
+    4
+   ],
+   [
+    "asics",
+    0,
+    2
+   ]
+  ],
+  "users": 10
  }
 }
