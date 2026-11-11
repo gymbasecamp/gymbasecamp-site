@@ -268,6 +268,8 @@ DESC = {
 "gym-generation":"Old-school bodybuilding style made modern: pump covers, tank tops, stringers, gym pants and women's tops and leggings.",
 "youngla":"LA lifestyle and gymwear brand with bodybuilding and compression lines and collabs such as Gold's Gym and UFC.",
 "nobull":"Global sports brand with a broad range of training and functional performance products.",
+"built-for-athletes":"UK gym bag brand from Cheshire and official backpack and luggage supplier of HYROX Europe, with a men's and women's training apparel line since 2024.",
+"8rox":"UK hybrid racing apparel brand from Newcastle making race-day tees, vests, hoodies, leggings and grip socks.",
 "ten-thousand":"Focused on men's performance trainingwear, organized by Training, Running, Lifting and HYROX.",
 "virus":"Performance brand known for its own fabric technology, covering weightlifting, compression and training apparel.",
 "gorilla-wear":"Global gymwear brand deeply tied to bodybuilding culture, selling apparel, footwear and gear.",
