@@ -1,0 +1,5 @@
+{
+ "date": "2026-11-11-card",
+ "video_url": "https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@4b72b723b962edf292be4753087ce24ff555526e/",
+ "instagram": "error item reels/cards/2026-11-11/s1.jpg: {'error': {'message': 'Only photo or video can be accepted as media type.', 'type': 'OAuthException', 'code': 9004, 'error_subcode': 2207052, 'is_transient': False, 'error_user_title': '미디어 다운로드에 실패했습니다. 미디어 URI가 요구 사항을 충족하지 않습니다.', 'error_user_msg': '이 URI에서 미디어를 가져올 수 없습니다. https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@4b72b723b962edf292be4753087ce24ff555526e/reels/cards/2026-11-11/s1.jpg.자세한 내용은 개발 문서의 제한 사항 섹션을 확인하세요. https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-user/media#creating', 'fbtrace_id': 'AV9RZYKsb1EvQxbDENfjP9j'}}"
+}
