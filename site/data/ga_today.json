@@ -5,23 +5,23 @@
   "compare_add": 4,
   "filter_use": 1,
   "first_visit": 8,
-  "page_view": 15,
+  "page_view": 16,
   "range_brand": 3,
   "range_find": 1,
   "range_peak": 14,
   "scroll": 13,
   "search_open": 1,
   "search_result_click": 1,
-  "session_start": 9,
+  "session_start": 10,
   "user_engagement": 6
  },
- "sessions": 9,
+ "sessions": 10,
  "sources": {
-  "(direct)": 4,
+  "(direct)": 5,
   "(not set)": 1,
   "instagram": 4,
   "threads": 1
  },
- "updated_kst": "2026-11-11 14:10",
+ "updated_kst": "2026-11-11 17:23",
  "users": 9
 }
