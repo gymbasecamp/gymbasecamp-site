@@ -57,9 +57,17 @@ def carousel():
     G = 'https://graph.facebook.com/v21.0' if not tok.startswith('IG') else 'https://graph.instagram.com/v21.0'
     kids = []
     for im in item['images']:
-        u = f'https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{im}'
-        r = requests.post(f'{G}/{uid}/media', data={'image_url': u, 'is_carousel_item': 'true', 'access_token': tok}, timeout=60).json()
-        if 'id' not in r: return f'error item {im}: {r}'
+        # 11/11 카드: 인스타가 jsDelivr 이미지를 못 가져옴(2207052) → 재시도 후 raw.githubusercontent 로 대체
+        urls = [f'https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{im}',
+                f'https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{im}',
+                f'https://raw.githubusercontent.com/gymbasecamp/gymbasecamp-site/{sha}/{im}']
+        errs = []
+        for i, u in enumerate(urls):
+            if i: time.sleep(20)
+            r = requests.post(f'{G}/{uid}/media', data={'image_url': u, 'is_carousel_item': 'true', 'access_token': tok}, timeout=60).json()
+            if 'id' in r: break
+            errs.append(f'{u}: {r}')
+        if 'id' not in r: return f'error item {im}: {errs}'
         kids.append(r['id'])
     r = requests.post(f'{G}/{uid}/media', data={'media_type': 'CAROUSEL', 'children': ','.join(kids), 'caption': item['caption'], 'access_token': tok}, timeout=60).json()
     if 'id' not in r: return f'error carousel: {r}'
