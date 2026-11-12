@@ -38,9 +38,12 @@
  "gymshark": [
   "HYROX"
  ],
- "_note_hyrox": "2026-11-11 HYROX 분리. PUMA=HYROX 공식 의류·신발 파트너(Business Wire 2024·2025), GYMSHARK·NIKE=HYROX 의류 가이드(FashionBeans·rb100), REEBOK=HYROX 트레이닝 라인(기존 데이터) · 2026-11-11 REPRESENT 247=하이브리드 레이싱 전용 \"Technical Numbers\" 컬렉션(endurance.biz 2026-03-19)",
+ "_note_hyrox": "2026-11-11 HYROX 분리. PUMA=HYROX 공식 의류·신발 파트너(Business Wire 2024·2025), GYMSHARK·NIKE=HYROX 의류 가이드(FashionBeans·rb100), REEBOK=HYROX 트레이닝 라인(기존 데이터) · 2026-11-11 REPRESENT 247=하이브리드 레이싱 전용 \"Technical Numbers\" 컬렉션(endurance.biz 2026-03-19) · 2026-11-12 ONER ACTIVE=하이브리드 캡슐 20종(wellworthy 2025-09-15)·FashionBeans HYROX 추천 브랜드",
  "_note_gym": "2026-11-11 지훈: 나이키 등은 헬스·러닝 둘 다 가능 → 종목마다 그 종목 기준 점수로 따로 채점",
  "represent-247": [
+  "HYROX"
+ ],
+ "oner-active": [
   "HYROX"
  ]
 }

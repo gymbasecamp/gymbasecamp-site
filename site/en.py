@@ -270,6 +270,8 @@ DESC = {
 "nobull":"Global sports brand with a broad range of training and functional performance products.",
 "built-for-athletes":"UK gym bag brand from Cheshire and official backpack and luggage supplier of HYROX Europe, with a men's and women's training apparel line since 2024.",
 "8rox":"UK hybrid racing apparel brand from Newcastle making race-day tees, vests, hoodies, leggings and grip socks.",
+"r-a-d":"Portland-based CrossFit and hybrid fitness racing brand, known for its training shoes, with performance shorts and tights since 2025.",
+"oner-active":"London women's strength-training activewear brand founded by Krissy Cela in 2020, with a hybrid capsule for lifting and running.",
 "ten-thousand":"Focused on men's performance trainingwear, organized by Training, Running, Lifting and HYROX.",
 "virus":"Performance brand known for its own fabric technology, covering weightlifting, compression and training apparel.",
 "gorilla-wear":"Global gymwear brand deeply tied to bodybuilding culture, selling apparel, footwear and gear.",
