@@ -39,7 +39,7 @@
 "compare": 0,
 "official": 0,
 "quiz": 0,
-"view": 2
+"view": 4
 },
 "hdex": {
 "compare": 1,
@@ -55,7 +55,7 @@
 },
 "nike": {
 "compare": 0,
-"official": 0,
+"official": 1,
 "quiz": 0,
 "view": 4
 },

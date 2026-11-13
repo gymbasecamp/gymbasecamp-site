@@ -608,5 +608,74 @@
    ]
   ],
   "users": 1
+ },
+ "2026-11-13": {
+  "events": {
+   "brand_view": 2,
+   "click": 1,
+   "first_visit": 2,
+   "official_click": 1,
+   "page_view": 7,
+   "range_peak": 1,
+   "scroll": 5,
+   "session_start": 6
+  },
+  "sessions": 6,
+  "sources": {
+   "(direct)": 6
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    3,
+    5
+   ],
+   [
+    "nike",
+    1,
+    4
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "reps-on-reps",
+    1,
+    1
+   ],
+   [
+    "physical-garments",
+    1,
+    0
+   ],
+   [
+    "volante",
+    1,
+    0
+   ],
+   [
+    "gymshark",
+    0,
+    4
+   ]
+  ],
+  "users": 4
  }
 }
