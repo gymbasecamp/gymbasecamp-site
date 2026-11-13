@@ -1,0 +1,29 @@
+{
+ "date": "2026-11-13",
+ "brands": [],
+ "hashtags": [],
+ "errors": [
+  "@gymgeneration: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'A_wvGAJfmQpk_IKITp6hoL3",
+  "@venus.korea: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AuPM1S03_6gldsxO5uuJV7L",
+  "@rdx_sports: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'A218TQr9R5Xh5Lx9oe-Hytr",
+  "@blackcombat_official: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AANeKxQADtG2yKa5tUWWHYI",
+  "@puma_kr: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'ArY5ZPdjQdkpeTI3yyrNpA1",
+  "@compressport_kr: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AYX1-bfgOKDqahpUe2ROePw",
+  "@wannabezfit: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'An93dkOZ8BDy6Sei6Z1Dnno",
+  "@myproteinkr: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AWnrg6NZiMKyIHEoV1M2NcE",
+  "@goldsgym: {'error': {'message': '(#10) Application does not have permission for this action', 'code': 10, 'type': 'OAuthException', 'fbtrace_id': 'AbbnS6pBBvQ8IJTkha-xa_x",
+  "@blackmonsterfit: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AP5OzFS0n0dj84zzW3T8X26",
+  "@lornajaneactive: {'error': {'message': '(#10) Application does not have permission for this action', 'code': 10, 'type': 'OAuthException', 'fbtrace_id': 'Ai3lq2fpEbrl3EDXPPu_bSM",
+  "@tracksmithrunning: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'ABrseeND_kH-hG1F4uHMcTS",
+  "@fairtex: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AaFlzfOb-_TjyBeeMPp0hDj",
+  "@sweatybetty: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AZAkVzA_feMKmneejgxcEgg",
+  "@mizunokr: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'A-7Hzgy5HkSAkwDFmNsbGBI",
+  "@roguefitness: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AwXvKSg3jrf2gfTpZYxB-_W",
+  "@skins_compression: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'A4NJzUbQdTQeyBLYenD260e",
+  "@liveoficial: {'error': {'message': '(#10) Application does not have permission for this action', 'type': 'OAuthException', 'code': 10, 'fbtrace_id': 'AE_vec1_xGjJO-Donq86sJ1",
+  "#마라톤: {'error': {'message': \"(#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Inst",
+  "#bodybuilding: {'error': {'message': \"(#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Inst",
+  "#운동하는여자: {'error': {'message': \"(#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Inst",
+  "#gymmotivation: {'error': {'message': \"(#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Inst"
+ ]
+}
