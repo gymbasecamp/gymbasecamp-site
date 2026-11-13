@@ -1,7 +1,6 @@
 name: Engage list (read-only)
 on:
-  schedule:
-    - cron: '41 22 * * *'   # 매일 07:41 KST
+  # 자동 실행 꺼 둠: 앱에 business_discovery·해시태그 검색 권한이 없어 (#10) 오류. 권한 생기면 schedule 다시 켜기
   workflow_dispatch: {}
   push:
     branches: [main]
