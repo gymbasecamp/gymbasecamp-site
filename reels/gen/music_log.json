@@ -1,0 +1,11 @@
+[
+ {
+  "date": "2026-11-13",
+  "sport": "격투기",
+  "script": "fight/music.py",
+  "seed": 4127,
+  "bpm": 94,
+  "key": "G (root 49Hz, G1)",
+  "note": "하트비트 킥+임팩트, 하이햇 마스크 랜덤"
+ }
+]
