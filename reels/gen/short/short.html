@@ -1,0 +1,142 @@
+<!doctype html><meta charset=utf-8><body style="margin:0;background:#000"><canvas id=c width=1080 height=1920></canvas><script>
+// 짧은 릴스 '오늘의 브랜드' — 브랜드 1개, 종목별 순위·점수, 대표 아이템·한국 구매, CTA
+const D=window.DATA||{"date":"11.14","brand":{"en":"REEBOK","ko":"리복","ig":"@reebok",
+ "ranks":[{"c":"크로스핏","r":1,"s":77.6},{"c":"HYROX","r":1,"s":71.6}],
+ "facts":[["SIGNATURE","나노(Nano) 트레이닝화 · 레깅스 · 스포츠브라"],["BUY IN KOREA","국내 공식몰 · 의류 약 3.9만~13.9만원"]]}};
+const W=1080,H=1920,cv=document.getElementById('c'),ctx=cv.getContext('2d');
+let s=7;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
+const L=(a,b,t)=>a+(b-a)*t, cl=(v,a,b)=>Math.max(a,Math.min(b,v)), ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function mk(){const c=document.createElement('canvas');c.width=W;c.height=H;return [c,c.getContext('2d')];}
+const PT='#FF6A3D', IV='#F4EFE8';
+
+const tm=sc=>{const m=120-sc; const mm=Math.floor(m), ss=Math.round((m-mm)*60); return `${mm}:${String(ss).padStart(2,'0')}`;};
+// ---------- 경기장 배경 ----------
+function hall(){ const [c,g]=mk(); s=23;
+  let bg=g.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#030304'); bg.addColorStop(.55,'#0d0b0b'); bg.addColorStop(1,'#040303'); g.fillStyle=bg; g.fillRect(0,0,W,H);
+  // 천장 트러스 + 조명 줄
+  g.strokeStyle='rgba(255,255,255,.05)'; g.lineWidth=3; for(let i=0;i<9;i++){ g.beginPath(); g.moveTo(-100+i*160,140); g.lineTo(60+i*160,520); g.stroke(); }
+  g.save(); g.filter='blur(10px)'; for(let i=0;i<220;i++){ g.fillStyle=`rgba(${rnd()<.75?'255,196,150':'170,190,255'},${L(.04,.22,rnd())})`; g.beginPath(); g.arc(W*rnd(),L(880,1260,rnd()),L(5,18,rnd()),0,7); g.fill(); } g.restore();
+  // 뒤쪽 배너
+  g.fillStyle='#0a0909'; g.fillRect(40,600,W-80,250); g.strokeStyle='rgba(255,255,255,.07)'; g.strokeRect(40,600,W-80,250);
+  g.font="300 60px 'Inter Display'"; g.textAlign='center'; g.letterSpacing='20px'; g.fillStyle='rgba(244,239,232,.14)'; g.fillText('BASECAMP RACE',W/2,745);
+  // 바닥(인조잔디 트랙) + 레인
+  let fl=g.createLinearGradient(0,1300,0,1700); fl.addColorStop(0,'#1e1714'); fl.addColorStop(1,'#0a0807'); g.fillStyle=fl; g.fillRect(0,1300,W,420);
+  g.strokeStyle='rgba(244,239,232,.10)'; for(let k=0;k<6;k++){ const y=1320+Math.pow(k/5,1.4)*360; g.lineWidth=1.5+k; g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); }
+  return c; }
+const BG=hall();
+// ---------- 인물 ----------
+let BULK=1;
+const mix=(a,b,t)=>{const o={};for(const k in a)o[k]=[L(a[k][0],b[k][0],t),L(a[k][1],b[k][1],t)];return o;};
+const P={
+ stand:{h:[2,-168],n:[0,-150],p:[0,-92],le:[8,-120],lh:[10,-94],re:[-6,-120],rh:[-8,-94],lk:[4,-48],lf:[6,-2],rk:[-4,-48],rf:[-6,-2]},
+ r1:{h:[14,-164],n:[8,-148],p:[0,-94],le:[18,-124],lh:[34,-140],re:[-14,-122],rh:[-28,-106],lk:[26,-58],lf:[40,-10],rk:[-14,-50],rf:[-42,-34]},
+ pa:{h:[12,-168],n:[6,-152],p:[0,-98],le:[4,-124],lh:[12,-110],re:[2,-124],rh:[8,-110],lk:[20,-70],lf:[6,-40],rk:[-4,-52],rf:[-10,-14]},
+ r2:{h:[14,-164],n:[8,-148],p:[0,-94],le:[-14,-122],lh:[-28,-106],re:[18,-124],rh:[34,-140],lk:[-14,-50],lf:[-42,-34],rk:[26,-58],rf:[40,-10]},
+ pb:{h:[12,-168],n:[6,-152],p:[0,-98],le:[2,-124],lh:[8,-110],re:[4,-124],rh:[12,-110],lk:[-4,-52],lf:[-10,-14],rk:[20,-70],rf:[6,-40]},
+ win:{h:[0,-168],n:[0,-150],p:[0,-92],le:[16,-178],lh:[24,-212],re:[-16,-178],rh:[-24,-212],lk:[8,-48],lf:[14,-2],rk:[-8,-48],rf:[-14,-2]},
+ // 월볼: 스쿼트 → 던지기
+ wbS:{h:[10,-118],n:[6,-102],p:[-16,-56],le:[20,-92],lh:[24,-112],re:[16,-92],rh:[20,-112],lk:[22,-44],lf:[8,-2],rk:[18,-44],rf:[4,-2]},
+ wbT:{h:[4,-170],n:[2,-152],p:[0,-94],le:[10,-180],lh:[14,-214],re:[6,-180],rh:[10,-214],lk:[4,-48],lf:[8,-2],rk:[0,-48],rf:[2,-2]},
+ // 썰매 밀기
+ skA:{h:[46,-124],n:[34,-116],p:[-8,-86],le:[52,-110],lh:[70,-108],re:[48,-106],rh:[68,-102],lk:[16,-50],lf:[22,-2],rk:[-24,-50],rf:[-42,-10]},
+ skB:{h:[46,-124],n:[34,-116],p:[-8,-86],le:[52,-110],lh:[70,-108],re:[48,-106],rh:[68,-102],lk:[-22,-50],lf:[-40,-10],rk:[18,-50],rf:[24,-2]},
+ // 파머스 캐리
+ fcA:{h:[4,-168],n:[2,-150],p:[0,-92],le:[14,-120],lh:[16,-86],re:[-12,-120],rh:[-14,-86],lk:[14,-48],lf:[22,-2],rk:[-8,-48],rf:[-16,-4]},
+ fcB:{h:[4,-168],n:[2,-150],p:[0,-92],le:[14,-120],lh:[16,-86],re:[-12,-120],rh:[-14,-86],lk:[-8,-48],lf:[-16,-4],rk:[14,-48],rf:[22,-2]},
+ // 스키에르그
+ siU:{h:[6,-170],n:[4,-152],p:[0,-94],le:[16,-182],lh:[24,-212],re:[12,-182],rh:[20,-212],lk:[4,-48],lf:[6,-2],rk:[0,-48],rf:[2,-2]},
+ siD:{h:[34,-132],n:[24,-122],p:[-6,-84],le:[30,-96],lh:[30,-70],re:[26,-96],rh:[26,-70],lk:[14,-46],lf:[6,-2],rk:[10,-46],rf:[2,-2]},
+ // 워밍업
+ swA:{h:[2,-168],n:[0,-150],p:[0,-92],le:[12,-124],lh:[22,-104],re:[-10,-124],rh:[-20,-104],lk:[30,-58],lf:[52,-28],rk:[-4,-48],rf:[-6,-2]},
+ swB:{h:[2,-168],n:[0,-150],p:[0,-92],le:[12,-124],lh:[22,-104],re:[-10,-124],rh:[-20,-104],lk:[-20,-50],lf:[-36,-14],rk:[-4,-48],rf:[-6,-2]},
+ acA:{h:[2,-168],n:[0,-150],p:[0,-92],le:[22,-160],lh:[34,-188],re:[-22,-160],rh:[-34,-188],lk:[6,-48],lf:[12,-2],rk:[-6,-48],rf:[-12,-2]},
+ acB:{h:[2,-168],n:[0,-150],p:[0,-92],le:[26,-128],lh:[44,-110],re:[-26,-128],rh:[-44,-110],lk:[6,-48],lf:[12,-2],rk:[-6,-48],rf:[-12,-2]},
+ hpA:{h:[2,-176],n:[0,-158],p:[0,-100],le:[10,-128],lh:[16,-106],re:[-8,-128],rh:[-14,-106],lk:[6,-56],lf:[8,-12],rk:[-6,-56],rf:[-8,-12]},
+ stA:{h:[30,-110],n:[22,-104],p:[-6,-80],le:[28,-74],lh:[30,-40],re:[24,-74],rh:[26,-40],lk:[10,-44],lf:[12,-2],rk:[-12,-44],rf:[-20,-2]},
+};
+const RUN=[['r1',.13],['pa',.12],['r2',.13],['pb',.12]];
+function seq(list,t){ const tot=list.reduce((a,x)=>a+x[1],0); let u=((t%tot)+tot)%tot; for(let i=0;i<list.length;i++){ const [p,d]=list[i]; if(u<d){ const nx=list[(i+1)%list.length][0]; const k=cl((u-d*.55)/(d*.45),0,1); return mix(P[p],P[nx],ease(k)); } u-=d; } return P[list[0][0]]; }
+function fig(g,x,y,h,J,rim){ const u=h/180; const X=p=>x+p[0]*u, Y=p=>y+p[1]*u;
+  const draw=(col)=>{ g.strokeStyle=g.fillStyle=col; g.lineCap='round'; g.lineJoin='round';
+    const ln=(w,...ps)=>{g.lineWidth=w*u*BULK; g.beginPath(); g.moveTo(X(J[ps[0]]),Y(J[ps[0]])); for(let i=1;i<ps.length;i++) g.lineTo(X(J[ps[i]]),Y(J[ps[i]])); g.stroke();};
+    ln(19,'p','rk'); ln(13,'rk','rf'); ln(20,'p','lk'); ln(14,'lk','lf');
+    g.lineWidth=34*u*BULK; g.beginPath(); g.moveTo(X(J.n),Y(J.n)+8*u); g.lineTo(X(J.p),Y(J.p)-4*u); g.stroke(); g.lineWidth=26*u*BULK; g.beginPath(); g.moveTo(X(J.p),Y(J.p)-6*u); g.lineTo(X(J.p),Y(J.p)+2*u); g.stroke();
+    g.lineWidth=38*u*BULK; g.beginPath(); g.moveTo(X(J.n)-6*u,Y(J.n)+10*u); g.lineTo(X(J.n)+6*u,Y(J.n)+12*u); g.stroke();
+    ln(14,'n','re'); ln(11,'re','rh'); ln(14,'n','le'); ln(11,'le','lh');
+    g.beginPath(); g.arc(X(J.lh),Y(J.lh),8.5*u,0,7); g.fill(); g.beginPath(); g.arc(X(J.rh),Y(J.rh),8.5*u,0,7); g.fill();
+    g.beginPath(); g.ellipse(X(J.h),Y(J.h),8*u,9.6*u,0,0,7); g.fill(); ln(7,'n','h'); };
+  g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=.6; g.filter=`blur(${2*u}px)`; g.translate(-2*u,-1.5*u); draw(rim); g.restore();
+  g.save(); draw('#030202'); g.restore();
+  g.save(); g.fillStyle='rgba(0,0,0,.55)'; g.filter='blur(8px)'; g.beginPath(); g.ellipse(x,y+4,60*u,8*u,0,0,7); g.fill(); g.restore(); }
+function shirt(g,x,y,h,J,name){ const u=h/180; const nx=x+J.n[0]*u, ny=y+J.n[1]*u, px=x+J.p[0]*u, py=y+J.p[1]*u; const cx=(nx+px)/2, cy=(ny+py)/2+4*u, ang=Math.atan2(py-ny,px-nx)-Math.PI/2;
+  g.save(); g.translate(cx,cy); g.rotate(ang); let fs=13*u; g.font=`800 ${fs}px 'Inter Display'`; while(g.measureText(name).width>36*u*BULK&&fs>4*u){fs-=.5*u; g.font=`800 ${fs}px 'Inter Display'`;} g.textAlign='center'; g.textBaseline='middle'; g.fillStyle=PT; g.fillText(name,0,0); g.restore(); }
+// 브랜드별 체형·워밍업
+const ST={'REPRESENT 247':{bulk:1.04,h:470,warm:'swing',st:'wb'},'BUILT FOR ATHLETES':{bulk:1.14,h:480,warm:'arms',st:'sled'},'8ROX':{bulk:.98,h:500,warm:'hop',st:'farm'},'NIKE':{bulk:1.08,h:492,warm:'jog',st:'ski'},'REEBOK':{bulk:1.2,h:505,warm:'stretch',st:'run'}};
+const SNAME={wb:'WALL BALLS',sled:'SLED PUSH',farm:'FARMERS CARRY',ski:'SKIERG',run:'FINAL RUN'};
+function warm(kind,t){ const o=(Math.sin(t*Math.PI*2*1.9)+1)/2;
+  if(kind==='swing') return mix(P.swA,P.swB,o);
+  if(kind==='arms') return mix(P.acA,P.acB,(Math.sin(t*Math.PI*2*2.2)+1)/2);
+  if(kind==='hop') return mix(P.stand,P.hpA,Math.abs(Math.sin(t*Math.PI*2.6)));
+  if(kind==='jog') return seq(RUN,t*.55);
+  return mix(P.stand,P.stA,(Math.sin(t*Math.PI*2*.9)+1)/2); }
+function athlete(g,x,y,it,J,rim,scale){ const st=ST[it.en]; BULK=st.bulk; const h=st.h*(scale||1); fig(g,x,y,h,J,rim); shirt(g,x,y,h,J,it.en); BULK=1; return h; }
+// ---------- 소품 ----------
+function gantry(x,lit){ ctx.save(); ctx.fillStyle='#0b0a0a'; ctx.fillRect(x-12,1040,24,640);
+  ctx.fillStyle='#121010'; ctx.fillRect(x-130,990,260,62); ctx.strokeStyle=lit?PT:'rgba(244,239,232,.25)'; ctx.lineWidth=2; ctx.strokeRect(x-130,990,260,62);
+  ctx.font="800 40px 'Inter Display'"; ctx.textAlign='center'; ctx.letterSpacing='10px'; ctx.fillStyle=lit?PT:'rgba(244,239,232,.6)'; ctx.fillText('FINISH',x+5,1035); ctx.letterSpacing='0px';
+  // 바닥 결승선
+  ctx.fillStyle=lit?'rgba(255,106,61,.9)':'rgba(244,239,232,.5)'; ctx.beginPath(); ctx.moveTo(x-6,1420); ctx.lineTo(x+6,1420); ctx.lineTo(x+22,1700); ctx.lineTo(x-22,1700); ctx.fill(); ctx.restore(); }
+function ball(x,y,r){ ctx.save(); ctx.fillStyle='#16110e'; ctx.strokeStyle=PT; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x-r,y); ctx.lineTo(x+r,y); ctx.stroke(); ctx.restore(); }
+function sled(x,y,rim){ ctx.save(); ctx.fillStyle='#0d0c0c'; ctx.strokeStyle=rim; ctx.lineWidth=2.5; ctx.beginPath(); ctx.roundRect(x,y-120,130,110,6); ctx.fill(); ctx.stroke(); ctx.fillRect(x-8,y-12,150,12); for(let k=0;k<2;k++){ ctx.beginPath(); ctx.arc(x+65,y-60-k*14,40-k*6,0,7); ctx.stroke(); } ctx.restore(); }
+function kb(x,y,rim){ ctx.save(); ctx.fillStyle='#0d0c0c'; ctx.strokeStyle=rim; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(x,y+26,24,0,7); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(x,y+6,12,Math.PI,0); ctx.stroke(); ctx.restore(); }
+function skierg(x,rim){ ctx.save(); ctx.fillStyle='#0b0a0a'; ctx.strokeStyle=rim; ctx.lineWidth=2; ctx.fillRect(x-16,1080,32,520); ctx.strokeRect(x-16,1080,32,520); ctx.fillRect(x-60,1590,120,20); ctx.restore(); }
+function spot(LV,cx){ const sc=[Math.round(L(150,255,LV)),Math.round(L(185,130,LV)),Math.round(L(255,80,LV))];
+  ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.filter='blur(34px)'; let cg=ctx.createLinearGradient(0,150,0,1500); cg.addColorStop(0,`rgba(${sc},.30)`); cg.addColorStop(1,`rgba(${sc},.03)`); ctx.fillStyle=cg; ctx.beginPath(); ctx.moveTo(cx-90,140); ctx.lineTo(cx+90,140); ctx.lineTo(cx+430,1600); ctx.lineTo(cx-430,1600); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.globalCompositeOperation='lighter'; let sp=ctx.createRadialGradient(cx,1560,0,cx,1560,440); sp.addColorStop(0,`rgba(${sc},.32)`); sp.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=sp; ctx.fillRect(0,1150,W,620); ctx.restore(); return `rgba(${sc},.95)`; }
+function speed(t,a){ ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.filter='blur(3px)'; for(let i=0;i<16;i++){ const y=1180+((i*89)%460), x=W-((t*2400+i*233)%(W+500)); ctx.strokeStyle=`rgba(255,200,150,${.10*a})`; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+300,y); ctx.stroke(); } ctx.restore(); }
+function confetti(t){ ctx.save(); for(let i=0;i<90;i++){ const x=(i*97)%W, y=-40+((t*(380+(i%5)*60))+i*53)%1700, r=(i%3)+4; ctx.fillStyle=i%3?PT:IV; ctx.globalAlpha=.85; ctx.translate(x,y); ctx.rotate(t*3+i); ctx.fillRect(-r,-r*.4,r*2,r*.8); ctx.setTransform(1,0,0,1,0,0); } ctx.restore(); }
+// ---------- 텍스트 ----------
+const GR=[0,1,2].map(()=>{const c=document.createElement('canvas');c.width=540;c.height=960;const g=c.getContext('2d');const id=g.createImageData(540,960);for(let i=0;i<id.data.length;i+=4){const v=128+(Math.random()-.5)*120;id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=255;}g.putImageData(id,0,0);return c;});
+const SERIF="'Noto Serif CJK KR',serif", EN="'Inter Display','Noto Sans CJK KR',sans-serif", KR="'Noto Sans CJK KR',sans-serif";
+function T(t,x,y,f,col,al,ls){ ctx.font=f; ctx.fillStyle=col; ctx.textAlign=al||'left'; ctx.letterSpacing=(ls||0)+'px'; ctx.fillText(t,x,y); }
+function board(done,cur){ const y=1780; for(let i=0;i<5;i++){ const it=IT[i]; const x=110+i*215; const d=done>i, on=cur===i;
+  ctx.fillStyle=on?'rgba(255,106,61,.25)':d?'rgba(244,239,232,.10)':'rgba(244,239,232,.04)'; ctx.beginPath(); ctx.roundRect(x-100,y-46,200,92,4); ctx.fill(); ctx.strokeStyle=on?PT:'rgba(244,239,232,.25)'; ctx.lineWidth=1.5; ctx.stroke();
+  let fs=24; ctx.font=`700 ${fs}px 'Inter Display'`; while(ctx.measureText(it.en).width>186&&fs>12){fs--;ctx.font=`700 ${fs}px 'Inter Display'`;} ctx.textAlign='center'; ctx.fillStyle=IV; ctx.letterSpacing='0px'; ctx.fillText(it.en,x,y-8);
+  ctx.font="600 24px 'Inter Display'"; ctx.fillStyle=d?PT:'rgba(244,239,232,.4)'; ctx.fillText(d?tm(it.s):'— : —',x,y+26); } }
+// ---------- 오늘의 브랜드 (9.6초) ----------
+const B=D.brand; ST[B.en]=ST[B.en]||{bulk:1.15,h:500,warm:'jog',st:'run'};
+const TOT=9.6;
+const ease2=t=>1-Math.pow(1-cl(t,0,1),3);
+function frame(t){
+  ctx.setTransform(1,0,0,1,0,0); ctx.filter='none'; ctx.globalAlpha=1; ctx.letterSpacing='0px';
+  const z=1+.05*(t/TOT); ctx.save(); ctx.translate(W/2,H*.62); ctx.scale(z,z); ctx.translate(-W/2,-H*.62);
+  ctx.drawImage(BG,0,0); const LV=cl(t/7,0,1); const rim=spot(LV,W*.62);
+  // 달리는 선수(브랜드 이름이 몸에)
+  const sp=t<6.6?1:Math.max(0,1-(t-6.6)/.5); let J=t<6.9?seq(RUN,t*1.4):mix(seq(RUN,6.9*1.4),P.win,ease(cl((t-6.9)/.5,0,1)));
+  athlete(ctx,W*.62,1600-(t<6.9?Math.abs(Math.sin(t*Math.PI*2*2.8))*8:0),B,J,rim); if(t<6.9) speed(t,.9*sp);
+  ctx.restore();
+  let sh=ctx.createLinearGradient(0,0,0,H); sh.addColorStop(0,'rgba(0,0,0,.78)'); sh.addColorStop(.42,'rgba(0,0,0,.25)'); sh.addColorStop(.6,'rgba(0,0,0,0)'); ctx.fillStyle=sh; ctx.fillRect(0,0,W,H);
+  T('TODAY\'S BRAND · '+D.date,70,200,`600 24px ${EN}`,PT,'left',8);
+  // 1) 이름 쾅
+  const a1=ease2(t/.35); ctx.save(); ctx.translate(70,420); ctx.scale(1+.25*(1-a1),1+.25*(1-a1)); ctx.globalAlpha=a1; let fs=170; ctx.font=`800 ${fs}px ${EN}`; ctx.letterSpacing='2px'; while(ctx.measureText(B.en).width>W-140&&fs>70){fs-=4;ctx.font=`800 ${fs}px ${EN}`;} ctx.shadowColor=PT; ctx.shadowBlur=t<.6?50:0; T(B.en,0,0,`800 ${fs}px ${EN}`,IV,'left',2); ctx.restore();
+  T(`${B.ko}${B.ig?'  ·  '+B.ig:''}`,74,490,`500 34px ${KR}`,'#d9d1c8');
+  // 2) 종목별 순위 카드
+  if(t>1.4){ const head=B.ranks.length>1?`${B.ranks.length}개 종목 1위`:`${B.ranks[0].c} ${B.ranks[0].r}위`; const ah=ease2((t-1.4)/.3);
+    ctx.globalAlpha=ah; T(head,70,640,`700 84px ${SERIF}`,PT); ctx.globalAlpha=1;
+    B.ranks.forEach((r,i)=>{ const st=1.75+i*.45, a=ease2((t-st)/.35); if(a<=0) return; const y=700+i*150; ctx.globalAlpha=a; ctx.fillStyle='rgba(10,10,12,.72)'; ctx.beginPath(); ctx.roundRect(70-(1-a)*60,y,620,124,6); ctx.fill(); ctx.strokeStyle='rgba(244,239,232,.22)'; ctx.lineWidth=1.5; ctx.stroke();
+      T(r.c,100-(1-a)*60,y+52,`600 34px ${KR}`,IV); T(`${r.r}위`,100-(1-a)*60,y+100,`800 40px ${EN}`,PT);
+      const n=r.s*cl((t-st)/.8,0,1); T(n.toFixed(1),660-(1-a)*60,y+92,`800 76px ${EN}`,'#fff','right'); ctx.globalAlpha=1; }); }
+  // 3) 정보
+  if(t>4.1){ const a=ease2((t-4.1)/.35); ctx.globalAlpha=a; const y0=720+B.ranks.length*150+10;
+    B.facts.forEach((f,i)=>{ const b=ease2((t-4.1-i*.35)/.3); if(b<=0) return; ctx.globalAlpha=b; T(f[0],70,y0+i*96,`600 26px ${EN}`,PT,'left',4); T(f[1],70,y0+i*96+42,`600 36px ${KR}`,IV); }); ctx.globalAlpha=1; }
+  // 4) CTA
+  if(t>7.3){ const a=ease2((t-7.3)/.4); ctx.fillStyle=`rgba(0,0,0,${.88*a})`; ctx.fillRect(0,0,W,H); ctx.globalAlpha=a; ctx.shadowColor='#000'; ctx.shadowBlur=40;
+    T('내 종목 1위는?',W/2,700,`700 104px ${SERIF}`,IV,'center'); ctx.shadowBlur=0; T('9개 종목 · 100점 순위',W/2,800,`500 38px ${KR}`,'#ddd3c9','center'); T('gymbasecamp.kr',W/2,880,`800 56px ${EN}`,PT,'center'); T('광고 아님 · 순위에 광고 안 섞음',W/2,950,`500 28px ${KR}`,'rgba(221,211,201,.7)','center'); ctx.globalAlpha=1; }
+  if(t<.12){ ctx.fillStyle=`rgba(255,255,255,${.5*(1-t/.12)})`; ctx.fillRect(0,0,W,H); }
+  ctx.save(); ctx.globalCompositeOperation='overlay'; ctx.globalAlpha=.22; ctx.drawImage(GR[Math.floor(t*12)%3],0,0,W,H); ctx.restore();
+  let vg=ctx.createRadialGradient(W/2,H*.5,H*.25,W/2,H*.5,H*.75); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.55)'); ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#000'; ctx.fillRect(0,0,W,120); ctx.fillRect(0,H-70,W,70);
+  if(t>TOT-.3){ ctx.fillStyle=`rgba(0,0,0,${(t-(TOT-.3))/.3})`; ctx.fillRect(0,0,W,H); }
+}
+window.frame=frame; window.TOT=TOT;
+</script>
