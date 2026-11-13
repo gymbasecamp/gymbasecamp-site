@@ -1,8 +1,14 @@
 {
  "date": "2026-11-13",
- "events": {},
- "sessions": 0,
- "sources": {},
- "updated_kst": "2026-11-13 07:42",
+ "events": {
+  "page_view": 2,
+  "scroll": 2,
+  "session_start": 2
+ },
+ "sessions": 2,
+ "sources": {
+  "(direct)": 2
+ },
+ "updated_kst": "2026-11-13 11:12",
  "users": 0
 }
