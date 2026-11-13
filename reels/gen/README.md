@@ -8,7 +8,10 @@
 - 러닝 레이스 — run/
 - 파워리프팅 최고 기록전 (점수×4=kg) — powerlifting/
 - HYROX 레이스 (기록=120분−점수) — hyrox/ (2026-11-12 첫 게시)
+- 짧은 릴스 '오늘의 브랜드' (9.6초) — short/short.html + music_short.py (2026-11-13 지훈 OK · 점심 12:37 화·목·토·일, 큐 파일명 YYYY-MM-DD-card.json 에 "video" 넣으면 됨)
 
 ## 승인 대기 (지훈 OK 전 큐에 넣지 않음)
-- 짧은 릴스 '오늘의 브랜드' (9.6초) — short/short.html + music_short.py (점심 12:37 화·목·토·일, 큐 파일명 YYYY-MM-DD-card.json 에 "video" 넣으면 됨)
 - 보디빌딩 포징 심사, 요가·필라테스, 크로스핏, 컴프레션, 종합 스포츠
+
+## 시리즈 스토리 (2026-11-13~)
+모든 메인 릴스는 STORY.md 규칙대로 '지난 화/다음 화 예고' 오버레이를 넣는다: `STORY=ep.json PAGE=... node rec.js`. 회차 기록은 story_log.json.
