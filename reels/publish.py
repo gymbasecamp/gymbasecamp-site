@@ -25,21 +25,33 @@ def instagram():
     if not (tok and uid): return 'skip: IG secrets not set'
     # IGAA = 인스타 로그인 토큰 / EAA = 페이스북(시스템 사용자) 토큰
     G = 'https://graph.facebook.com/v21.0' if not tok.startswith('IG') else 'https://graph.instagram.com/v21.0'
-    r = requests.post(f'{G}/{uid}/media', data={'media_type': 'REELS', 'video_url': public_url,
-        'caption': item['caption'], 'share_to_feed': 'true', 'access_token': tok,
-        **({'cover_url': f"https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{item['cover']}"} if item.get('cover') else {})}, timeout=60).json()
-    if 'id' not in r: return f'error create: {r}'
-    cid = r['id']
-    for _ in range(40):
-        s = requests.get(f'{G}/{cid}', params={'fields': 'status_code,status', 'access_token': tok}, timeout=30).json()
-        if s.get('status_code') == 'FINISHED': break
-        if s.get('status_code') == 'ERROR': return f'error processing: {s}'
-        time.sleep(15)
+    # 11/13 릴스: 인스타가 jsDelivr 영상을 못 가져옴(2207052) → 캐시 예열·재시도 후 raw.githubusercontent 로 대체
+    raw = f'https://raw.githubusercontent.com/gymbasecamp/gymbasecamp-site/{sha}/'
+    cands = [(public_url, f"https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/"), (public_url, f"https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/"), (raw + video, raw)]
+    errs, cid, vurl = [], None, None
+    for i, (vu, base) in enumerate(cands):
+        try: requests.get(vu, timeout=120, stream=True).close()  # CDN 캐시 예열
+        except Exception: pass
+        if i: time.sleep(20)
+        r = requests.post(f'{G}/{uid}/media', data={'media_type': 'REELS', 'video_url': vu,
+            'caption': item['caption'], 'share_to_feed': 'true', 'access_token': tok,
+            **({'cover_url': base + item['cover']} if item.get('cover') else {})}, timeout=60).json()
+        if 'id' not in r: errs.append(f'create {vu}: {r}'); continue
+        st = None
+        for _ in range(40):
+            s = requests.get(f'{G}/{r["id"]}', params={'fields': 'status_code,status', 'access_token': tok}, timeout=30).json()
+            st = s.get('status_code')
+            if st in ('FINISHED', 'ERROR'): break
+            time.sleep(15)
+        if st == 'FINISHED': cid, vurl = r['id'], vu; break
+        errs.append(f'processing {vu}: {s}')
+    if not cid: return f'error: {errs}'
+    result['video_url'] = vurl
     p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
     if 'id' not in p: return f'error publish: {p}'
     # 같은 영상을 스토리로도 알림 (실패해도 릴스 결과에는 영향 없음)
     try:
-        r2 = requests.post(f'{G}/{uid}/media', data={'media_type': 'STORIES', 'video_url': public_url, 'access_token': tok}, timeout=60).json()
+        r2 = requests.post(f'{G}/{uid}/media', data={'media_type': 'STORIES', 'video_url': vurl, 'access_token': tok}, timeout=60).json()
         if 'id' in r2:
             for _ in range(30):
                 s2 = requests.get(f'{G}/{r2["id"]}', params={'fields': 'status_code', 'access_token': tok}, timeout=30).json()
