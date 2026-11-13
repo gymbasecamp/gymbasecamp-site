@@ -1,7 +1,8 @@
-import numpy as np, wave, sys
+import numpy as np, wave, sys, os
+SEED=int(os.environ.get('SEED',7)); TR=int(os.environ.get('TR',0)); X=2**(TR/12)
 SR=44100; T=19.6; n=int(SR*T); t=np.arange(n)/SR; out=np.zeros(n)
-BPM=140; b=60/BPM; HOOK,SEG=3.0,2.6; hits=[HOOK+i*SEG for i in range(5)]; END=HOOK+5*SEG
-rng=np.random.default_rng(7)
+BPM=float(os.environ.get('BPM',140)); b=60/BPM; HOOK,SEG=3.0,2.6; hits=[HOOK+i*SEG for i in range(5)]; END=HOOK+5*SEG
+rng=np.random.default_rng(SEED); _r=np.random.default_rng(SEED*3+11)
 def add(sig,at,g=1):
     i=int(at*SR); j=min(n,i+len(sig))
     if 0<=i<n: out[i:j]+=g*sig[:j-i]
@@ -18,10 +19,11 @@ def note(f,L,wave='saw',cut=1.0):
     a=int(len(s)*0+1); w=max(1,int(SR/(f*6*cut))); s=np.convolve(s,np.ones(w)/w,'same')
     return s*env(L,.005,L/3)
 # key A minor: bass roots per bar  Am F C G
-roots=[55,43.65,65.41,49]
+PROG=[[55,43.65,65.41,49],[55,49,43.65,41.2],[55,65.41,49,43.65],[55,41.2,43.65,49]]
+roots=[r*X for r in PROG[int(os.environ.get('PROG',0))]]
 lv=lambda tt: 0 if tt<HOOK else min(4,int((tt-HOOK)/SEG))
 # pad intro
-for f in [220,261.6,329.6]: out+= .05*np.sin(2*np.pi*f*t)*np.minimum(t/2,1)*np.exp(-np.maximum(t-HOOK,0)*.4)
+for f in [220*X,261.6*X,329.6*X]: out+= .05*np.sin(2*np.pi*f*t)*np.minimum(t/2,1)*np.exp(-np.maximum(t-HOOK,0)*.4)
 beats=np.arange(0,END,b)
 for i,bt in enumerate(beats):
     L=lv(bt); bar=int(bt/(4*b))%4; r=roots[bar]
@@ -32,12 +34,14 @@ for i,bt in enumerate(beats):
         for h in (0,.5): add(note(r*2,b*.45,'saw',.5),bt+h*b,.22)
     if bt>=HOOK and L>=3 and i%2==1: add(clap(),bt,.5)
 # arp from rank 3 (L>=2): 16th notes
-arp=[1,1.5,2,2.4]
+arp=list(_r.permutation([1,1.5,2,2.4,3])[:4]) if SEED!=7 else [1,1.5,2,2.4]
 for i,bt in enumerate(np.arange(HOOK+2*SEG,END,b/4)):
     bar=int(bt/(4*b))%4; f=roots[bar]*8*arp[i%4]
     add(note(f,b/4*.9,'sq',1.5),bt,.05+.02*lv(bt))
 # lead from #1
-mel=[659,587,523,587,659,784,659,523]
+SC=[440,493.9,523.3,587.3,659.3,698.5,784,880]
+mel=[659,587,523,587,659,784,659,523] if SEED==7 else [SC[i] for i in _r.integers(2,8,8)]
+mel=[m*X for m in mel]
 for i,bt in enumerate(np.arange(hits[4],END,b)):
     add(note(mel[i%len(mel)],b*.9,'saw',2),bt,.10)
 # riser into #1 and impacts

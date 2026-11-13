@@ -7,5 +7,23 @@
   "bpm": 94,
   "key": "G (root 49Hz, G1)",
   "note": "하트비트 킥+임팩트, 하이햇 마스크 랜덤"
+ },
+ {
+  "date": "2026-11-14",
+  "sport": "러닝",
+  "script": "run/music_run.py",
+  "seed": 5821,
+  "bpm": 150,
+  "key": "F# minor (TR=-3, PROG=3: i–v–VI–VII)",
+  "note": "아르페지오·리드 멜로디 시드 랜덤"
+ },
+ {
+  "date": "2026-11-15",
+  "sport": "파워리프팅",
+  "script": "powerlifting/music_pl2.py",
+  "seed": 6603,
+  "bpm": 76,
+  "key": "F# (TR=+2, E→F#)",
+  "note": "클랩 위치·베이스 루트 시드 랜덤"
  }
 ]
