@@ -692,11 +692,15 @@ function viewDetail(b){
         ${same.length?`<div class="panel"><h2>${t.sameH}</h2><div style="display:flex;flex-direction:column;gap:10px">${same.map(x=>`<a href="#b-${x.id}" style="display:flex;justify-content:space-between;gap:10px;text-decoration:none;align-items:center"><span><b style="font-family:var(--display);font-size:20px;text-transform:uppercase">${esc(x.en)}</b> <span class="ko" style="display:inline">${esc(x.ko)}</span></span><span class="rank">${x.v2.total}/100</span></a>`).join('')}</div></div>`:''}
       </div>
     </div>
+    <a class="d-sticky" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}"><span>${esc(b.en)}</span><b>${t.officialGo}</b></a>
   </div>`;
 }
 
 function covGrid(b){
   const t=T(), c=b.cov||{}, done=Object.keys(c).length>0;
+  if(!done){ const yes=FILTERS.filter(k=>b.f.includes(k)); const ko=lang==='ko';
+    return yes.length?`<p class="cov-lead">${ko?'판매 확인된 품목':'Confirmed items'}</p><div class="cov-chips">${yes.map(k=>`<span>${esc(lb(k))}</span>`).join('')}</div><p class="note">${ko?'품목별 비중(주력·많음·일부)은 공식몰 기준으로 매일 확인 중이에요.':'Item mix (core / lots / some) is being measured daily from the official store.'}</p>`
+      :`<p class="note">${t.covTodo}</p>`; }
   const lv=k=>c[k]||(b.f.includes(k)?'Y':'Q');
   const cell=k=>{const v=lv(k);return `<div class="cv cv-${v}"><span class="sw">${v==='M'?'★':v==='Q'?'?':''}</span><span class="cl">${esc(lb(k))}</span><span class="ct">${v==='Y'?t.lvY:t.lv[v]}</span></div>`;};
   const keys=done?['M','H','L','X']:['M','H','L','X','Y','Q'];
