@@ -1,9 +1,9 @@
 name: Reels auto publish
 on:
   schedule:
-    - cron: '37 10 * * 1-5'   # 평일 19:37 KST 릴스
-    - cron: '37 1 * * 0,6'    # 주말 10:37 KST 릴스
-    - cron: '37 3 * * *'      # 매일 12:37 KST 점심 게시물(월·수·금 카드뉴스, 그 외 짧은 릴스)
+    - cron: '47 9 * * 1-5'    # 평일 18:47 KST 예약 → GitHub 지연(약 50분) 감안해 실제 19:30~19:40 게시
+    - cron: '47 0 * * 0,6'    # 주말 09:47 KST 예약 → 실제 10:30~10:40 게시
+    - cron: '47 2 * * *'      # 매일 11:47 KST 예약 → 실제 12:30~12:40 점심 게시물(월·수·금 카드뉴스, 그 외 짧은 릴스)
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -27,7 +27,7 @@ jobs:
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
         run: |
           if [ -s .github/publish-date ] && [ "${{ github.event_name }}" = "push" ]; then export PUBLISH_DATE=$(cat .github/publish-date); [ -s .github/publish-kind ] && export PUBLISH_KIND=$(cat .github/publish-kind); fi
-          case "${{ github.event.schedule }}" in "37 3 * * *") export PUBLISH_KIND=card;; "") ;; *) export PUBLISH_KIND=reel;; esac
+          case "${{ github.event.schedule }}" in "47 2 * * *") export PUBLISH_KIND=card;; "") ;; *) export PUBLISH_KIND=reel;; esac
           python3 reels/publish.py
       - name: Commit log
         run: |
