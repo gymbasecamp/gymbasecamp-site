@@ -39,7 +39,7 @@
 "compare": 0,
 "official": 0,
 "quiz": 0,
-"view": 4
+"view": 5
 },
 "hdex": {
 "compare": 1,
@@ -57,7 +57,7 @@
 "compare": 0,
 "official": 1,
 "quiz": 0,
-"view": 4
+"view": 5
 },
 "overwhelm": {
 "compare": 0,
@@ -70,6 +70,12 @@
 "official": 1,
 "quiz": 0,
 "view": 0
+},
+"reebok": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 1
 },
 "reps-on-reps": {
 "compare": 0,
