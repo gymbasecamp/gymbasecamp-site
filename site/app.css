@@ -360,6 +360,13 @@ footer.gbfoot a{color:var(--on-dark);font-weight:600}
   .rrow{grid-template-columns:auto minmax(0,1fr)}
   .rrow .thumb{display:none}
   .rrow .btn{grid-column:1/-1;justify-self:start}
+  /* 2026-11-14 2회차: 모바일 터치 영역 44px (공식몰·비교 버튼, 검색·언어 버튼, 구매처 링크, 뒤로가기) */
+  .btn.sm{min-height:44px;padding:10px 11px}
+  .sbtn,.lang{position:relative}
+  .sbtn::after,.lang::after{content:'';position:absolute;inset:-7px -4px}
+  .facts a.shop-a{position:relative}
+  .facts a.shop-a::after{content:'';position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+  .crumb a{display:inline-block;padding:14px 0;margin:-14px 0}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
@@ -663,3 +670,5 @@ footer.gbfoot{background:#05060a}
 .cov-lead{font-size:12.5px;color:#9a94a6;margin:0 0 10px}
 .cov-chips{display:flex;flex-wrap:wrap;gap:8px}
 .cov-chips span{padding:7px 11px;border:1px solid rgba(244,239,232,.22);border-radius:2px;font-size:13.5px;color:#F4EFE8}
+/* 2026-11-14 2회차: 브랜드명+종목 순위 태그가 한 줄에 안 들어가면 태그를 아래 줄로 (데스크톱 3열·좁은 폰에서 'XE/XY/MI/X', EN에선 한 글자씩 세로로 쪼개지던 문제) */
+.card-top{flex-wrap:wrap;row-gap:6px}
