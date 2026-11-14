@@ -1,8 +1,7 @@
 name: GA4 daily pull
 on:
   schedule:
-    - cron: '7 22 * * *'
-    - cron: '17 1,4,7,10,13 * * *'   # 07:07 KST, before the morning data tasks
+    - cron: '7 22 * * *'   # 매일 07:07 KST 1회 (2026-11-14 점검: 하루 6회 → 1회, 방문 수가 적어 하루 1번이면 충분)
   workflow_dispatch: {}
   push:
     branches: [main]

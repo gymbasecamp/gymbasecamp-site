@@ -78,7 +78,7 @@ const L = {
   valH:'운동복 브랜드를<br>하나씩 검색하지 마세요.', valP:'GYM BASECAMP에서 핏, 스타일, 운동 목적, 국내 구매 가능 여부를 한 번에 비교하세요.',
   val:[['FIT','핏','머슬핏 · 오버핏 · 컴프레션'],['STYLE','스타일','짐웨어 · 짐 스트리트 · 애슬레저'],['PURPOSE','운동 목적','보디빌딩 · 파워리프팅 · 러닝 · HYROX'],['BUY','국내 구매',(k,o)=>`국내 공식몰 ${k}곳 · 해외 직배송 ${o}곳`]],
   finalH:'나에게 맞는<br>짐웨어 브랜드 찾기', finalP:'브랜드 이름을 몰라도 괜찮아요. 핏과 아이템만 고르면 됩니다.',
-  topH:'현재 점수 20 / 20', topP:'헬스 특화도·국내 접근성·제품군 완성도·정보 완성도 만점 브랜드입니다. 같은 점수는 공동 순위로 표시합니다.', scoreRule:'점수 기준 보기', all:n=>`전체 ${n}개 브랜드 보기 →`,
+  topH:'현재 점수 20 / 20', topP:'종목 특화도·국내 접근성·제품군 완성도·정보 완성도 만점 브랜드입니다. 같은 점수는 공동 순위로 표시합니다.', scoreRule:'점수 기준 보기', all:n=>`전체 ${n}개 브랜드 보기 →`,
   sPh:'브랜드·아이템 검색 (예: 싱글렛, 짐샤크)', sHot:'많이 찾는 검색어', sAll:n=>`검색 결과 ${n}개 모두 보기 →`, sNone:q=>`'${q}' 검색 결과가 없어요. 다른 단어나 영어 이름으로 찾아보세요.`, sTagN:'브랜드', sTagM:'관련', brandsH:'브랜드 찾기', brandsP:'조건을 고를수록 결과가 좁혀집니다. 핏·아이템 조건은 모두 만족하는 브랜드만 보여줍니다.', filter:'필터', search:'브랜드·상품 검색 (예: 싱글렛, 짐샤크)', gender:'성별', items:'아이템', type:'브랜드 유형', buy:'구매 방식', selected:n=>`${n}개 선택`,
   sScore:'추천순 (점수)', sKr:'국내 브랜드 먼저', sName:'이름순 A–Z', empty:'조건에 모두 맞는 브랜드가 아직 없어요.<br>조건을 하나 빼보거나', clearAll:'전체 초기화',
   cmpAdd:'+ 비교', cmpOn:'비교 담음', official:'공식몰 ↗', officialGo:'공식몰 바로가기 ↗', rank:(b,tie)=>`${tie?'공동 ':''}${b}위`, cmpMax:'비교는 최대 4개까지 담을 수 있어요. 하나를 빼고 다시 담아주세요.',
@@ -118,12 +118,12 @@ const L = {
   valH:'Stop searching<br>brands one by one.', valP:'Compare fit, style, training purpose and whether you can buy in Korea, all in one place.',
   val:[['FIT','Fit','Muscle fit · Oversized · Compression'],['STYLE','Style','Gymwear · Gym street · Athleisure'],['PURPOSE','Training','Bodybuilding · Powerlifting · Running · HYROX'],['BUY','Buying in Korea',(k,o)=>`${k} Korean official stores · ${o} ship from abroad`]],
   finalH:'Find gymwear<br>that fits you', finalP:'No need to know brand names. Just pick the fit and items you want.',
-  topH:'Score 20 / 20', topP:'Full marks on gym focus, access from Korea, range depth and verified info. Equal scores share a rank.', scoreRule:'How we score', all:n=>`See all ${n} brands →`,
+  topH:'Score 20 / 20', topP:'Full marks on sport focus, access from Korea, range depth and verified info. Equal scores share a rank.', scoreRule:'How we score', all:n=>`See all ${n} brands →`,
   sPh:'Search brands or items (e.g. singlet, Gymshark)', sHot:'Popular searches', sAll:n=>`See all ${n} results →`, sNone:q=>`No results for '${q}'. Try another word or the brand's English name.`, sTagN:'Brand', sTagM:'Match', brandsH:'Find brands', brandsP:'Each choice narrows the list. Brands must match every fit and item you select.', filter:'Filters', search:'Search brands or products (e.g. singlet, Gymshark)', gender:'Gender', items:'Items', type:'Brand type', buy:'How to buy', selected:n=>`${n} selected`,
   sScore:'Recommended (score)', sKr:'Korean brands first', sName:'Name A–Z', empty:'No brand matches every filter yet.<br>Try removing one, or', clearAll:'reset all',
   cmpAdd:'+ Compare', cmpOn:'Added', official:'Store ↗', officialGo:'Visit official store ↗', rank:(b,tie)=>`#${b}`, cmpMax:'You can compare up to 4 brands. Remove one first.',
   fType:'Type', fSport:'Training', fVibe:'Style', fStyle:'Range', fItems:'Key products', fPrice:'Price range', fFor:'For', fBuy:'How to buy', fShops:'Where to buy in Korea', fUrl:'Official store',
-  scoreH:'GYM BASECAMP score', scoreNote:'Six criteria, 100 points. Until we have enough visit data, every brand gets the same neutral user score (10). Ties are broken by user response, then gym focus, then verified info, so no two brands share a rank.', bd:{focus:'Gym focus',range:'Range',access:'Buying in Korea',info:'Verified info',editor:'Editor rating',user:'User response'}, coverH:'Fit & item coverage', lv:{M:'Core',H:'Lots',L:'Some',X:'None',Y:'Yes (mix pending)',Q:'Checking'}, lvY:'Yes', covDone:'Based on product counts per category on the official store. ★ Core is what the brand pushes most on its main page and best-sellers.', covTodo:'We are still measuring this brand\'s item mix (updated daily). Hatched items are confirmed but not yet measured; ? items are not checked yet.', sameH:'Same type',
+  scoreH:'GYM BASECAMP score', scoreNote:'Six criteria, 100 points. Until we have enough visit data, every brand gets the same neutral user score (10). Ties are broken by user response, then sport focus, then verified info, so no two brands share a rank.', bd:{focus:'Sport focus',range:'Range',access:'Buying in Korea',info:'Verified info',editor:'Editor rating',user:'User response'}, coverH:'Fit & item coverage', lv:{M:'Core',H:'Lots',L:'Some',X:'None',Y:'Yes (mix pending)',Q:'Checking'}, lvY:'Yes', covDone:'Based on product counts per category on the official store. ★ Core is what the brand pushes most on its main page and best-sellers.', covTodo:'We are still measuring this brand\'s item mix (updated daily). Hatched items are confirmed but not yet measured; ? items are not checked yet.', sameH:'Same type',
   upImg:'Upload brand image', chImg:'Change image', rmImg:'Remove image', upNote:'Only people who can edit see this. Upload only images the brand has allowed you to use.', uploading:'Uploading…', upFail:'Upload failed. Use a PNG, JPG or WEBP under 20 MB.',
   cmpH:'Compare brands', cmpP:'Put up to 4 brands side by side: fit, items, price range and how to buy.', cmpEmpty:'Nothing to compare yet. Tap <b>+ Compare</b> on a brand card.', goFind:'Find brands', remove:'Remove', more:'Add more brands', cmpClear:'Clear comparison', score:'Score', rankL:'Rank', origin:'Origin', sport:'Training',
   trayClear:'Clear', trayGo:'Compare',
@@ -814,14 +814,14 @@ function viewAbout(){
     <p>You don't need to know brand names. Pick conditions like men's, muscle fit, compression and Korean brands, and the matches appear.</p>
     <h2 class="dsp">How we rank</h2>
     <table class="rubric"><thead><tr><th>Criterion</th><th>What we look at</th><th>Points</th></tr></thead><tbody>
-      <tr><td>Gym focus</td><td>Brand type, core training (bodybuilding, weights, powerlifting), gym items like muscle fit, compression, tanks, pump covers, singlets</td><td>25</td></tr>
+      <tr><td>Sport focus</td><td>Scored separately for each sport the brand is ranked in: main sport vs. secondary, sport-specific brand, and the 5 key items for that sport (e.g. running: running wear, shorts, tights, singlets, light outerwear), singlets</td><td>25</td></tr>
       <tr><td>Range</td><td>How many item categories and fits it covers, men's and women's lines</td><td>20</td></tr>
       <tr><td>Buying in Korea</td><td>Korean official store 20 · Korean authorized retailer (department store, multi-brand shop) 17 · ships from abroad 13 · overseas order 7</td><td>20</td></tr>
       <tr><td>Verified info</td><td>Official store, stated price range, key products, Instagram confirmed</td><td>10</td></tr>
       <tr><td>Editor rating</td><td>Our earlier hands-on review</td><td>5</td></tr>
       <tr><td>User response</td><td>What visitors open, compare and click through to the store (last 28 days)</td><td>20</td></tr>
     </tbody></table>
-    <p class="note">User response stays neutral (10 for every brand) until we have enough visits. Ties are broken by user response, gym focus, then verified info, so every brand has its own rank. We never fill in information we can't verify.</p>
+    <p class="note">User response stays neutral (10 for every brand) until we have enough visits. Ties are broken by user response, sport focus, then verified info, so every brand has its own rank. We never fill in information we can't verify.</p>
     <h2 class="dsp">Advertising policy</h2>
     <p>Sponsored brands are never mixed into recommendations. Any paid placement is labeled Sponsored and shown separately.</p>
     <h2 class="dsp">Suggest a brand</h2>
