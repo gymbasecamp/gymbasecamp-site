@@ -25,5 +25,23 @@
   "bpm": 76,
   "key": "F# (TR=+2, E→F#)",
   "note": "클랩 위치·베이스 루트 시드 랜덤"
+ },
+ {
+  "date": "2026-11-15",
+  "sport": "오늘의 브랜드(A7)",
+  "script": "short/music_short.py",
+  "seed": 2741,
+  "bpm": 140,
+  "key": "G#1 (root 51.91Hz)",
+  "note": "점심 짧은 릴스"
+ },
+ {
+  "date": "2026-11-16",
+  "sport": "HYROX",
+  "script": "hyrox/music_hyrox.py",
+  "seed": 7319,
+  "bpm": 134,
+  "key": "C (TR=+3, A→C)",
+  "note": "SEED/BPM/TR 환경변수 추가, 결승 히트·엔딩 코드도 이조"
  }
 ]

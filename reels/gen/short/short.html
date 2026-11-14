@@ -1,8 +1,8 @@
 <!doctype html><meta charset=utf-8><body style="margin:0;background:#000"><canvas id=c width=1080 height=1920></canvas><script>
 // 짧은 릴스 '오늘의 브랜드' — 브랜드 1개, 종목별 순위·점수, 대표 아이템·한국 구매, CTA
-const D=window.DATA||{"date":"11.14","brand":{"en":"REEBOK","ko":"리복","ig":"@reebok",
- "ranks":[{"c":"크로스핏","r":1,"s":77.6},{"c":"HYROX","r":1,"s":71.6}],
- "facts":[["SIGNATURE","나노(Nano) 트레이닝화 · 레깅스 · 스포츠브라"],["BUY IN KOREA","국내 공식몰 · 의류 약 3.9만~13.9만원"]]}};
+const D=window.DATA||{"date":"11.15","brand":{"en":"A7","ko":"에이세븐","ig":"@a7korea",
+ "ranks":[{"c":"스트렝스·파워리프팅","r":2,"s":76.9}],
+ "facts":[["SIGNATURE","IPF 승인 싱글렛 · 니슬리브 · 벨트"],["BUY IN KOREA","국내 공식몰 · 약 7만~30.9만원"]]}};
 const W=1080,H=1920,cv=document.getElementById('c'),ctx=cv.getContext('2d');
 let s=7;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
 const L=(a,b,t)=>a+(b-a)*t, cl=(v,a,b)=>Math.max(a,Math.min(b,v)), ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -71,7 +71,7 @@ function fig(g,x,y,h,J,rim){ const u=h/180; const X=p=>x+p[0]*u, Y=p=>y+p[1]*u;
 function shirt(g,x,y,h,J,name){ const u=h/180; const nx=x+J.n[0]*u, ny=y+J.n[1]*u, px=x+J.p[0]*u, py=y+J.p[1]*u; const cx=(nx+px)/2, cy=(ny+py)/2+4*u, ang=Math.atan2(py-ny,px-nx)-Math.PI/2;
   g.save(); g.translate(cx,cy); g.rotate(ang); let fs=13*u; g.font=`800 ${fs}px 'Inter Display'`; while(g.measureText(name).width>36*u*BULK&&fs>4*u){fs-=.5*u; g.font=`800 ${fs}px 'Inter Display'`;} g.textAlign='center'; g.textBaseline='middle'; g.fillStyle=PT; g.fillText(name,0,0); g.restore(); }
 // 브랜드별 체형·워밍업
-const ST={'REPRESENT 247':{bulk:1.04,h:470,warm:'swing',st:'wb'},'BUILT FOR ATHLETES':{bulk:1.14,h:480,warm:'arms',st:'sled'},'8ROX':{bulk:.98,h:500,warm:'hop',st:'farm'},'NIKE':{bulk:1.08,h:492,warm:'jog',st:'ski'},'REEBOK':{bulk:1.2,h:505,warm:'stretch',st:'run'}};
+const ST={'A7':{bulk:1.34,h:486,warm:'stretch',st:'run'},'REPRESENT 247':{bulk:1.04,h:470,warm:'swing',st:'wb'},'BUILT FOR ATHLETES':{bulk:1.14,h:480,warm:'arms',st:'sled'},'8ROX':{bulk:.98,h:500,warm:'hop',st:'farm'},'NIKE':{bulk:1.08,h:492,warm:'jog',st:'ski'},'REEBOK':{bulk:1.2,h:505,warm:'stretch',st:'run'}};
 const SNAME={wb:'WALL BALLS',sled:'SLED PUSH',farm:'FARMERS CARRY',ski:'SKIERG',run:'FINAL RUN'};
 function warm(kind,t){ const o=(Math.sin(t*Math.PI*2*1.9)+1)/2;
   if(kind==='swing') return mix(P.swA,P.swB,o);

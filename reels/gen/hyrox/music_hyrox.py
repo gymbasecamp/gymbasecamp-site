@@ -1,7 +1,8 @@
 # HYROX 레이스 전용 트랙 — 128BPM 드라이빙 테크노, 출발 휘슬 + 결승 통과마다 상승 히트 (다른 릴스와 겹치지 않는 새 곡)
-import numpy as np, wave, sys
+import numpy as np, wave, sys, os
+SEED=int(os.environ.get('SEED',91)); TR=int(os.environ.get('TR',0)); X=2**(TR/12)
 SR=44100; INTRO,SEG,LAST,END=3.4,3.4,4.6,3.2; T=INTRO+SEG*4+LAST+END; n=int(SR*T); t=np.arange(n)/SR; out=np.zeros(n)
-rng=np.random.default_rng(91); BPM=128; b=60/BPM; GO=2.9
+rng=np.random.default_rng(SEED); BPM=float(os.environ.get('BPM',128)); b=60/BPM; GO=2.9
 def add(sig,at,g=1):
     i=int(at*SR); j=min(n,i+len(sig))
     if 0<=i<n: out[i:j]+=g*sig[:j-i]
@@ -26,7 +27,7 @@ for i in range(3): k,e=env(.18,.003,10); add(np.sin(2*np.pi*660*k)*e*.35,1.4+i*.
 add(whistle(.55),GO); out+=.10*np.sin(2*np.pi*55*t)*np.clip((t-.2)/1.5,0,1)*(t<GO)
 end=INTRO+SEG*4+LAST
 # 그루브 (GO 이후) — 구간마다 레이어 추가
-root=[55,55,65.4,49]; scale=[0,3,7,10,12,15]
+root=[r*X for r in [55,55,65.4,49]]; scale=[0,3,7,10,12,15]
 beats=np.arange(GO,end,b)
 for i,bt in enumerate(beats):
     lv=min(4,int(max(0,bt-INTRO)//SEG))
@@ -45,9 +46,9 @@ fins=[INTRO+i*SEG+2.3 for i in range(4)]+[INTRO+4*SEG+2.2]
 for i,ft in enumerate(fins):
     a0=ft-1.0; i0,i1=int(a0*SR),int(ft*SR); k=np.arange(i1-i0)/SR; nz=rng.standard_normal(len(k)); nz=nz-np.convolve(nz,np.ones(30)/30,'same')
     out[i0:i1]+=((k/1.0)**2.2)*(.10+.04*i)*nz
-    add(boom(110*2**(i*2/12)),ft,.8+.1*i)
+    add(boom(110*X*2**(i*2/12)),ft,.8+.1*i)
 # 마지막: 메이저 코드 + 엔딩
-for f in (220,277.2,329.6,440): k,e=env(3.2,.01,1.1); add((np.sin(2*np.pi*f*k)+.3*np.sin(2*np.pi*2*f*k))*e*.12,fins[4]+.1)
+for f in [q*X for q in (220,277.2,329.6,440)]: k,e=env(3.2,.01,1.1); add((np.sin(2*np.pi*f*k)+.3*np.sin(2*np.pi*2*f*k))*e*.12,fins[4]+.1)
 add(boom(82.4),end,1.0)
 ir=np.random.default_rng(5).standard_normal(int(1.0*SR))*np.exp(-np.arange(int(1.0*SR))/SR*6)*.02
 m=len(out)+len(ir); wet=np.fft.irfft(np.fft.rfft(out,m)*np.fft.rfft(ir,m))[:n]
