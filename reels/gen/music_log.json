@@ -43,5 +43,23 @@
   "bpm": 134,
   "key": "C (TR=+3, A→C)",
   "note": "SEED/BPM/TR 환경변수 추가, 결승 히트·엔딩 코드도 이조"
+ },
+ {
+  "date": "2026-11-17",
+  "sport": "격투기",
+  "script": "fight/music.py",
+  "seed": 9157,
+  "bpm": 104,
+  "key": "F# (root 46.25Hz, F#1)",
+  "note": "EP.19"
+ },
+ {
+  "date": "2026-11-18",
+  "sport": "러닝",
+  "script": "run/music_run.py",
+  "seed": 3389,
+  "bpm": 158,
+  "key": "A# minor (TR=+1, PROG=2: i–III–VII–VI 계열)",
+  "note": "EP.20"
  }
 ]
