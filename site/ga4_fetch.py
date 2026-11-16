@@ -53,7 +53,15 @@ json.dump(react, open(P('data/react.json'), 'w', encoding='utf-8'), ensure_ascii
 top = sorted(((k, v['official'], v['view']) for k, v in react.items()), key=lambda x: (-x[1], -x[2]))[:10]
 hp = P('data/ga_daily.json')
 H = json.load(open(hp, encoding='utf-8')) if os.path.exists(hp) else {}
-H[day] = {'users': int(users), 'sessions': int(sessions), 'sources': src, 'events': ev, 'top_brands_28d': top}
+# 주간 리뷰용(2026-11-17~): 국가별 방문자, 신규 방문자, 참여 세션·참여 시간
+try:
+    countries = {c: int(n) for c, n in report(['country'], ['activeUsers'], 'yesterday')}
+    ex = report([], ['newUsers', 'engagedSessions', 'userEngagementDuration'], 'yesterday')
+    new_u, eng_s, eng_sec = (ex[0] if ex else [0, 0, 0])
+except Exception as e:
+    print('extra metrics skipped:', e); countries, new_u, eng_s, eng_sec = {}, 0, 0, 0
+H[day] = {'users': int(users), 'sessions': int(sessions), 'sources': src, 'events': ev, 'top_brands_28d': top,
+          'countries': countries, 'new_users': int(new_u), 'engaged_sessions': int(eng_s), 'engagement_sec': int(eng_sec)}
 for d in sorted(H)[:-180]: del H[d]
 json.dump(H, open(hp, 'w', encoding='utf-8'), ensure_ascii=False, sort_keys=True, indent=1)
 print(f'{day}: users {int(users)}, sessions {int(sessions)}, sources {src}, brand views 28d {sum(v["view"] for v in react.values())}')
