@@ -47,27 +47,61 @@ const PO={
  lat:{h:[0,-168],n:[0,-150],p:[0,-92],le:[32,-126],lh:[13,-100],re:[-32,-126],rh:[-13,-100],lk:[13,-48],lf:[17,-2],rk:[-13,-48],rf:[-17,-2]},
  side:{h:[0,-166],n:[0,-150],p:[0,-92],le:[30,-168],lh:[8,-174],re:[-30,-168],rh:[-8,-174],lk:[14,-50],lf:[10,-2],rk:[-12,-48],rf:[-16,-2]},
  mm:{h:[2,-158],n:[0,-145],p:[0,-92],le:[36,-130],lh:[10,-110],re:[-36,-130],rh:[-10,-110],lk:[15,-48],lf:[19,-2],rk:[-15,-48],rf:[-19,-2]},
+ sc:{h:[8,-166],n:[2,-150],p:[0,-92],le:[16,-124],lh:[24,-110],re:[10,-126],rh:[22,-113],lk:[12,-50],lf:[8,-2],rk:[-4,-48],rf:[-6,-2]},
+ st:{h:[8,-166],n:[2,-150],p:[0,-92],le:[4,-122],lh:[-4,-94],re:[-8,-122],rh:[-10,-96],lk:[12,-50],lf:[8,-2],rk:[-4,-48],rf:[-6,-2]},
+ bdb:{h:[0,-168],n:[0,-150],p:[0,-92],le:[36,-150],lh:[30,-182],re:[-36,-150],rh:[-30,-182],lk:[12,-48],lf:[15,-2],rk:[-12,-44],rf:[-22,-8]},
+ bls:{h:[0,-168],n:[0,-150],p:[0,-92],le:[35,-128],lh:[14,-100],re:[-35,-128],rh:[-14,-100],lk:[12,-48],lf:[15,-2],rk:[-12,-44],rf:[-22,-8]},
+ vac:{h:[0,-168],n:[0,-150],p:[0,-92],le:[28,-170],lh:[6,-174],re:[-28,-170],rh:[-6,-174],lk:[8,-48],lf:[10,-2],rk:[-8,-48],rf:[-10,-2]},
+ fcp:{h:[4,-166],n:[0,-150],p:[0,-92],le:[30,-150],lh:[24,-182],re:[-6,-126],rh:[10,-114],lk:[16,-46],lf:[24,-2],rk:[-8,-50],rf:[-14,-4]},
+ mpf:{h:[0,-168],n:[0,-150],p:[0,-92],le:[22,-124],lh:[14,-97],re:[-18,-124],rh:[-26,-98],lk:[10,-48],lf:[14,-2],rk:[-6,-48],rf:[-8,-2]},
+ mpq:{h:[6,-168],n:[2,-150],p:[0,-92],le:[6,-122],lh:[10,-96],re:[-4,-122],rh:[-2,-96],lk:[8,-48],lf:[10,-2],rk:[-2,-48],rf:[0,-2]},
+ mpb:{h:[0,-168],n:[0,-150],p:[0,-92],le:[18,-124],lh:[26,-98],re:[-22,-124],rh:[-14,-97],lk:[6,-48],lf:[8,-2],rk:[-10,-48],rf:[-14,-2]},
+ mpf2:{h:[0,-168],n:[0,-150],p:[0,-92],le:[18,-124],lh:[26,-98],re:[-22,-124],rh:[-14,-97],lk:[8,-48],lf:[12,-2],rk:[-8,-48],rf:[-12,-2]},
  win:{h:[0,-168],n:[0,-150],p:[0,-92],le:[18,-178],lh:[26,-212],re:[-18,-178],rh:[-26,-212],lk:[10,-48],lf:[16,-2],rk:[-10,-48],rf:[-16,-2]},
 };
 const IT=D.items;
-const ST={HUGVONE:{bulk:1.02,h:480},'ROUGH ATHLETIC':{bulk:1.06,h:490},DRIX:{bulk:1.1,h:495},'PHYSICAL GARMENTS':{bulk:1.14,h:505},MUSCOLO:{bulk:1.22,h:520}};
+// 순위가 높을수록 더 크고 두껍게 · 체급(디비전)마다 체형과 규정 포즈가 다르다
+const ST={
+ HUGVONE:{div:"MEN'S PHYSIQUE",h:486,bulk:.9,sh:.98,waist:.86,arm:.78,quad:.7,shorts:true,poses:['mpf','mpq','mpb','mpf2']},
+ 'ROUGH ATHLETIC':{div:'CLASSIC PHYSIQUE',h:492,bulk:1.0,sh:1.08,waist:.68,arm:.95,quad:.95,poses:['fdb','sc','vac','fcp']},
+ DRIX:{div:'BODYBUILDING',h:468,bulk:1.1,sh:1.1,waist:.98,arm:1.05,quad:1.12,poses:['fdb','lat','sc','bdb']},
+ 'PHYSICAL GARMENTS':{div:'BODYBUILDING',h:500,bulk:1.16,sh:1.16,waist:.94,arm:1.12,quad:1.16,poses:['bls','st','side','mm']},
+ MUSCOLO:{div:'BODYBUILDING · OPEN',h:522,bulk:1.26,sh:1.26,waist:.9,arm:1.26,quad:1.26,poses:['fdb','bdb','side','mm']},
+};
+const PROF={sc:1,st:1,mpq:1}, BACKP={bdb:1,bls:1,mpb:1};
 const INTRO=3.0, SEG=3.6, LAST=4.6, END=3.2, TOT=INTRO+SEG*4+LAST+END;
 // 포즈 타이밍(세그먼트 내부): 걸어 들어오기 → 4포즈 박자 컷
-const HITS=[[.6,'fdb'],[1.2,'lat'],[1.8,'side'],[2.4,'mm']];
-const POSE_KO={fdb:'FRONT DOUBLE BICEPS',lat:'FRONT LAT SPREAD',side:'ABS AND THIGH',mm:'MOST MUSCULAR'};
+const HT=[.6,1.2,1.8,2.4]; let HITS=HT.map((t,i)=>[t,'fdb']);
+const POSE_KO={fdb:'FRONT DOUBLE BICEPS',lat:'FRONT LAT SPREAD',side:'ABDOMINALS AND THIGH',mm:'MOST MUSCULAR',sc:'SIDE CHEST',st:'SIDE TRICEPS',bdb:'BACK DOUBLE BICEPS',bls:'BACK LAT SPREAD',vac:'ABDOMINAL VACUUM',fcp:'FAVORITE CLASSIC POSE',mpf:'FRONT POSE',mpq:'QUARTER TURN',mpb:'BACK POSE',mpf2:'FRONT POSE · FINAL'};
 function jit(J,a,t){ if(!a) return J; const o={}; for(const k in J){ const q=(k==='lh'||k==='rh'||k==='le'||k==='re')?1:.3; o[k]=[J[k][0]+Math.sin(t*61+k.length)*a*q, J[k][1]+Math.cos(t*53+k.charCodeAt(0))*a*q]; } return o; }
-function poseAt(lt){ let cur='stand',k=1,since=99;
+function poseAt(lt,it){ HITS=HT.map((t,i)=>[t,ST[it.en].poses[i]]); let cur='stand',k=1,since=99;
   for(let i=HITS.length-1;i>=0;i--){ if(lt>=HITS[i][0]){ const prev=i?HITS[i-1][1]:'stand'; since=lt-HITS[i][0]; k=cl(since/.14,0,1); return {J:mix(PO[prev],PO[HITS[i][1]],ease(k)),since,name:HITS[i][1],idx:i}; } }
   return {J:mix(PO.walkA,PO.walkB,(Math.sin(lt*Math.PI*2*1.8)+1)/2),since:99,name:null,idx:-1}; }
-function muscles(g,x,y,h,J,rim){ const k=h/180, u=k*BULK; const X=p=>x+p[0]*k, Y=p=>y+p[1]*k;
-  const nx=X(J.n), ny=Y(J.n), px=X(J.p), py=Y(J.p); const dx=(J.le[0]-J.re[0])/60; // 정면일수록 넓게
-  const sw=L(14,27,cl(dx,0,1))*u, ww=9*u;
-  const blobs=[[J.le,J.lh,.05,6.5],[J.re,J.rh,.05,6.5],[J.p,J.lk,.35,9],[J.p,J.rk,.35,9],[J.lk,J.lf,.25,6.5],[J.rk,J.rf,.25,6.5]];
-  const draw=c=>{ g.fillStyle=c; g.beginPath(); g.moveTo(nx-sw,ny+4*u); g.quadraticCurveTo(nx,ny-6*u,nx+sw,ny+4*u); g.quadraticCurveTo(nx+sw*.9,ny+26*k,px+ww,py-4*k); g.lineTo(px-ww,py-4*k); g.quadraticCurveTo(nx-sw*.9,ny+26*k,nx-sw,ny+4*u); g.fill(); [[-1,J.re],[1,J.le]].forEach(([sg,e])=>{ const sx=nx+sg*sw*.92, sy=ny+6*u; g.beginPath(); g.arc(L(sx,X(e),.2),L(sy,Y(e),.2),8.5*u,0,7); g.fill(); });
+let CUR=null, CURP='';
+function muscles(g,x,y,h,J,rim){ const A=CUR, k=h/180, u=k*BULK; const X=p=>x+p[0]*k, Y=p=>y+p[1]*k;
+  const prof=!!PROF[CURP], back=!!BACKP[CURP];
+  const nx=X(J.n), ny=Y(J.n), px=X(J.p), py=Y(J.p); const dx=(J.le[0]-J.re[0])/60;
+  const sw=(prof?11:L(14,27,cl(dx,0,1))*(back?1.08:1))*u*A.sh, ww=9*u*A.waist*(CURP==='vac'?.72:1)*(prof?.8:1);
+  const blobs=[[J.le,J.lh,.05,6.5*A.arm],[J.re,J.rh,.05,6.5*A.arm],[J.p,J.lk,.35,9*A.quad],[J.p,J.rk,.35,9*A.quad],[J.lk,J.lf,.25,6.5*A.quad],[J.rk,J.rf,.25,6.5*A.quad]];
+  const draw=c=>{ g.fillStyle=c; g.beginPath(); g.moveTo(nx-sw,ny+9*u); g.quadraticCurveTo(nx,ny+1*u,nx+sw,ny+9*u); g.quadraticCurveTo(nx+sw*.9,ny+30*k,px+ww,py-4*k); g.lineTo(px-ww,py-4*k); g.quadraticCurveTo(nx-sw*.9,ny+30*k,nx-sw,ny+9*u); g.fill();
+    if(!prof) [[-1,J.re],[1,J.le]].forEach(([sg,e])=>{ const sx=nx+sg*sw*.92, sy=ny+11*u; g.beginPath(); g.arc(L(sx,X(e),.2),L(sy,Y(e),.2),8.5*u*A.sh,0,7); g.fill(); });
+    else { g.beginPath(); g.arc(nx+6*u,ny+8*u,9*u*A.sh,0,7); g.fill(); g.beginPath(); g.ellipse(L(nx,px,.3)+8*u*A.sh,L(ny,py,.3),9*u*A.sh,12*u,0,0,7); g.fill(); }
     blobs.forEach(([a,b,f,r])=>{ g.beginPath(); g.arc(L(X(a),X(b),f),L(Y(a),Y(b),f),r*u,0,7); g.fill(); }); };
   g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=.5; g.filter=`blur(${2*k}px)`; g.translate(-2*k,-1.5*k); draw(rim); g.restore();
-  g.save(); draw('#030202'); g.restore(); }
-function bb(g,x,y,it,J,rim,sc){ const st=ST[it.en]; const h=st.h*(sc||1); BULK=st.bulk; muscles(g,x,y,h,J,rim); fig(g,x,y,h,J,1,[rim,1]); shirt(g,x,y,h,J,it.en,PT); BULK=1; }
+  g.save(); draw('#030202'); g.restore();
+  if(back){ g.save(); g.globalCompositeOperation='lighter'; g.strokeStyle=rim; g.globalAlpha=.35; g.lineWidth=2.2*k; g.beginPath(); g.moveTo(nx,ny+6*u); g.lineTo(px,py-6*k); g.stroke();
+    g.globalAlpha=.22; [[-1],[1]].forEach(([sg])=>{ g.beginPath(); g.moveTo(nx+sg*sw*.5,ny+14*u); g.quadraticCurveTo(nx+sg*sw*.85,ny+24*u,px+sg*ww*.9,py-10*k); g.stroke(); }); g.restore(); } }
+// 팔을 몸통 위에 윤곽선으로 다시 그려 포즈가 덩어리로 뭉개지지 않게
+function arms(g,x,y,h,J,rim,A){ const k=h/180, u=k*BULK; const X=p=>x+p[0]*k, Y=p=>y+p[1]*k;
+  const sx=s0=>[X(J.n)+s0*10*u*A.sh*(PROF[CURP]?.3:1), Y(J.n)+11*u];
+  [[1,J.le,J.lh],[-1,J.re,J.rh]].forEach(([sg,e,hd])=>{ const sh=sx(sg); const pts=[sh,[X(e),Y(e)],[X(hd),Y(hd)]];
+    const path=()=>{ g.beginPath(); g.moveTo(...pts[0]); g.lineTo(...pts[1]); g.lineTo(...pts[2]); };
+    g.save(); g.lineCap='round'; g.lineJoin='round'; g.globalCompositeOperation='lighter'; g.strokeStyle=rim; g.globalAlpha=.45; g.lineWidth=15*u*A.arm; path(); g.stroke(); g.restore();
+    g.save(); g.lineCap='round'; g.lineJoin='round'; g.strokeStyle='#030202'; g.lineWidth=12*u*A.arm; path(); g.stroke(); g.fillStyle='#030202'; g.beginPath(); g.arc(L(pts[1][0],pts[0][0],.4),L(pts[1][1],pts[0][1],.4),7.5*u*A.arm,0,7); g.fill(); g.restore(); }); }
+function shorts(g,x,y,h,J,rim){ const k=h/180; const X=p=>x+p[0]*k, Y=p=>y+p[1]*k; const px=X(J.p), py=Y(J.p);
+  const kl=[L(X(J.p),X(J.lk),.78),L(Y(J.p),Y(J.lk),.78)], kr=[L(X(J.p),X(J.rk),.78),L(Y(J.p),Y(J.rk),.78)], hw=12*k;
+  g.save(); g.fillStyle='#14100e'; g.strokeStyle=rim; g.globalAlpha=1; g.lineWidth=2*k; g.beginPath(); g.moveTo(px-hw,py-6*k); g.lineTo(px+hw,py-6*k); g.lineTo(kl[0]+8*k,kl[1]); g.lineTo(kl[0]-6*k,kl[1]+1*k); g.lineTo(px,py+6*k); g.lineTo(kr[0]+6*k,kr[1]+1*k); g.lineTo(kr[0]-8*k,kr[1]); g.closePath(); g.fill(); g.globalAlpha=.6; g.stroke(); g.restore(); }
+function bb(g,x,y,it,J,rim,sc,pn){ const st=ST[it.en]; CUR=st; CURP=pn||''; const h=st.h*(sc||1); BULK=st.bulk; muscles(g,x,y,h,J,rim); fig(g,x,y,h,J,1,[rim,1]); if(st.shorts) shorts(g,x,y,h,J,rim); arms(g,x,y,h,J,rim,st); shirt(g,x,y,h,J,it.en,PT); BULK=1; }
 function shirt(g,x,y,h,J,name,col){ const u=h/180; const nx=x+J.n[0]*u, ny=y+J.n[1]*u, px=x+J.p[0]*u, py=y+J.p[1]*u; const cx=(nx+px)/2, cy=(ny+py)/2+6*u;
   g.save(); g.translate(cx,cy); let fs=12*u; g.font=`800 ${fs}px 'Inter Display'`; while(g.measureText(name).width>40*u*BULK&&fs>5*u){fs-=.5*u; g.font=`800 ${fs}px 'Inter Display'`;} g.textAlign='center'; g.textBaseline='middle'; g.fillStyle=col; g.fillText(name,0,0); g.restore(); }
 function flashes(t,amt){ if(amt<=0) return; s=Math.floor(t*30)*7+3; ctx.save(); ctx.globalCompositeOperation='lighter'; for(let i=0;i<6;i++){ const sd=rnd()<.5?-1:1, x=W/2+sd*L(200,520,rnd()), y=L(1040,1380,rnd()), on=rnd()<amt; if(!on) continue; let g=ctx.createRadialGradient(x,y,0,x,y,38); g.addColorStop(0,'rgba(255,255,255,.95)'); g.addColorStop(1,'rgba(255,255,255,0)'); ctx.fillStyle=g; ctx.fillRect(x-38,y-38,76,76); } ctx.restore(); }
@@ -86,16 +120,16 @@ function frame(t){
   ctx.setTransform(1,0,0,1,0,0); ctx.filter='none'; ctx.globalAlpha=1; ctx.letterSpacing='0px';
   let ph,lt,sl; if(t<INTRO){ph='intro';lt=t;sl=INTRO;} else if(t<INTRO+SEG*4){const i=Math.floor((t-INTRO)/SEG);ph=i;lt=t-INTRO-i*SEG;sl=SEG;} else if(t<INTRO+SEG*4+LAST){ph=4;lt=t-INTRO-SEG*4;sl=LAST;} else {ph='end';lt=t-INTRO-SEG*4-LAST;sl=END;}
   const LV=ph==='intro'?0:ph==='end'?1:ph/4;
-  let punch=0, P=null; if(typeof ph==='number'){ P=poseAt(lt); if(P.since<.25) punch=1-P.since/.25; }
+  let punch=0, P=null; if(typeof ph==='number'){ P=poseAt(lt,IT[ph]); if(P.since<.25) punch=1-P.since/.25; }
   const z=1+.035*(lt/sl)+.03*punch; ctx.save(); ctx.translate(W/2,H*.6); ctx.scale(z,z); ctx.translate(-W/2,-H*.6);
   ctx.drawImage(BG,0,0); const rim=spot(LV);
   let pop=0, lit=0;
-  if(ph==='intro'){ const cyc=['fdb','lat','side','mm']; const bi=Math.floor(lt/.6)%4, k=cl((lt%.6)/.14,0,1); for(let i=0;i<5;i++){ const it=IT[i]; const x=150+i*195; const J=mix(PO[cyc[(bi+3)%4]],PO[cyc[bi]],ease(k)); bb(ctx,x,1540,it,jit(J,k>=1?1.2:0,lt+i),rim,.6); } judges(false,0,0); }
+  if(ph==='intro'){ const bi=Math.floor(lt/.6)%4, k=cl((lt%.6)/.14,0,1); for(let i=0;i<5;i++){ const it=IT[i]; const cyc=ST[it.en].poses; const x=150+i*195; const J=mix(PO[cyc[(bi+3)%4]],PO[cyc[bi]],ease(k)); bb(ctx,x,1540,it,jit(J,k>=1?1.2:0,lt+i),rim,.6,cyc[bi]); } judges(false,0,0); }
   else if(ph==='end'){ bb(ctx,W/2,1560,IT[4],jit(PO.win,1,lt),rim); confetti(lt+2); }
   else { const it=IT[ph]; let J=P.J; let x=W/2;
     if(P.idx<0){ x=L(-180,W/2,ease(cl(lt/.6,0,1))); }
-    if(ph===4&&lt>3.3) J=mix(PO.mm,PO.win,ease(cl((lt-3.3)/.3,0,1)));
-    bb(ctx,x,1560,it,jit(J,P.since<99&&P.since>.14?1.4:0,lt),rim);
+    if(ph===4&&lt>3.3) J=mix(PO[ST[it.en].poses[3]],PO.win,ease(cl((lt-3.3)/.3,0,1)));
+    bb(ctx,x,1560,it,jit(J,P.since<99&&P.since>.14?1.4:0,lt),rim,1,ph===4&&lt>3.3?'':(P.since>.07?P.name:(HITS[P.idx-1]||[0,''])[1]));
     const P1=2.4; if(lt>=P1){ pop=cl((lt-P1)/.25,0,1); lit=cl((lt-P1)/.5,0,1); }
     judges(lt>=P1,lit,it.s);
     if(ph===4&&lt>3.3) confetti(lt-3.3); }
@@ -106,10 +140,10 @@ function frame(t){
   if(ph==='intro'){ const ls=[['헬스·보디빌딩 운동복',0],['브랜드 5명의',0],['포징 대회',1]]; ls.forEach(([w,hl],i)=>{ const a=cl((lt-.15-i*.3)/.25,0,1); if(!a) return; ctx.globalAlpha=a; ctx.shadowColor='#000'; ctx.shadowBlur=40; T(w,70,330+i*120,`700 ${i?104:92}px ${SERIF}`,hl?PT:'#F4EFE8'); ctx.shadowBlur=0; ctx.globalAlpha=1; });
     const a=cl((lt-1.3)/.4,0,1); ctx.globalAlpha=a; T('규칙: 심사 점수 = 사이트 랭킹 점수 (100점)',70,720,`500 34px ${KR}`,'#ddd3c9'); ctx.globalAlpha=1; lineup(0,-1); }
   else if(ph==='end'){ const a=cl(lt/.5,0,1); ctx.fillStyle=`rgba(0,0,0,${.5*a})`; ctx.fillRect(0,0,W,H); ctx.globalAlpha=a; T('GYM BASECAMP',W/2,420,`600 28px ${EN}`,PT,'center',10); ctx.shadowColor='#000'; ctx.shadowBlur=40; T('운동복,',W/2,580,`700 120px ${SERIF}`,'#F4EFE8','center'); ctx.font=`700 120px ${SERIF}`; const w1=ctx.measureText('감 말고 ').width,w2=ctx.measureText('점수로.').width,x0=W/2-(w1+w2)/2; T('감 말고 ',x0,730,`700 120px ${SERIF}`,'#F4EFE8'); T('점수로.',x0+w1,730,`700 120px ${SERIF}`,PT); ctx.shadowBlur=0; T('gymbasecamp.kr',W/2,880,`500 40px ${EN}`,'#ddd3c9','center',2); ctx.globalAlpha=1; }
-  else { const it=IT[ph]; const a0=cl(lt/.3,0,1); ctx.globalAlpha=a0; T(`ATHLETE ${ph+1} / 5`,70,300,`600 28px ${EN}`,PT,'left',8);
+  else { const it=IT[ph]; const a0=cl(lt/.3,0,1); ctx.globalAlpha=a0; T(`ATHLETE ${ph+1} / 5  ·  ${ST[it.en].div}`,70,300,`600 28px ${EN}`,PT,'left',8);
     let fs=110; ctx.font=`300 ${fs}px ${EN}`; ctx.letterSpacing='10px'; while(ctx.measureText(it.en).width>W-140&&fs>56){fs-=4;ctx.font=`300 ${fs}px ${EN}`;} T(it.en,66,420,`300 ${fs}px ${EN}`,'#F4EFE8','left',10);
     T(`${it.ko}${it.ig?'  ·  '+it.ig:''}`,72,480,`500 32px ${KR}`,'#d9d1c8'); ctx.globalAlpha=1;
-    if(P.name&&pop===0){ const a=cl(P.since/.1,0,1); ctx.globalAlpha=a; T(POSE_KO[P.name],W/2,620,`700 44px ${EN}`,'#F4EFE8','center',6); T(`POSE ${P.idx+1} / 4`,W/2,670,`600 24px ${EN}`,PT,'center',6); ctx.globalAlpha=1; }
+    if(P.name&&pop===0){ const a=cl(P.since/.1,0,1); ctx.globalAlpha=a; T(POSE_KO[P.name],W/2,620,`700 44px ${EN}`,'#F4EFE8','center',6); T(`${ST[it.en].div}  ·  POSE ${P.idx+1} / 4`,W/2,670,`600 24px ${EN}`,PT,'center',6); ctx.globalAlpha=1; }
     if(pop>0){ const sc=1+.6*Math.pow(1-ease(pop),2); ctx.save(); ctx.translate(W/2,760); ctx.scale(sc,sc); ctx.globalAlpha=pop; ctx.shadowColor=PT; ctx.shadowBlur=60; T(it.s.toFixed(1),0,40,`800 200px ${EN}`,'#fff','center',-4); ctx.shadowBlur=0; T('JUDGES’ SCORE',0,110,`700 40px ${EN}`,PT,'center',6); ctx.restore(); ctx.globalAlpha=1;
       const b=cl((lt-2.8)/.3,0,1); if(b){ ctx.globalAlpha=b; T(`${it.r}위`,W/2,610,`700 64px ${SERIF}`,it.r===1?PT:'#F4EFE8','center'); ctx.globalAlpha=1; } }
     lineup(ph+(pop>0?1:0),ph); }
