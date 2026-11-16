@@ -1,3 +1,6 @@
 site/out/
 site/data/brands.json
 __pycache__/
+reels/out/**/*.mp4
+reels/out/**/*.jpg
+reels/out/**/*.png

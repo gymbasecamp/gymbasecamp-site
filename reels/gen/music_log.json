@@ -61,5 +61,98 @@
   "bpm": 158,
   "key": "A# minor (TR=+1, PROG=2: i–III–VII–VI 계열)",
   "note": "EP.20"
+ },
+ {
+  "kit": "fight",
+  "style": "격투기 — 타이코 힙합",
+  "bpm": 92.31,
+  "root_midi": 51,
+  "scale": "hijaz",
+  "prog": [
+   0,
+   3,
+   1,
+   0
+  ],
+  "motif_var": 0,
+  "swing": 0.065,
+  "drums": [
+   "x..x......x..x..",
+   "....x.......x...",
+   "x.x.x.x.x.x.x.x."
+  ],
+  "seed": 1917,
+  "date": "2026-11-17",
+  "script": "music/engine.py",
+  "note": "EP.19 재작곡(엔진 v2)",
+  "cues": [
+   3.0,
+   5.6,
+   8.2,
+   10.8,
+   13.4
+  ]
+ },
+ {
+  "kit": "gym",
+  "style": "헬스·보디빌딩 — 짐 퐁크",
+  "bpm": 100.0,
+  "root_midi": 53,
+  "scale": "phrygian",
+  "prog": [
+   0,
+   5,
+   1,
+   0
+  ],
+  "motif_var": 0,
+  "swing": 0.043,
+  "drums": [
+   "x.....x.......x.",
+   "........x.......",
+   "xxx.x.xxx.x.x.xx"
+  ],
+  "seed": 2111,
+  "date": "2026-11-19",
+  "script": "music/engine.py",
+  "note": "EP.21 보디빌딩 포징 대회 첫 편",
+  "cues": [
+   5.4,
+   9.0,
+   12.6,
+   16.2,
+   19.8
+  ]
+ },
+ {
+  "kit": "run",
+  "style": "러닝 — 리퀴드 드럼앤베이스",
+  "bpm": 184.62,
+  "root_midi": 46,
+  "scale": "minor",
+  "prog": [
+   0,
+   3,
+   4,
+   0
+  ],
+  "motif_var": 3,
+  "swing": 0.04,
+  "drums": [
+   "x.........x.....",
+   "....x.......x...",
+   "..x...x...x...x."
+  ],
+  "seed": 2018,
+  "date": "2026-11-18",
+  "script": "music/engine.py",
+  "note": "EP.20 재작곡(엔진 v2)",
+  "cues": [
+   3.0,
+   5.6,
+   8.2,
+   10.8,
+   13.4
+  ]
  }
 ]
