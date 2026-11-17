@@ -36,7 +36,7 @@
 
 <footer class="gbfoot">
   <div class="wrap">
-    <div><b>GYM BASECAMP</b><br><span id="ftMotto"></span><br><a href="#submit" id="ftSubmit"></a> · <a href="#privacy">개인정보처리방침</a></div>
+    <div><b>GYM BASECAMP</b><br><span id="ftMotto"></span><br><a href="#submit" id="ftSubmit"></a> · <a href="#privacy" id="ftPriv">개인정보처리방침</a></div>
     <div style="max-width:30em" id="ftNote"></div>
   </div>
 </footer>
@@ -319,6 +319,8 @@ const EV_SHORT_EN={'헬스·보디빌딩':'Bodybuilding','요가·필라테스·
 const evS=c=>lang==='en'?(EV_SHORT_EN[c]||c):(EV_SHORT[c]||c);
 const EV_CHIPS=[['gender',['남성','여성']],['fit',['머슬핏','오버핏','컴프레션']],['item',['슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','아우터','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝']],['buy',['국내 공식몰','국내 판매처','해외 직배송']]];
 let EVF={f:[],buy:[]};
+const EV_SLUG={'헬스·보디빌딩':'bodybuilding','요가·필라테스·레깅스':'yoga','스트렝스·파워리프팅':'powerlifting','크로스핏':'crossfit','HYROX':'hyrox','러닝':'running','격투기':'combat','컴프레션·기능성':'compression','종합 스포츠':'all'};
+function evSlugCat(v){ v=String(v).toLowerCase(); return CATN.find(c=>EV_SLUG[c]===v||c.toLowerCase()===v||(EV_SHORT[c]||'').toLowerCase()===v||(EV_SHORT_EN[c]||'').toLowerCase()===v)||null; }
 function evCatList(c){ return BRANDS.filter(b=>b.rk&&b.rk[c]).sort((x,y)=>x.rk[c]-y.rk[c]); }
 function evScore(b,c){ return (b.rs&&b.rs[c]!=null)?b.rs[c]:b.v2.total; }
 function evPeaks(){
@@ -518,6 +520,9 @@ function initRange(){
   cv.addEventListener('pointermove',e=>{ if(!drag) return; R.cam.x=Math.max(300,Math.min(WW-300,drag.cx-(e.clientX-drag.x)/R.cam.z)); draw(); });
   R.onResize=()=>{ if(G3) return; W=root.clientWidth; H=cv.clientHeight; dpr=Math.min(2,window.devicePixelRatio||1); mobile=W<760; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); R.cam=R.sel?focus(R.sel):fit(); draw(); };
   R.onResize(); window.addEventListener('resize',R.onResize);
+  // 종목 바로가기 링크(#rank-running 등, 2026-11-17): 인스타·릴스에서 바로 그 종목 순위를 연다
+  const dl=(location.hash.match(/^#rank-(.+)$/)||[])[1]; const dc=dl&&evSlugCat(decodeURIComponent(dl)); const dp=dc&&P.find(x=>x.c===dc);
+  if(dp){ track('rank_link',{category:dp.c}); if(G3) draw(); else { R.cam=focus(dp); draw(); } setTimeout(()=>showRank(dp),G3?400:150); return; }
   // 첫 진입: 정상에서 산맥 전체로 천천히 물러나는 카메라
   if(G3){ draw(); setTimeout(()=>fly(fit(),3200),150); return; }
   const f=fit(); R.cam={x:f.x,y:f.y-80/f.z,z:f.z*1.18}; draw(); setTimeout(()=>fly(f,2600),150);
@@ -674,6 +679,7 @@ function viewDetail(b){
           ${igLinks(b.ig)?row('Instagram',igLinks(b.ig).replace(/data-brand=""/g,`data-brand="${esc(b.en)}"`)):''}
         </dl>
         ${storyHTML(b)}
+        <a class="d-buy2" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}"><span><small>${lang==='ko'?'다 읽었다면':'Ready to shop?'}</small><b>${esc(b.en)} ${lang==='ko'?'공식몰에서 상품 보기':'— see it on the official store'}</b></span><i>${esc(b.url.replace(/^https?:\/\//,'').replace(/\/$/,''))} ↗</i></a>
       </div>
       <div style="min-width:0">
         ${thumb(b,'d-img')}
@@ -1019,6 +1025,7 @@ function chrome(){
   document.getElementById('ftMotto').textContent=t.motto;
   document.getElementById('ftNote').textContent=t.foot;
   document.getElementById('ftSubmit').textContent=t.submitLink;
+  document.getElementById('ftPriv').textContent=lang==='ko'?'개인정보처리방침':'Privacy policy';
   document.getElementById('trayClear').textContent=t.trayClear;
   document.getElementById('trayGo').textContent=t.trayGo;
 }

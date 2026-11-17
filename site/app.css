@@ -681,3 +681,20 @@ footer.gbfoot{background:#05060a}
   .ev-hero .ev-nav button{min-height:44px;padding:0 14px}
   .nav{padding-right:28px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
 }
+
+/* ===== 2026-11-17: 종목별 점수 칩 여백(홈 .cat 격자 규칙 누수 차단), 데스크톱 상세 하단 공식몰 버튼 ===== */
+.bycat .bycat-c.cat:nth-child(n){padding:10px 12px;border:1px solid rgba(244,239,232,.2);min-height:44px}
+.d-buy2{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px;padding:18px 22px;background:#FF6A3D;color:#0A0A0C;text-decoration:none;border-radius:4px;transition:filter .15s}
+.d-buy2:hover,.d-buy2:focus-visible{filter:brightness(1.08)}
+.d-buy2 span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.d-buy2 small{font-size:12.5px;font-weight:600;opacity:.7}
+.d-buy2 b{font-size:17px;font-weight:800;line-height:1.35}
+.d-buy2 i{font-style:normal;font-size:13px;font-weight:600;white-space:nowrap;opacity:.8}
+@media (max-width:760px){ .d-buy2{display:none} }
+/* 2026-11-17: 품목 비중 칸 표시(주력·많음·일부·판매)가 어두운 배경에서 안 보이던 것 → 밝은 색 기준으로 */
+.cv-M .sw{background:#FF6A3D;color:#0A0A0C}
+.cv-H .sw{background:rgba(244,239,232,.75)}
+.cv-L .sw{background:rgba(244,239,232,.32)}
+.cv-Y .sw{background:repeating-linear-gradient(45deg,rgba(244,239,232,.7) 0 2px,transparent 2px 4.5px);border:1.5px solid rgba(244,239,232,.7)}
+.cv-X .sw{border-color:rgba(244,239,232,.28)}
+.cv-Q .sw{color:#b8b3c2}
