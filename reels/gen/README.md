@@ -1,6 +1,8 @@
 # 대회형 릴스 생성기 (2026-11-12~)
 브랜드를 선수처럼 표현해 종목별 대회로 5위→1위를 보여준다. 각 html 맨 위 `const D=` 를 그날 순위로 바꾸고, 음악은 **music/engine.py(엔진 v2, 2026-11-17~)** 로 만든다 — 종목 테마는 고정, 키·BPM·진행·변주는 매번 다르게(music/MUSIC.md). 공개 시각을 --cues로 넘겨 드롭·임팩트를 맞춘다. 폴더별 옛 music 스크립트는 쓰지 않는다.
 
+표지(썸네일, 2026-11-17~): 모든 릴스 표지는 `python3 reels/gen/cover.py` 통일 템플릿으로 만든다(시즌·EP / 종목 이름 크게 / '운동복 브랜드 TOP5' / 주황 훅 배지 / 아래 실루엣). 영상 속 아무 프레임을 표지로 쓰지 않는다. 짧은 릴스는 --kind short --sport <브랜드명>.
+
 업로드 패키지: 큐 json을 만든 뒤 `python3 reels/gen/platforms.py reels/queue/<파일>.json` → reels/out/<이름>/captions.md (인스타·TikTok·YouTube Shorts 캡션 + 영상·커버). 지훈에게 영상과 captions.md를 같이 보낸다.
 
 렌더: `cd reels/gen && PAGE=hyrox/hyrox.html OUT=/tmp/f START=0 STOP=125 node rec.js` (6개 병렬) → ffmpeg로 음악 합치기.

@@ -1,5 +1,5 @@
 <!doctype html><meta charset=utf-8><body style="margin:0;background:#000"><canvas id=c width=1080 height=1920></canvas><script>
-const D={"ep":21,"items":[{"r":5,"en":"HUGVONE","ko":"허그본","s":80.1,"ig":"@hugvone_kr"},{"r":4,"en":"ROUGH ATHLETIC","ko":"러프 애슬레틱","s":80.1,"ig":"@roughathletic.kr"},{"r":3,"en":"DRIX","ko":"드릭스","s":80.4,"ig":""},{"r":2,"en":"PHYSICAL GARMENTS","ko":"피지컬가먼츠","s":80.6,"ig":"@physicalgarments"},{"r":1,"en":"MUSCOLO","ko":"머스콜로","s":81.8,"ig":"@muscolo_company"}]};
+const D={"ep": 20, "items": [{"r": 5, "en": "HUGVONE", "ko": "허그본", "s": 80.1, "ig": "@hugvone_kr"}, {"r": 4, "en": "ROUGH ATHLETIC", "ko": "러프 애슬레틱", "s": 80.1, "ig": "@roughathletic.kr"}, {"r": 3, "en": "PHYSICAL GARMENTS", "ko": "피지컬가먼츠", "s": 80.6, "ig": "@physicalgarments"}, {"r": 2, "en": "MUSCOLO", "ko": "머스콜로", "s": 81.8, "ig": "@muscolo_company"}, {"r": 1, "en": "DRIX", "ko": "드릭스", "s": 82.6, "ig": ""}]};
 const W=1080,H=1920,cv=document.getElementById('c'),ctx=cv.getContext('2d');
 let s=7;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
 const L=(a,b,t)=>a+(b-a)*t, cl=(v,a,b)=>Math.max(a,Math.min(b,v)), ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -61,13 +61,15 @@ const PO={
 };
 const IT=D.items;
 // 순위가 높을수록 더 크고 두껍게 · 체급(디비전)마다 체형과 규정 포즈가 다르다
-const ST={
- HUGVONE:{div:"MEN'S PHYSIQUE",h:486,bulk:.9,sh:.98,waist:.86,arm:.78,quad:.7,shorts:true,poses:['mpf','mpq','mpb','mpf2']},
- 'ROUGH ATHLETIC':{div:'CLASSIC PHYSIQUE',h:492,bulk:1.0,sh:1.08,waist:.68,arm:.95,quad:.95,poses:['fdb','sc','vac','fcp']},
- DRIX:{div:'BODYBUILDING',h:468,bulk:1.1,sh:1.1,waist:.98,arm:1.05,quad:1.12,poses:['fdb','lat','sc','bdb']},
- 'PHYSICAL GARMENTS':{div:'BODYBUILDING',h:500,bulk:1.16,sh:1.16,waist:.94,arm:1.12,quad:1.16,poses:['bls','st','side','mm']},
- MUSCOLO:{div:'BODYBUILDING · OPEN',h:522,bulk:1.26,sh:1.26,waist:.9,arm:1.26,quad:1.26,poses:['fdb','bdb','side','mm']},
-};
+// 순위 자리별 체급·체형·규정 포즈(5위→1위). 순위가 높을수록 더 크고 두껍게. 브랜드는 그날 순위에 따라 자리에 배정된다.
+const SPEC=[
+ {div:"MEN'S PHYSIQUE",h:486,bulk:.9,sh:.98,waist:.86,arm:.78,quad:.7,shorts:true,poses:['mpf','mpq','mpb','mpf2']},
+ {div:'CLASSIC PHYSIQUE',h:492,bulk:1.0,sh:1.08,waist:.68,arm:.95,quad:.95,poses:['fdb','sc','vac','fcp']},
+ {div:'BODYBUILDING',h:470,bulk:1.1,sh:1.1,waist:.98,arm:1.05,quad:1.12,poses:['fdb','lat','sc','bdb']},
+ {div:'BODYBUILDING',h:500,bulk:1.16,sh:1.16,waist:.94,arm:1.12,quad:1.16,poses:['bls','st','side','mm']},
+ {div:'BODYBUILDING · OPEN',h:522,bulk:1.26,sh:1.26,waist:.9,arm:1.26,quad:1.26,poses:['fdb','bdb','side','mm']},
+];
+const ST={}; D.items.forEach((it,i)=>ST[it.en]=SPEC[i]);
 const PROF={sc:1,st:1,mpq:1}, BACKP={bdb:1,bls:1,mpb:1};
 const INTRO=3.0, SEG=3.6, LAST=4.6, END=3.2, TOT=INTRO+SEG*4+LAST+END;
 // 포즈 타이밍(세그먼트 내부): 걸어 들어오기 → 4포즈 박자 컷
