@@ -1,15 +1,8 @@
 {
- "date": "2026-11-17",
- "events": {
-  "first_visit": 1,
-  "page_view": 1,
-  "scroll": 1,
-  "session_start": 1
- },
- "sessions": 1,
- "sources": {
-  "(direct)": 1
- },
- "updated_kst": "2026-11-17 07:44",
- "users": 1
+ "date": "2026-11-18",
+ "events": {},
+ "sessions": 0,
+ "sources": {},
+ "updated_kst": "2026-11-18 07:51",
+ "users": 0
 }

@@ -889,5 +889,78 @@
    ]
   ],
   "users": 4
+ },
+ "2026-11-17": {
+  "countries": {
+   "South Korea": 1,
+   "United Kingdom": 2
+  },
+  "engaged_sessions": 2,
+  "engagement_sec": 29,
+  "events": {
+   "first_visit": 3,
+   "page_view": 3,
+   "scroll": 3,
+   "session_start": 3,
+   "user_engagement": 2
+  },
+  "new_users": 3,
+  "sessions": 3,
+  "sources": {
+   "(direct)": 3
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    3,
+    5
+   ],
+   [
+    "nike",
+    1,
+    5
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "reps-on-reps",
+    1,
+    1
+   ],
+   [
+    "physical-garments",
+    1,
+    0
+   ],
+   [
+    "volante",
+    1,
+    0
+   ],
+   [
+    "gymshark",
+    0,
+    5
+   ]
+  ],
+  "users": 3
  }
 }
