@@ -22,6 +22,15 @@ def parse(cap):
     date = re.search(r'\((\d{1,2}\.\d{1,2}) 집계\)', cap)
     return dict(hook=hook, ranks=ranks, tags=tags, ask=ask, next=nxt, notes=notes, date=date.group(1) if date else '')
 
+def dedupe_tags(text):
+    seen=set(); out=[]
+    for line in text.split('\n'):
+        if line.startswith('#'):
+            tags=[t for t in line.split() if not (t in seen or seen.add(t))]
+            line=' '.join(tags)
+        out.append(line)
+    return '\n'.join(out)
+
 def strip_handles(s):  # 틱톡·유튜브에선 인스타 @태그가 다른 계정을 가리킬 수 있어 뺀다
     return re.sub(r'\s*@[\w.]+', '', s).strip()
 
@@ -45,6 +54,7 @@ def build(qpath, title=None):
     if P['ask']: tk += [P['ask'], '']
     tk += [' '.join(['#베이스캠프정상쟁탈전'] + base_tags + ['#운동복추천'][: 5 - 1 - len(base_tags)] )]
     tiktok = '\n'.join(tk).strip()
+    tiktok = dedupe_tags(tiktok)
     # YouTube Shorts
     sport = ''
     try:
@@ -64,7 +74,10 @@ def build(qpath, title=None):
     yd += ['전체 순위·공식몰 바로가기 👉 https://gymbasecamp.kr', '']
     if P['ask']: yd += [P['ask'] if '댓글' in P['ask'] else P['ask'] + ' 댓글로', '']
     yd += [' '.join(['#Shorts', '#운동복'] + base_tags[:1])]
-    yt_desc = '\n'.join(yd).strip()
+    yt_desc = dedupe_tags('\n'.join(yd).strip())
+    if imgs:
+        yt_title = yt_title.replace(' #Shorts', '')
+        yt_desc = yt_desc.replace('#Shorts ', '')
     kind = '카드뉴스(피드 캐러셀)' if imgs else ('짧은 릴스' if name.endswith('-card') else '릴스')
     data = dict(name=name, kind=kind, instagram=cap, tiktok=tiktok, youtube_title=yt_title, youtube_description=yt_desc, files=[os.path.relpath(f, ROOT) for f in files])
     json.dump(data, open(os.path.join(out, 'captions.json'), 'w'), ensure_ascii=False, indent=1)
