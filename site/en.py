@@ -198,6 +198,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"picsil":"Spanish cross-training brand founded in 2012 that grew from handmade CrossFit grips into men's and women's performance tees, shorts, leggings and sports bras.",
+"descente":"Sports brand with roots in Japan since 1935, run in Korea by Descente Korea with running apparel, training pants and jackets.",
+"eleiko":"Halmstad, Sweden strength equipment maker since 1957, with its own weightlifting and powerlifting singlets, tees and sweatshirts.",
 "c3fit":"Japanese compression wear line from Goldwin built on its 3C (Compression, Conditioning, Comfort) technology, known for made-in-Japan long tights and calf sleeves.",
 "yokkao":"Muay Thai brand founded in Bangkok in 2010 by Philip Villa, known for fight shorts, rash guards and training apparel alongside its gloves.",
 "tala":"London women's activewear brand founded by Grace Beverley in 2019, known for recycled-fabric leggings, sports bras and studio sets.",
