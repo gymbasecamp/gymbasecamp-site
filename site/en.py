@@ -198,6 +198,7 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"skalez":"Seoul-based gymwear brand with muscle-fit tops, compression tights and women's leggings, plus bodybuilder collaboration lines.",
 "picsil":"Spanish cross-training brand founded in 2012 that grew from handmade CrossFit grips into men's and women's performance tees, shorts, leggings and sports bras.",
 "descente":"Sports brand with roots in Japan since 1935, run in Korea by Descente Korea with running apparel, training pants and jackets.",
 "eleiko":"Halmstad, Sweden strength equipment maker since 1957, with its own weightlifting and powerlifting singlets, tees and sweatshirts.",
