@@ -1,0 +1,104 @@
+<!doctype html><meta charset=utf-8>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;background:#0A0A0C;color:#F4EFE8;font-family:'Noto Sans CJK KR',sans-serif;overflow:hidden}
+.s{position:absolute;inset:0;padding:96px 84px;background:radial-gradient(900px 600px at 50% -10%,rgba(255,106,61,.16),transparent 70%),#0A0A0C;display:none}
+.s.on{display:block}
+.top{display:flex;justify-content:space-between;font:700 26px 'Inter Display','Noto Sans CJK KR';letter-spacing:8px;color:#FF6A3D}
+.kick{margin-top:70px;font:700 30px 'Noto Sans CJK KR';letter-spacing:6px;color:#FF6A3D}
+h1{font:900 104px/1.12 'Noto Sans CJK KR';margin-top:26px;letter-spacing:-2px}
+h1 em{font-style:normal;color:#FF6A3D}
+h2{font:900 76px/1.15 'Noto Sans CJK KR';margin-top:22px;letter-spacing:-1px}
+h2 em{font-style:normal;color:#FF6A3D}
+.pts{font:800 150px/1 'Inter Display';color:#FF6A3D;margin-top:40px;letter-spacing:-4px}
+.pts small{font:700 44px 'Noto Sans CJK KR';color:#F4EFE8;margin-left:10px;letter-spacing:0}
+p.lead{font:500 38px/1.55 'Noto Sans CJK KR';color:#d9d1c8;margin-top:34px}
+.badge{display:inline-block;margin-top:44px;background:#FF6A3D;color:#0A0A0C;font:900 46px 'Noto Sans CJK KR';padding:20px 36px;border-radius:16px}
+.foot{position:absolute;left:84px;right:84px;bottom:84px;font:500 32px 'Noto Sans CJK KR';color:#bdb4aa;display:flex;justify-content:space-between}
+.rows{margin-top:46px}
+.row{display:flex;align-items:center;gap:22px;margin:22px 0}
+.row .n{width:330px;font:700 36px 'Noto Sans CJK KR'}
+.row .bar{height:46px;background:#FF6A3D;border-radius:8px}
+.row .bar.g{background:#5b4a40}
+.row .v{font:800 40px 'Inter Display';color:#F4EFE8}
+.list{margin-top:40px}
+.it{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(244,239,232,.14);padding:24px 0;font:500 38px 'Noto Sans CJK KR'}
+.it b{font:800 42px 'Inter Display';color:#FF6A3D}
+.it span.d{display:block;font:400 28px 'Noto Sans CJK KR';color:#a99f95;margin-top:8px}
+.ex{margin-top:46px;border:2px solid rgba(255,106,61,.6);border-radius:18px;padding:30px 34px;font:500 34px/1.55 'Noto Sans CJK KR';color:#e8e0d6}
+.ex b{color:#FF6A3D}
+</style>
+<body>
+<!-- 1 표지 -->
+<div class="s" id="s1"><div class="top"><span>GYM BASECAMP</span><span>1 / 7</span></div>
+ <div class="kick">랭킹 기준 공개</div>
+ <h1>운동복 순위,<br><em>이렇게</em><br>매깁니다</h1>
+ <div class="badge">100점 채점표 · 6가지 기준</div>
+ <p class="lead">9개 종목 · 116개 브랜드를 같은 자로 잽니다.<br>광고·협찬은 점수에 넣지 않아요.</p>
+ <div class="foot"><span>저장해두고 비교할 때 꺼내보세요</span><span>넘겨서 →</span></div></div>
+<!-- 2 한눈에 -->
+<div class="s" id="s2"><div class="top"><span>GYM BASECAMP</span><span>2 / 7</span></div>
+ <div class="kick">한눈에 보기</div>
+ <h2>100점 = <em>6가지</em> 합</h2>
+ <div class="rows">
+  <div class="row"><div class="n">종목 특화도</div><div class="bar" style="width:350px"></div><div class="v">25</div></div>
+  <div class="row"><div class="n">제품 구성</div><div class="bar" style="width:280px"></div><div class="v">20</div></div>
+  <div class="row"><div class="n">국내 구매 편의</div><div class="bar" style="width:280px"></div><div class="v">20</div></div>
+  <div class="row"><div class="n">사용자 반응</div><div class="bar" style="width:280px"></div><div class="v">20</div></div>
+  <div class="row"><div class="n">정보 신뢰도</div><div class="bar" style="width:140px"></div><div class="v">10</div></div>
+  <div class="row"><div class="n">에디터 평가</div><div class="bar g" style="width:70px"></div><div class="v">5</div></div>
+ </div>
+ <p class="lead">사람 취향(에디터)은 5점뿐.<br>나머지 95점은 확인된 사실과 데이터로 계산해요.</p>
+ <div class="foot"><span>점수가 같으면 반응·특화도 순</span><span>→</span></div></div>
+<!-- 3 종목 특화도 -->
+<div class="s" id="s3"><div class="top"><span>GYM BASECAMP</span><span>3 / 7</span></div>
+ <div class="kick">기준 ① 가장 큰 비중</div>
+ <h2>종목 특화도</h2><div class="pts">25<small>점</small></div>
+ <div class="list">
+  <div class="it"><span>그 종목이 대표 종목<span class="d">다른 종목 전용 라인으로 들어오면 9점</span></span><b>15</b></div>
+  <div class="it"><span>그 종목을 위한 브랜드인가<span class="d">핵심 운동·성향·스타일 확인</span></span><b>+5</b></div>
+  <div class="it"><span>종목 필수 아이템 5개<span class="d">헬스 예: 머슬핏·컴프레션·민소매·펌프커버·싱글렛</span></span><b>+1씩</b></div>
+ </div>
+ <p class="lead">그래서 <b style="color:#FF6A3D">같은 브랜드도 종목마다 점수가 달라요.</b></p>
+ <div class="foot"><span>러닝 1위가 헬스 1위는 아닌 이유</span><span>→</span></div></div>
+<!-- 4 제품 구성 + 국내 구매 -->
+<div class="s" id="s4"><div class="top"><span>GYM BASECAMP</span><span>4 / 7</span></div>
+ <div class="kick">기준 ② ③</div>
+ <h2>제품 구성 <em>20</em><br>국내 구매 편의 <em>20</em></h2>
+ <div class="list">
+  <div class="it"><span>9개 아이템 구색<span class="d">민소매·쇼츠·조거·레깅스·브라·아우터 등</span></span><b>11</b></div>
+  <div class="it"><span>핏 3종 (머슬·오버·컴프레션)</span><b>6</b></div>
+  <div class="it"><span>남성·여성 모두</span><b>3</b></div>
+  <div class="it"><span>국내 공식몰 / 국내 판매처<span class="d">해외 직배송 13 · 해외 직구 7</span></span><b>20 / 17</b></div>
+ </div>
+ <div class="foot"><span>한국에서 사기 쉬울수록 ↑</span><span>→</span></div></div>
+<!-- 5 정보 + 에디터 -->
+<div class="s" id="s5"><div class="top"><span>GYM BASECAMP</span><span>5 / 7</span></div>
+ <div class="kick">기준 ④ ⑤</div>
+ <h2>정보 신뢰도 <em>10</em><br>에디터 평가 <em>5</em></h2>
+ <div class="list">
+  <div class="it"><span>공식몰 확인</span><b>3</b></div>
+  <div class="it"><span>가격대 확인</span><b>3</b></div>
+  <div class="it"><span>대표 상품 확인</span><b>2</b></div>
+  <div class="it"><span>공식 인스타 계정 확인</span><b>2</b></div>
+  <div class="it"><span>에디터 종합 평가</span><b>5</b></div>
+ </div>
+ <p class="lead">"확인 필요"인 칸은 점수가 없어요.<br>모르면 비워 두고, 확인되면 그날 반영합니다.</p>
+ <div class="foot"><span>지어낸 정보 0</span><span>→</span></div></div>
+<!-- 6 사용자 반응 -->
+<div class="s" id="s6"><div class="top"><span>GYM BASECAMP</span><span>6 / 7</span></div>
+ <div class="kick">기준 ⑥ 여러분이 만드는 점수</div>
+ <h2>사용자 반응</h2><div class="pts">20<small>점</small></div>
+ <p class="lead">사이트에서 많이 보고, 비교하고,<br><b style="color:#F4EFE8">공식몰까지 눌러 본 브랜드</b>일수록 높아요.<br>공식몰 클릭은 조회의 3배로 쳐요.</p>
+ <div class="ex">지금은 데이터가 쌓이는 중이라<br><b>모든 브랜드 10점으로 똑같이</b> 둡니다.<br>최근 28일 브랜드 조회 200회를 넘으면 반영 시작.</div>
+ <div class="foot"><span>당신의 클릭이 순위가 됩니다</span><span>→</span></div></div>
+<!-- 7 원칙 + 예시 + CTA -->
+<div class="s" id="s7"><div class="top"><span>GYM BASECAMP</span><span>7 / 7</span></div>
+ <div class="kick">그래서 순위가 바뀝니다</div>
+ <h2>매일 다시 계산,<br><em>돈으로는</em> 안 바뀜</h2>
+ <div class="ex">예) 헬스 1위 교체 (11.17)<br><b>드릭스 80.4 → 82.6</b><br>판매 품목 구성이 새로 확인돼<br>종목 특화도 +1 · 제품 구성 +1.2</div>
+ <p class="lead">광고는 Sponsored로 따로 표시하고<br>순위에는 절대 섞지 않아요.</p>
+ <div class="badge">내 종목 1위 확인 → 프로필 링크</div>
+ <div class="foot"><span>gymbasecamp.kr</span><span>💾 저장</span></div></div>
+<script>const i=+(location.hash.slice(1)||1);document.getElementById('s'+i).classList.add('on');</script>
+</body>
