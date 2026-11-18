@@ -198,6 +198,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"bad-boy":"San Diego fightwear brand founded in 1982 that made early vale tudo shorts and dressed Brazilian MMA pioneers, selling MMA shorts, compression and tees.",
+"cep":"Sports compression brand of German medical compression maker medi, with running compression tights, shorts, shirts, jackets and socks for men and women.",
+"twl":"Australian CrossFit-rooted training brand (The WOD Life) making hybrid shorts, tees, tanks, tights and sports bras tested on CrossFit and HYROX athletes.",
 "skalez":"Seoul-based gymwear brand with muscle-fit tops, compression tights and women's leggings, plus bodybuilder collaboration lines.",
 "picsil":"Spanish cross-training brand founded in 2012 that grew from handmade CrossFit grips into men's and women's performance tees, shorts, leggings and sports bras.",
 "descente":"Sports brand with roots in Japan since 1935, run in Korea by Descente Korea with running apparel, training pants and jackets.",
