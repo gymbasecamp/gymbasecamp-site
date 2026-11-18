@@ -698,3 +698,13 @@ footer.gbfoot{background:#05060a}
 .cv-Y .sw{background:repeating-linear-gradient(45deg,rgba(244,239,232,.7) 0 2px,transparent 2px 4.5px);border:1.5px solid rgba(244,239,232,.7)}
 .cv-X .sw{border-color:rgba(244,239,232,.28)}
 .cv-Q .sw{color:#b8b3c2}
+
+/* ===== 2026-11-18: 선택된 봉우리 카드(포인트색 배경) 글자 대비 · 모바일 목록 카드 공식몰 버튼 한 줄 유지 ===== */
+.ev-pk.on .ev-card,.ev-pk.on .ev-card b,.ev-pk.on .ev-cs,.ev-pk.on .ev-cc i{color:#0A0A0C}
+.ev-pk.on .ev-cc{color:rgba(10,10,12,.78)!important;font-weight:700}
+.ev-pk.on .ev-card small{color:rgba(10,10,12,.72)}
+@media (max-width:560px){
+  .card-foot .plates{gap:1px}
+  .card-foot .plates i{width:2px}
+  .card-foot .btn.sm{padding-left:12px;padding-right:12px}
+}

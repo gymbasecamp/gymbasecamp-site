@@ -493,7 +493,7 @@ function initRange(){
   nav.innerHTML=P.slice().sort((a,b)=>CATN.indexOf(a.c)-CATN.indexOf(b.c)).map(p=>`<button type="button" data-evp="${P.indexOf(p)}">${esc(evS(p.c))}</button>`).join('');
   const openPanel=html=>{ panel.innerHTML=html; panel.hidden=false; requestAnimationFrame(()=>panel.classList.add('in')); root.classList.add('panel'); };
   const closePanel=()=>{ panel.classList.remove('in'); root.classList.remove('panel'); root.classList.remove('explore'); R.sel=null; setTimeout(()=>{ if(!panel.classList.contains('in')) panel.hidden=true; },350); fly(fit(),1100); };
-  const rows=(list,c)=>list.map(b=>{ const sc=evScore(b,c); return `<li class="ev-row"><span class="ev-rn">${b.rk[c]}</span><a class="ev-rb" href="#b-${b.id}" data-track="range_brand" data-brand="${esc(b.en)}"><b>${esc(b.en)}</b><small>${esc(b.ko)} · ${esc(trOne?trOne(b.buy):b.buy)}${c!==b.cat?` · ${ko?'겸':'also'}`:''}</small><span class="ev-bar"><i style="width:${sc}%"></i></span></a><span class="ev-rs">${sc}</span><a class="ev-ro" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" aria-label="${ko?'공식몰':'store'}">↗</a></li>`; }).join('');
+  const rows=(list,c)=>list.map(b=>{ const sc=evScore(b,c); return `<li class="ev-row"><span class="ev-rn">${b.rk[c]}</span><a class="ev-rb" href="#b-${b.id}" data-track="range_brand" data-brand="${esc(b.en)}"><b>${esc(b.en)}</b><small>${ko?`${esc(b.ko)} · `:''}${esc(lb(b.buy))}${c!==b.cat?` · ${ko?'겸':'also'}`:''}</small><span class="ev-bar"><i style="width:${sc}%"></i></span></a><span class="ev-rs">${sc}</span><a class="ev-ro" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" aria-label="${ko?'공식몰':'store'}">↗</a></li>`; }).join('');
   const showRank=p=>{ R.sel=p; track('range_peak',{category:p.c}); const list=evCatList(p.c);
     openPanel(`<div class="ev-ph"><p class="ev-pc">${esc(lb(p.c))}</p><h2>${ko?'종목 순위':'Ranking'}</h2><p class="ev-pn">${ko?`${list.length}개 브랜드 · 100점 만점 점수순`:`${list.length} brands · by score`}</p><button type="button" class="ev-x" data-ev="close" aria-label="close">×</button></div><ol class="ev-list">${rows(list,p.c)}</ol><button type="button" class="ev-btn ghost" data-ev="find">${ko?'조건으로 다시 찾기':'Refine by what you wear'}</button>`);
     fly(focus(p),1300); };
@@ -709,7 +709,7 @@ function covGrid(b){
       :`<p class="note">${t.covTodo}</p>`; }
   const lv=k=>c[k]||(b.f.includes(k)?'Y':'Q');
   const cell=k=>{const v=lv(k);return `<div class="cv cv-${v}"><span class="sw">${v==='M'?'★':v==='Q'?'?':''}</span><span class="cl">${esc(lb(k))}</span><span class="ct">${v==='Y'?t.lvY:t.lv[v]}</span></div>`;};
-  const keys=done?['M','H','L','X']:['M','H','L','X','Y','Q'];
+  const used=FILTERS.map(lv); const keys=['M','H','L','X','Y','Q'].filter(v=>!done||['M','H','L','X'].includes(v)||used.includes(v)); // 2026-11-18: 빗금(있음)·?(확인 중) 칸이 있으면 범례에도 표시
   return `<div class="fit-grid cov">${FILTERS.map(cell).join('')}</div>
   <div class="cov-key">${keys.map(v=>`<span class="cv-${v}"><span class="sw">${v==='M'?'★':v==='Q'?'?':''}</span>${t.lv[v]}</span>`).join('')}</div>
   <p class="note">${done?t.covDone:t.covTodo}</p>`;
