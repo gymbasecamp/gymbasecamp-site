@@ -55,6 +55,10 @@ def build(qpath, title=None):
     tk += [' '.join(['#베이스캠프정상쟁탈전'] + base_tags + ['#운동복추천'][: 5 - 1 - len(base_tags)] )]
     tiktok = '\n'.join(tk).strip()
     tiktok = dedupe_tags(tiktok)
+    if imgs:  # 카드뉴스: 본문(종목별 순위 줄 등)을 그대로 살리고 해시태그만 5개로
+        body = [l for l in cap.split('\n') if not l.startswith('#')]
+        tags = ['#베이스캠프정상쟁탈전'] + [t for t in P['tags'] if t != '#베이스캠프정상쟁탈전'][:4]
+        tiktok = dedupe_tags(strip_handles('\n'.join(body)).strip() + '\n\n' + ' '.join(tags))
     # YouTube Shorts
     sport = ''
     try:
