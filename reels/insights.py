@@ -25,10 +25,12 @@ for m in r.get('data', []):
     else:
         row['insights'] = {d['name']: (d.get('values') or [{}])[0].get('value') for d in ir.get('data', [])}
     out['media'].append(row)
-# 계정 단위(팔로워 활동 시간·도달) — 권한 있으면
-ar = requests.get(f'{G}/{uid}/insights', params={'metric': 'reach,profile_views,website_clicks,follower_count', 'period': 'day', 'access_token': tok}, timeout=30).json()
+# 계정 단위(최근 28일 합계: 도달·조회·프로필 방문·링크 누름·반응) — total_value 방식
+import time
+since=int(time.time())-28*86400; until=int(time.time())
+ar = requests.get(f'{G}/{uid}/insights', params={'metric': 'reach,views,profile_views,website_clicks,total_interactions,follows_and_unfollows', 'period': 'day', 'metric_type': 'total_value', 'since': since, 'until': until, 'access_token': tok}, timeout=30).json()
 if 'error' in ar: out['errors']['account_insights'] = ar['error'].get('message')
-else: out['account_insights'] = {d['name']: d.get('values') for d in ar.get('data', [])}
+else: out['account_28d'] = {d['name']: (d.get('total_value') or {}).get('value') for d in ar.get('data', [])}
 os.makedirs('reels/insights', exist_ok=True)
 p = f"reels/insights/{kst.strftime('%Y-%m-%d')}.json"
 json.dump(out, open(p, 'w'), ensure_ascii=False, indent=1)
