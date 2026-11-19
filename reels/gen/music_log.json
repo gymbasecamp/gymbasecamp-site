@@ -185,5 +185,36 @@
    15.84,
    19.44
   ]
+ },
+ {
+  "kit": "hyrox",
+  "style": "HYROX — 인더스트리얼 테크노",
+  "bpm": 141.176,
+  "root_midi": 50,
+  "scale": "minor",
+  "prog": [
+   0,
+   3,
+   4,
+   0
+  ],
+  "motif_var": 0,
+  "swing": 0.015,
+  "drums": [
+   "x...x...x...x...",
+   "....x.......x...",
+   "..x.x.x...x.x.xx"
+  ],
+  "seed": 2321,
+  "date": "2026-11-21",
+  "script": "music/engine.py",
+  "note": "EP.23 HYROX",
+  "cues": [
+   5.7,
+   9.1,
+   12.5,
+   15.9,
+   19.2
+  ]
  }
 ]
