@@ -1,0 +1,43 @@
+name: IG token test (read-only)
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['.github/token-test-run']
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests
+      - env:
+          T_OLD: ${{ secrets.IG_TOKEN }}
+          T_NEW: ${{ secrets.IG_TOKEN_NEW }}
+          UID_: ${{ secrets.IG_USER_ID }}
+        run: |
+          python3 - <<'PY'
+          import os,json,requests,datetime
+          u=os.environ['UID_']; out={'at':datetime.datetime.utcnow().isoformat()}
+          for name in ('T_OLD','T_NEW'):
+              t=os.environ.get(name,''); r={'set':bool(t),'kind':t[:3] if t else ''}
+              if t:
+                  G='https://graph.facebook.com/v21.0' if not t.startswith('IG') else 'https://graph.instagram.com/v21.0'
+                  a=requests.get(f'{G}/{u}',params={'fields':'username,followers_count','access_token':t},timeout=30).json()
+                  r['account']=a.get('username'); r['account_err']=(a.get('error') or {}).get('message')
+                  p=requests.get(f'{G}/{u}/content_publishing_limit',params={'access_token':t},timeout=30).json()
+                  r['publish_ok']='data' in p; r['publish_err']=(p.get('error') or {}).get('message')
+                  m=requests.get(f'{G}/{u}/media',params={'fields':'id','limit':1,'access_token':t},timeout=30).json()
+                  mid=(m.get('data') or [{}])[0].get('id')
+                  if mid:
+                      i=requests.get(f'{G}/{mid}/insights',params={'metric':'reach,views,saved,shares,ig_reels_avg_watch_time','access_token':t},timeout=30).json()
+                      r['insights_ok']='data' in i; r['insights_err']=(i.get('error') or {}).get('message')
+                  d=requests.get(f'{G}/debug_token',params={'input_token':t,'access_token':t},timeout=30).json().get('data',{})
+                  r['expires_at']=d.get('expires_at'); r['data_access_expires_at']=d.get('data_access_expires_at'); r['scopes']=d.get('scopes')
+              out[name]=r
+          os.makedirs('reels/posted',exist_ok=True); json.dump(out,open('reels/posted/token-test.json','w'),ensure_ascii=False,indent=1); print(json.dumps(out,ensure_ascii=False))
+          PY
+      - run: |
+          git config user.name "gymbasecamp-bot"; git config user.email "actions@users.noreply.github.com"
+          git add reels/posted/token-test.json && git commit -m "IG 토큰 점검" && (git push || (git pull --rebase && git push)) || true
