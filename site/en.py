@@ -205,6 +205,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"new-balance":"Sports brand founded in Boston in 1906, with a full running apparel line of tanks, tights, shorts, jackets and sports bras alongside its running shoes.",
+"li-ning":"Chinese sportswear brand founded in 1990 by Olympic gymnast Li Ning, covering running, training, basketball and badminton.",
+"tatami-fightwear":"Jiu-jitsu and grappling brand founded in South Wales in 2009, making gis, rash guards, grappling shorts, spats and women's leggings.",
 "bad-boy":"San Diego fightwear brand founded in 1982 that made early vale tudo shorts and dressed Brazilian MMA pioneers, selling MMA shorts, compression and tees.",
 "cep":"Sports compression brand of German medical compression maker medi, with running compression tights, shorts, shirts, jackets and socks for men and women.",
 "twl":"Australian CrossFit-rooted training brand (The WOD Life) making hybrid shorts, tees, tanks, tights and sports bras tested on CrossFit and HYROX athletes.",
