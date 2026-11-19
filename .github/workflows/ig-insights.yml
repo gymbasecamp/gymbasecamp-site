@@ -17,7 +17,7 @@ jobs:
       - env:
           IG_TOKEN: ${{ secrets.IG_TOKEN_LONG || secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
-        run: python3 reels/insights.py
+        run: python3 reels/insights.py && python3 reels/ledger.py
       - run: |
           git config user.name "gymbasecamp-bot"; git config user.email "actions@users.noreply.github.com"
           git add reels/insights && git commit -m "인스타 성과 수집" && (git push || (git pull --rebase && git push)) || true
