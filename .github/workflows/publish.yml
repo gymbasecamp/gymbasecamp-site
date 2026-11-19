@@ -19,7 +19,7 @@ jobs:
       - run: pip install requests
       - name: Publish today's reel
         env:
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN_LONG || secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}

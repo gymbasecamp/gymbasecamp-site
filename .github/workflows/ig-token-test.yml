@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: pip install requests
       - env:
-          T_OLD: ${{ secrets.IG_TOKEN }}
+          T_OLD: ${{ secrets.IG_TOKEN_LONG || secrets.IG_TOKEN }}
           T_NEW: ${{ secrets.IG_TOKEN_LONG }}
           UID_: ${{ secrets.IG_USER_ID }}
         run: |

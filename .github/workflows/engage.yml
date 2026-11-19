@@ -17,7 +17,7 @@ jobs:
       - run: pip install requests
       - name: Collect candidate posts
         env:
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN_LONG || secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
         run: python3 reels/engage.py
       - name: Commit
