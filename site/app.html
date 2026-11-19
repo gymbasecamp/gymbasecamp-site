@@ -721,8 +721,8 @@ function viewCompare(){
   if(!list.length) return head+`<div class="wrap" style="padding-block:28px 64px"><div class="empty">${t.cmpEmpty}<br><br><a class="btn" href="#brands">${t.goFind}</a></div></div>`;
   const r=(label,fn)=>`<tr><th scope="row">${label}</th>${list.map(b=>`<td>${fn(b)}</td>`).join('')}</tr>`;
   return head+`<div class="wrap" style="padding-bottom:64px">
-    <div class="cmp-wrap"><table class="cmp">
-      <thead><tr><th></th>${list.map(b=>`<th><div class="nm"><a href="#b-${b.id}" style="text-decoration:none">${esc(b.en)}</a></div><div class="ko">${esc(b.ko)}</div><button class="x" data-cmprm="${b.id}">${t.remove}</button></th>`).join('')}</tr></thead>
+    <div class="cmp-wrap"><table class="cmp" style="--n:${list.length}">
+      <thead><tr><th></th>${list.map(b=>`<th><div class="nm"><a href="#b-${b.id}" style="text-decoration:none">${esc(b.en)}</a></div><div class="ko">${esc(b.ko)}</div><div class="cmp-act"><a class="cmp-go" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${t.official}</a><button class="x" data-cmprm="${b.id}">${t.remove}</button></div></th>`).join('')}</tr></thead>
       <tbody>
         ${r(t.score,b=>meter(b))}
         ${r(t.rankL,b=>rankLabel(b))}
@@ -1043,6 +1043,7 @@ function render(){
   else { app.innerHTML=viewHome(); updateFinder(); }
   stopAura(); if(key==='home') initRange(); else stopRange();
   document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===key) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  try{ const na=document.querySelector('.nav [aria-current="page"]'), nv=na&&na.parentElement; if(nv&&nv.scrollWidth>nv.clientWidth+2){ const r=na.getBoundingClientRect(), q=nv.getBoundingClientRect(); if(r.left<q.left||r.right>q.right) nv.scrollLeft+=r.left-q.left-(q.width-r.width)/2; } }catch(e){}
   syncCmp();
 }
 function route(){
