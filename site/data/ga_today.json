@@ -1,14 +1,15 @@
 {
- "date": "2026-11-19",
+ "date": "2026-11-20",
  "events": {
   "first_visit": 1,
   "page_view": 1,
+  "scroll": 1,
   "session_start": 1
  },
  "sessions": 1,
  "sources": {
-  "(direct)": 1
+  "instagram": 1
  },
- "updated_kst": "2026-11-19 07:50",
+ "updated_kst": "2026-11-20 07:46",
  "users": 1
 }
