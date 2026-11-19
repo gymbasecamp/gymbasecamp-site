@@ -47,7 +47,7 @@ def make(bg, crop, ep, sport, hook, out, kind='main', line2=None):
         im.paste(part, (0, top), mask)
     d = ImageDraw.Draw(im)
     # 시즌·EP
-    tag = f"SEASON 1 · 정상 쟁탈전   EP.{ep}" if kind == 'main' else "SEASON 1 · 오늘의 브랜드"
+    tag = (f"SEASON 1 · 정상 쟁탈전   EP.{ep}" if ep else "GYM BASECAMP · 랭킹 기준") if kind == "main" else "SEASON 1 · 오늘의 브랜드"
     f = font(SANS_B, 34); d.text((W/2, 330), tag, font=f, fill=PT, anchor='mm')
     # 종목 이름(크게)
     f = fit(d, sport, SERIF, 168, W - 120)
