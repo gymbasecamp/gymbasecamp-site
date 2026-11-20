@@ -1,15 +1,30 @@
 {
- "date": "2026-11-20",
+ "date": "2026-11-21",
  "events": {
-  "first_visit": 1,
-  "page_view": 1,
-  "scroll": 1,
-  "session_start": 1
+  "brand_click": 1,
+  "brand_view": 2,
+  "click": 4,
+  "filter_use": 1,
+  "first_visit": 3,
+  "official_click": 3,
+  "outbound_link_click": 1,
+  "page_view": 4,
+  "pwa_bar_show": 1,
+  "pwa_click": 1,
+  "pwa_open": 2,
+  "range_brand": 1,
+  "range_peak": 2,
+  "scroll": 4,
+  "session_start": 3,
+  "shop_click": 1,
+  "user_engagement": 2
  },
- "sessions": 1,
+ "sessions": 3,
  "sources": {
-  "instagram": 1
+  "(direct)": 2,
+  "(not set)": 1,
+  "homescreen": 1
  },
- "updated_kst": "2026-11-20 07:46",
- "users": 1
+ "updated_kst": "2026-11-21 07:44",
+ "users": 3
 }
