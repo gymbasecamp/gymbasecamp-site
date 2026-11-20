@@ -1,0 +1,5 @@
+{
+ "date": "2026-11-20",
+ "video_url": "https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@d72a8afd5588fb5d71ee7ef41194dd90046e6e1d/reels/queue/2026-11-20.mp4",
+ "instagram": "error publish: {'error': {'message': 'Fatal', 'code': -1, 'type': 'OAuthException', 'error_subcode': 2207085, 'is_transient': False, 'error_user_msg': 'An internal server error occurred. Please try again later.', 'error_user_title': 'Generic Internal Error', 'fbtrace_id': 'AOWZdFDDlqi-MrnYTTHSnZ9'}}"
+}
