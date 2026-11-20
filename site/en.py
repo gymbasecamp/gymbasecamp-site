@@ -205,6 +205,8 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"velites":"Spanish CrossFit brand that grew from homemade jump ropes into grips, training shoes and men's and women's training apparel; official apparel partner of the 2025 CrossFit Games.",
+"ciele-athletics":"Montreal running brand founded in 2014, known for its GOCap running caps and technical singlets, shorts, tights, sports bras and jackets.",
 "new-balance":"Sports brand founded in Boston in 1906, with a full running apparel line of tanks, tights, shorts, jackets and sports bras alongside its running shoes.",
 "li-ning":"Chinese sportswear brand founded in 1990 by Olympic gymnast Li Ning, covering running, training, basketball and badminton.",
 "tatami-fightwear":"Jiu-jitsu and grappling brand founded in South Wales in 2009, making gis, rash guards, grappling shorts, spats and women's leggings.",
