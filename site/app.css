@@ -739,3 +739,25 @@ table.cmp{table-layout:fixed;min-width:calc(150px + var(--n,2)*180px)}
   .ev-facts li{font-size:10.5px;padding:5px 7px;letter-spacing:-.01em}
   .ev-mini:lang(en){font-size:10.5px;letter-spacing:0}
 }
+/* ===== PWA 설치 (2026-11-20) ===== */
+.pwabar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:35;display:flex;align-items:center;gap:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:10px 10px 10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.pwabar img{border-radius:9px;flex:none}
+.pwabar-t{display:flex;flex-direction:column;min-width:0;margin-right:auto;line-height:1.3}
+.pwabar-t b{font-size:14px;font-weight:700}
+.pwabar-t small{font-size:12px;color:var(--muted)}
+.pwabar-x{background:none;border:0;color:var(--muted);font-size:16px;padding:8px;cursor:pointer;line-height:1}
+.pwaov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center}
+.pwaov[hidden]{display:none}
+.pwasheet{position:relative;width:100%;max-width:480px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px 18px 0 0;padding:28px 22px calc(26px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto}
+.pwaclose{position:absolute;right:10px;top:10px}
+.pwaicon{display:block;border-radius:14px;margin-bottom:14px}
+.pwasheet h3{font-size:21px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
+.pwasub{font-size:14px;color:var(--muted);margin:0 0 18px}
+.pwasteps{list-style:none;margin:0;padding:0;counter-reset:s}
+.pwasteps li{display:flex;gap:14px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line);counter-increment:s}
+.pwasteps li b{display:block;font-size:15.5px;font-weight:700}
+.pwasteps li b::before{content:counter(s) ". ";color:var(--accent)}
+.pwasteps li small{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.pwaic{flex:none;width:42px;height:42px;border-radius:10px;background:var(--sunk);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.pwabtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+@media (min-width:700px){.pwaov{align-items:center}.pwasheet{border-radius:18px}}

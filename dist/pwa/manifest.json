@@ -1,0 +1,39 @@
+{
+ "id": "https://gymbasecamp.kr/",
+ "name": "GYM BASECAMP · 운동복 브랜드 순위",
+ "short_name": "GYM BASECAMP",
+ "description": "9개 종목 운동복 브랜드를 100점 기준으로 매일 다시 계산한 순위",
+ "lang": "ko",
+ "dir": "ltr",
+ "start_url": "https://gymbasecamp.kr/?utm_source=homescreen&utm_medium=pwa",
+ "scope": "https://gymbasecamp.kr/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#07080d",
+ "theme_color": "#07080d",
+ "categories": [
+  "shopping",
+  "sports",
+  "lifestyle"
+ ],
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

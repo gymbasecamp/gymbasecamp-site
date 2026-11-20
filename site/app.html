@@ -33,10 +33,12 @@
   </div>
 </div>
 <div class="flash" id="flash" role="status" hidden></div>
+<div class="pwabar" id="pwaBar" hidden><img alt="" width="36" height="36" id="pwaBarIc"><div class="pwabar-t"><b id="pwaBarH"></b><small id="pwaBarS"></small></div><button class="btn inv sm" id="pwaBarGo" type="button"></button><button class="pwabar-x" id="pwaBarX" type="button" aria-label="close">✕</button></div>
+<div class="pwaov" id="pwaOv" hidden><div class="pwasheet" role="dialog" aria-modal="true" aria-labelledby="pwaH"><button class="pwabar-x pwaclose" id="pwaClose" type="button" aria-label="close">✕</button><div id="pwaBody"></div></div></div>
 
 <footer class="gbfoot">
   <div class="wrap">
-    <div><b>GYM BASECAMP</b><br><span id="ftMotto"></span><br><a href="#submit" id="ftSubmit"></a> · <a href="#privacy" id="ftPriv">개인정보처리방침</a></div>
+    <div><b>GYM BASECAMP</b><br><span id="ftMotto"></span><br><a href="#submit" id="ftSubmit"></a> · <a href="#privacy" id="ftPriv">개인정보처리방침</a><span id="ftInstallW" hidden> · <a href="#" id="ftInstall" role="button"></a></span></div>
     <div style="max-width:30em" id="ftNote"></div>
   </div>
 </footer>
@@ -1028,6 +1030,7 @@ function chrome(){
   document.getElementById('ftPriv').textContent=lang==='ko'?'개인정보처리방침':'Privacy policy';
   document.getElementById('trayClear').textContent=t.trayClear;
   document.getElementById('trayGo').textContent=t.trayGo;
+  try{ PWA.sync(); }catch(e){}
 }
 function render(){
   chrome();
@@ -1127,9 +1130,116 @@ document.addEventListener('keydown',e=>{
   if(e.key==='/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||'')){ e.preventDefault(); openSearch(''); }
 });
 document.addEventListener('focusin',e=>{ if(e.target.id==='hq'){ const h=document.getElementById('hres'); if(norm(e.target.value)){ h.innerHTML=sresHTML(e.target.value); h.hidden=false; } } });
+
+/* ---------- PWA: 홈 화면 설치 (2026-11-20) ----------
+   서비스워커는 다른 출처(jsDelivr)에서 등록할 수 없어 넣지 않는다. 설치 조건은 매니페스트+아이콘으로 충족.
+   GA 이벤트: pwa_open(설치 아이콘으로 실행) · pwa_bar_show · pwa_click{env} · pwa_prompt{outcome} · pwa_installed */
+const PWA=(()=>{
+  const ua=navigator.userAgent||'';
+  const ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const android=/Android/i.test(ua);
+  const inapp=/Instagram|FBAN|FBAV|KAKAOTALK|NAVER\(inapp|Line\/|; wv\)|Threads|Barcelona/i.test(ua);
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  const host=location.hostname.replace(/^www\./,'');
+  const ok=host==='gymbasecamp.kr';
+  let deferred=null;
+  const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  const env=standalone?'standalone':inapp?(ios?'inapp_ios':'inapp_android'):ios?'ios':android?'android':'desktop';
+  let base='https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@main/dist/pwa/';
+  try{ const sc=[...document.querySelectorAll('script[src*="/dist/gb.js"]')].pop(); if(sc) base=sc.src.replace(/dist\/gb\.js.*$/,'dist/pwa/'); }catch(e){}
+  function head(){
+    if(!ok) return;
+    const add=(tag,attrs)=>{ const el=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); document.head.appendChild(el); return el; };
+    document.querySelectorAll('link[rel="manifest"],link[rel="apple-touch-icon"]').forEach(el=>el.remove());
+    add('link',{rel:'manifest',href:base+(location.hostname.startsWith('www.')?'manifest-www.json':'manifest.json')});
+    add('link',{rel:'apple-touch-icon',href:base+'apple-touch-icon.png'});
+    [['apple-mobile-web-app-capable','yes'],['mobile-web-app-capable','yes'],['apple-mobile-web-app-title','GYM BASECAMP'],['apple-mobile-web-app-status-bar-style','black']].forEach(([n,c])=>{ if(!document.querySelector(`meta[name="${n}"]`)) add('meta',{name:n,content:c}); });
+    if(!document.querySelector('meta[name="theme-color"]')) add('meta',{name:'theme-color',content:'#07080d'});
+  }
+  const can=()=>ok&&!standalone&&(ios||android||!!deferred);
+  const ko=()=>lang==='ko';
+  const IC={
+    share:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v12M7.5 7.5L12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 11H4.5v9.5h15V11H18" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+    plus:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2"/></svg>',
+    dots:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>',
+    vdots:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>',
+    ext:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+    ok:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>'
+  };
+  const steps=a=>'<ol class="pwasteps">'+a.map(([ic,t,d])=>`<li><span class="pwaic">${IC[ic]}</span><span><b>${t}</b>${d?`<small>${d}</small>`:''}</span></li>`).join('')+'</ol>';
+  function sheet(){
+    const k=ko(); let h='', extra='';
+    if(env==='inapp_ios'||env==='inapp_android'){
+      h=k?'먼저 브라우저로 열어 주세요':'Open in your browser first';
+      const br=env==='inapp_ios'?'Safari':'Chrome';
+      extra=steps([[env==='inapp_ios'?'dots':'vdots',k?'오른쪽 위 ⋯ 메뉴 누르기':'Tap the ⋯ menu (top right)',k?'인스타·카카오톡·네이버 앱 안에서는 설치가 안 돼요':'Apps like Instagram can’t install web apps'],['ext',k?`'${br}에서 열기' 또는 '외부 브라우저로 열기'`:`“Open in ${br}” / “Open in external browser”`,''],['plus',k?`${br}에서 설치 안내가 바로 이어져요`:`The install steps continue in ${br}`,'']]);
+      try{ const u=new URL(location.href); if(!u.searchParams.has('pwa')){ u.searchParams.set('pwa','1'); history.replaceState(history.state,'',u.toString()); } }catch(e){}
+      extra+=`<div class="pwabtns">${env==='inapp_android'?`<a class="btn inv" id="pwaChrome" href="intent://${location.host}${location.pathname}?pwa=1#Intent;scheme=https;package=com.android.chrome;end">${k?'Chrome으로 열기':'Open in Chrome'}</a>`:''}<button class="btn ghost-dark" id="pwaCopy" type="button">${k?'링크 복사':'Copy link'}</button></div>`;
+    } else if(ios){
+      h=k?'홈 화면에 추가하기 · 3단계':'Add to Home Screen · 3 steps';
+      extra=steps([['share',k?'공유 버튼 누르기':'Tap the Share button',k?'Safari 주소창 옆 □↑ (안 보이면 ⋯ 메뉴 안)':'□↑ next to the address bar (or inside the ⋯ menu)'],['plus',k?"'홈 화면에 추가' 누르기":'Tap “Add to Home Screen”',k?'안 보이면 목록을 아래로 내려 보세요':'Scroll down the list if you don’t see it'],['ok',k?"오른쪽 위 '추가' 누르기":'Tap “Add” (top right)',k?'홈 화면 아이콘으로 열면 주소창 없이 앱처럼 열려요':'Open it from the icon — full screen, like an app']]);
+    } else {
+      h=k?'홈 화면에 설치하기':'Install on your home screen';
+      extra=steps([['vdots',k?'오른쪽 위 ⋮ 메뉴 누르기':'Tap the ⋮ menu (top right)',''],['plus',k?"'앱 설치' 또는 '홈 화면에 추가'":'“Install app” or “Add to Home screen”',''],['ok',k?"'설치' 누르기":'Tap “Install”','']]);
+    }
+    document.getElementById('pwaBody').innerHTML=`<img class="pwaicon" src="${base}icon-192.png" alt="" width="64" height="64"><h3 id="pwaH">${h}</h3><p class="pwasub">${k?'내 종목 1위, 매일 바뀌는 순위를 홈 화면에서 한 번에.':'Daily rankings for your sport, one tap from your home screen.'}</p>${extra}`;
+    const ov=document.getElementById('pwaOv'); ov.hidden=false;
+    const cp=document.getElementById('pwaCopy'); if(cp) cp.onclick=()=>{ track('pwa_copy',{env}); copyText(location.origin+location.pathname+'?pwa=1'); };
+    const ch=document.getElementById('pwaChrome'); if(ch) ch.addEventListener('click',()=>track('pwa_open_chrome',{env}));
+  }
+  function close(){ document.getElementById('pwaOv').hidden=true; }
+  async function install(from){
+    track('pwa_click',{env,from});
+    hideBar();
+    if(deferred){ const d=deferred; deferred=null; try{ d.prompt(); const r=await d.userChoice; track('pwa_prompt',{outcome:r&&r.outcome,env}); }catch(e){ sheet(); } return; }
+    sheet();
+  }
+  function hideBar(){ const b=document.getElementById('pwaBar'); if(b) b.hidden=true; }
+  function sync(){
+    const w=document.getElementById('ftInstallW'); if(w) w.hidden=!can();
+    const f=document.getElementById('ftInstall'); if(f) f.textContent=ko()?'📲 앱으로 설치':'📲 Install app';
+    const b=document.getElementById('pwaBar'); if(!b||b.hidden) return;
+    fillBar();
+  }
+  function fillBar(){
+    const k=ko();
+    document.getElementById('pwaBarIc').src=base+'icon-192.png';
+    document.getElementById('pwaBarH').textContent=k?'GYM BASECAMP 앱으로 보기':'Get the GYM BASECAMP app';
+    document.getElementById('pwaBarS').textContent=k?'홈 화면에 설치 · 무료 · 10초':'Home screen · free · 10 sec';
+    document.getElementById('pwaBarGo').textContent=k?'설치':'Install';
+  }
+  let views=1;
+  function maybeBar(){
+    views++;
+    if(!can()||!(ios||android)) return;
+    const until=+ls.get('gb_pwa_dismiss')||0; if(Date.now()<until) return;
+    if(views<2) return;
+    const tray=document.getElementById('tray'); if(tray&&!tray.hidden) return;
+    const b=document.getElementById('pwaBar'); if(!b.hidden) return;
+    fillBar(); b.hidden=false; track('pwa_bar_show',{env});
+  }
+  function init(){
+    head();
+    if(standalone){ try{ if(!sessionStorage.getItem('gb_pwa_open')){ sessionStorage.setItem('gb_pwa_open','1'); track('pwa_open',{os:ios?'ios':android?'android':'desktop'}); } }catch(e){ track('pwa_open',{}); } }
+    window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; sync(); });
+    window.addEventListener('appinstalled',()=>{ track('pwa_installed',{env}); deferred=null; hideBar(); close(); ls.set('gb_pwa_dismiss',String(Date.now()+365*864e5)); });
+    document.getElementById('ftInstall').addEventListener('click',e=>{ e.preventDefault(); install('footer'); });
+    document.getElementById('pwaBarGo').addEventListener('click',()=>install('bar'));
+    document.getElementById('pwaBarX').addEventListener('click',()=>{ hideBar(); ls.set('gb_pwa_dismiss',String(Date.now()+14*864e5)); track('pwa_bar_close',{env}); });
+    document.getElementById('pwaClose').addEventListener('click',close);
+    document.getElementById('pwaOv').addEventListener('click',e=>{ if(e.target.id==='pwaOv') close(); });
+    window.addEventListener('hashchange',()=>setTimeout(maybeBar,1200));
+    setTimeout(maybeBar,25000);
+    sync();
+    try{ const u=new URL(location.href); if(u.searchParams.get('pwa')==='1'){ u.searchParams.delete('pwa'); history.replaceState(history.state,'',u.toString()); if(!inapp&&can()){ track('pwa_handoff',{env}); setTimeout(()=>{ if(deferred) install('handoff'); else sheet(); },900); } } }catch(e){}
+  }
+  return {init,sync,install,env};
+})();
+
 window.addEventListener('hashchange',()=>closeSearch());
 window.addEventListener('hashchange',route);
 route();
+try{ PWA.init(); }catch(e){}
 
 /* ---------- images & submissions (light up when the viewer supports them) ---------- */
 async function uploadImg(id, file){
