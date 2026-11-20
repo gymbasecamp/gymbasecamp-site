@@ -1,5 +1,5 @@
 <!doctype html><meta charset=utf-8><body style="margin:0;background:#000"><canvas id=c width=1080 height=1920></canvas><script>
-const D={"ep": 21, "cat": "러닝", "hook": [[["러닝 운동복", 0]], [["정점", 1], ["을 달리는", 0]], [["브랜드 5", 0]]], "sub": "18개 러닝 브랜드 · 100점 채점 · 11.18 집계", "items": [{"r": 5, "en": "MIZUNO", "ko": "미즈노", "s": 75.1, "ig": "@mizunokr", "meta": "DRY AEROFLOW 러닝웨어 · 타이츠 · 자켓"}, {"r": 4, "en": "UVU", "ko": "유브이유", "s": 75.4, "ig": "@uvu", "meta": "트랙 자켓 2.0 · 풀 타이트 · 롱슬리브 티"}, {"r": 3, "en": "ASICS", "ko": "아식스", "s": 76.2, "ig": "@asicskr", "meta": "메타런 탱크 · 로드 쇼츠 · 국내 공식몰"}, {"r": 2, "en": "NIKE", "ko": "나이키", "s": 77.1, "ig": "@nike", "meta": "Nike Pro · Dri-FIT · 국내 공식몰"}, {"r": 1, "en": "HOKA", "ko": "호카", "s": 80.6, "ig": "@hoka_kr", "meta": "Glide 쇼츠 · Novafly 런 타이츠 · 싱글렛"}]};
+const D={"ep": 25, "cat": "러닝", "hook": [[["러닝 운동복", 0]], [["정점", 1], ["을 달리는", 0]], [["브랜드 5", 0]]], "sub": "러닝 브랜드 · 100점 채점 · 11.20 집계", "items": [{"r": 5, "en": "NEW BALANCE", "ko": "뉴발란스", "s": 77.1, "ig": "@newbalance", "meta": "RC 러닝 의류 · RC 브라 · 히트 타이츠"}, {"r": 4, "en": "UVU", "ko": "유브이유", "s": 77.6, "ig": "@uvu", "meta": "트랙 자켓 2.0 · 풀 타이트 · 롱슬리브 티"}, {"r": 3, "en": "ADIDAS", "ko": "아디다스", "s": 79.1, "ig": "@adidaskr", "meta": "러닝·트레이닝 풀 라인 · 국내 공식몰"}, {"r": 2, "en": "HOKA", "ko": "호카", "s": 80.6, "ig": "@hoka_kr", "meta": "Glide 쇼츠 · Novafly 런 타이츠 · 싱글렛"}, {"r": 1, "en": "ASICS", "ko": "아식스", "s": 82.9, "ig": "@asicskr", "meta": "메타런 탱크 · 로드 쇼츠 · 패커블 자켓"}]};
 const W=1080,H=1920,cv=document.getElementById('c'),ctx=cv.getContext('2d');
 let s=7;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
 const L=(a,b,t)=>a+(b-a)*t, cl=(v,a,b)=>Math.max(a,Math.min(b,v)), ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -273,7 +273,14 @@ const GR=[0,1,2].map(()=>{const c=document.createElement('canvas');c.width=540;c
 const SERIF="'Noto Serif CJK KR',serif", EN="'Inter Display','Noto Sans CJK KR',sans-serif", KR="'Noto Sans CJK KR',sans-serif";
 function T(t,x,y,f,col,al,ls){ ctx.font=f; ctx.fillStyle=col; ctx.textAlign=al||'left'; if(ls!=null) ctx.letterSpacing=ls+'px'; else ctx.letterSpacing='0px'; ctx.fillText(t,x,y); }
 // ---------- timeline ----------
-const HOOK=3.0, SEG=2.6, END=3.6; const N=D.items.length; const TOT=HOOK+SEG*N+END;
+const HOOK=3.0, SEG=2.8, Q1=1.0, END=3.6; const N=D.items.length; const TOT=HOOK+SEG*N+Q1+END; // 2026-11-20: 1위 앞 '1위는?' 멈칫(Q1) · 루프 엔딩
+const CUES=[...Array(N).keys()].map(i=>+(HOOK+SEG*i+(i===N-1?Q1:0)).toFixed(2));
+const ALPHA=[...D.items].sort((a,b)=>a.en.localeCompare(b.en));
+// 라인업 보드(알파벳 순 · 안전 영역 y 1420~1492, x 60~960): 처음엔 5명 이름만, 공개되면 순위·점수
+function board(done,cur){ const y=1456, cw=176; ctx.save(); for(let i=0;i<5;i++){ const it=ALPHA[i]; const x=60+cw/2+i*(cw+5); const d=(5-it.r)<done, on=(5-it.r)===cur;
+  ctx.fillStyle=on?'rgba(242,167,112,.35)':d?'rgba(20,16,14,.75)':'rgba(10,10,12,.72)'; ctx.beginPath(); ctx.roundRect(x-cw/2,y-36,cw,72,6); ctx.fill(); ctx.strokeStyle=on?'#F2A770':'rgba(244,239,232,.3)'; ctx.lineWidth=1.5; ctx.stroke();
+  let fs=26; ctx.font=`800 ${fs}px 'Inter Display'`; ctx.letterSpacing='0px'; while(ctx.measureText(it.en).width>cw-16&&fs>13){fs--;ctx.font=`800 ${fs}px 'Inter Display'`;} ctx.textAlign='center'; ctx.fillStyle='#F4ECE2'; ctx.fillText(it.en,x,y-4);
+  ctx.font="700 22px 'Noto Sans CJK KR'"; ctx.fillStyle=d?(it.r===1?'#F2A770':'#e9c9b8'):'rgba(244,239,232,.45)'; ctx.fillText(d?`${it.r}위 · ${it.s.toFixed(1)}`:'?',x,y+26); } ctx.restore(); }
 let LV=0;
 const road=(g,t,sp)=>{ sp*=(.75+.9*LV); g.strokeStyle='rgba(255,230,190,.55)'; for(let i=-1;i<8;i++){ const x=((i*180-(t*sp)%180)); g.lineWidth=6; g.beginPath(); g.moveTo(x,1690); g.lineTo(x+90,1690); g.stroke(); }
   g.save(); g.globalCompositeOperation='lighter'; g.filter='blur(3px)'; for(let i=0;i<14;i++){ const y=1250+((i*97)%420), x=W-((t*sp*1.6+i*233)%(W+400)); g.strokeStyle='rgba(255,200,150,.12)'; g.lineWidth=2; g.beginPath(); g.moveTo(x,y); g.lineTo(x+260,y); g.stroke(); } g.restore(); };
@@ -284,16 +291,16 @@ const scenes=[
  {bg:'tunnel', draw:(g,t)=>{ R(g,560,1660,500,t); }},
  {bg:'duskN', draw:(g,t)=>{ road(g,t,700); R(g,330,1660,400,t,.07); R(g,560,1680,440,t); R(g,800,1650,380,t,.15); }},
  {bg:'tunnel', draw:(g,t)=>{ R(g,420,1650,470,t); R(g,700,1640,430,t,.11); }},
- {bg:'dusk', draw:(g,t)=>{ road(g,t,t<1.3?800:800*Math.max(0,1-(t-1.3)/.4)); const k=t<1.3?seq(RUN,t):mix(seq(RUN,1.3),P.win,ease(cl((t-1.3)/.5,0,1))); fig(g,540,1690,470,k,1,['rgba(255,140,70,1)',1]); }},
+ {bg:'dusk', draw:(g,t0)=>{ const t=Math.max(0,t0-Q1); road(g,t0,t<1.3?800:800*Math.max(0,1-(t-1.3)/.4)); const k=t<1.3?seq(RUN,t):mix(seq(RUN,1.3),P.win,ease(cl((t-1.3)/.5,0,1))); fig(g,540,1690,470,k,1,['rgba(255,140,70,1)',1]); }},
 ];
 function frame(t){
   ctx.setTransform(1,0,0,1,0,0); ctx.filter='none'; ctx.globalAlpha=1;
   let seg, lt, bgKey, drawFn;
   if(t<HOOK){ seg='hook'; lt=t; bgKey='dusk'; drawFn=(g,u)=>{ road(g,u,700); R(g,420,1670,440,u); R(g,680,1660,410,u,.12); }; }
-  else if(t<HOOK+SEG*N){ const i=Math.floor((t-HOOK)/SEG); seg=i; lt=t-HOOK-i*SEG; bgKey=scenes[i].bg; drawFn=scenes[i].draw; }
-  else { seg='end'; lt=t-HOOK-SEG*N; bgKey='duskN'; drawFn=(g,u)=>{ road(g,u,600); R(g,540,1670,460,u); }; }
+  else if(t<HOOK+SEG*N+Q1){ const i=Math.min(N-1,Math.floor((t-HOOK)/SEG)); seg=i; lt=t-HOOK-i*SEG; bgKey=scenes[i].bg; drawFn=scenes[i].draw; }
+  else { seg='end'; lt=t-HOOK-SEG*N-Q1; bgKey='duskN'; drawFn=(g,u)=>{ road(g,u,600); R(g,540,1670,460,u); }; }
   LV = typeof seg==='number' ? seg/4 : (seg==='end'?1:0);
-  const segLen=seg==='hook'?HOOK:seg==='end'?END:SEG; const z=1+.045*(lt/segLen);
+  const segLen=seg==='hook'?HOOK:seg==='end'?END:(seg===N-1?SEG+Q1:SEG); const z=1+.045*(lt/segLen);
   ctx.save(); ctx.translate(W/2,H*.55); ctx.scale(z,z); ctx.translate(-W/2,-H*.55);
   ctx.drawImage(BG[bgKey],0,0); drawFn(ctx,lt);
   ctx.restore();
@@ -311,20 +318,22 @@ function frame(t){
   // shade for text
   let sh=ctx.createLinearGradient(0,0,0,H); sh.addColorStop(0,'rgba(0,0,0,.65)'); sh.addColorStop(.32,'rgba(0,0,0,.15)'); sh.addColorStop(.6,'rgba(0,0,0,0)'); sh.addColorStop(1,'rgba(0,0,0,.2)'); ctx.fillStyle=sh; ctx.fillRect(0,0,W,H);
   // flash on reveal
-  if(typeof seg==='number' && lt<.18){ ctx.fillStyle=`rgba(255,220,180,${.35*(1-lt/.18)})`; ctx.fillRect(0,0,W,H); }
+  const rl=(typeof seg==='number'&&seg===N-1)?lt-Q1:lt; if(typeof seg==='number' && rl>=0 && rl<.18){ ctx.fillStyle=`rgba(255,220,180,${.35*(1-rl/.18)})`; ctx.fillRect(0,0,W,H); }
   // tag
   T('BASECAMP RANK · EP.'+D.ep,70,200,`600 24px ${EN}`,'#E8A16A','left',8);
   if(seg==='hook'){
     const lines=D.hook; T('RUNNING',70,310,`600 26px ${EN}`,'#E8A16A','left',9);
     lines.forEach((ln,i)=>{ const a=cl((lt-.15-i*.32)/.25,0,1); if(!a) return; ctx.globalAlpha=a; const y=440+i*130+(1-a)*20; ctx.font=`700 116px ${SERIF}`; ctx.shadowColor='#000'; ctx.shadowBlur=40; let x=70; ln.forEach(([w,hl])=>{ T(w,x,y,`700 116px ${SERIF}`,hl?'#F2A770':'#F4ECE2'); x+=ctx.measureText(w).width; }); ctx.shadowBlur=0; ctx.globalAlpha=1; });
-    const a=cl((lt-1.4)/.4,0,1); ctx.globalAlpha=a; T(D.sub,70,880,`500 34px ${KR}`,'#ddd3c9'); ctx.globalAlpha=1;
+    const a=cl((lt-1.4)/.4,0,1); ctx.globalAlpha=a; T(D.sub,70,1010,`500 34px ${KR}`,'#ddd3c9'); ctx.globalAlpha=1; board(0,-1);
   } else if(seg==='end'){
     const a=cl(lt/.5,0,1); ctx.fillStyle=`rgba(0,0,0,${.45*a})`; ctx.fillRect(0,0,W,H); ctx.globalAlpha=a;
     T('GYM BASECAMP',W/2,420,`600 28px ${EN}`,'#E8A16A','center',10);
     ctx.shadowColor='#000'; ctx.shadowBlur=40; T('운동복,',W/2,580,`700 120px ${SERIF}`,'#F4ECE2','center'); ctx.font=`700 120px ${SERIF}`; const w1=ctx.measureText('감 말고 ').width, w2=ctx.measureText('점수로.').width; const x0=W/2-(w1+w2)/2; T('감 말고 ',x0,720,`700 120px ${SERIF}`,'#F4ECE2'); T('점수로.',x0+w1,720,`700 120px ${SERIF}`,'#F2A770'); ctx.shadowBlur=0;
     const b=cl((lt-.6)/.4,0,1); ctx.globalAlpha=b; T('내 운동에 맞는 정상 찾기',W/2,830,`500 36px ${KR}`,'#ddd3c9','center'); T('gymbasecamp.kr',W/2,890,`700 44px ${EN}`,'#fff','center');
-    ctx.fillStyle='#F4ECE2'; ctx.beginPath(); ctx.roundRect(W/2-210,940,420,86,43); ctx.fill(); T('@gymbasecamp.kr',W/2,998,`700 38px ${EN}`,'#000','center'); ctx.globalAlpha=1;
+    ctx.fillStyle='#F4ECE2'; ctx.beginPath(); ctx.roundRect(W/2-210,940,420,86,43); ctx.fill(); T('@gymbasecamp.kr',W/2,998,`700 38px ${EN}`,'#000','center'); ctx.globalAlpha=1; board(5,-1);
   } else {
+    if(seg===N-1&&lt<Q1){ const q=cl(lt/.15,0,1); ctx.globalAlpha=q; T(`${D.cat} · 1위`,70,310,`600 28px ${KR}`,'#E8A16A','left',6); ctx.shadowColor='#000'; ctx.shadowBlur=40; const ps=1+.05*Math.sin(lt*Math.PI*2*2.2); ctx.save(); ctx.translate(70,520); ctx.scale(ps,ps); T('그럼 1위는?',0,0,`700 120px ${SERIF}`,'#F4ECE2'); ctx.restore(); ctx.shadowBlur=0; ctx.globalAlpha=1; board(N-1,-1); }
+    else { const lt0=lt; { const lt=seg===N-1?lt0-Q1:lt0;
     const it=D.items[seg]; const a=ease(cl(lt/.35,0,1)), a2=ease(cl((lt-.25)/.35,0,1)), a3=ease(cl((lt-.45)/.35,0,1));
     ctx.shadowColor='#000'; ctx.shadowBlur=30;
     ctx.globalAlpha=a; T(`${D.cat} · ${it.r}위`,70,310,`600 28px ${KR}`,'#E8A16A','left',6);
@@ -335,13 +344,13 @@ function frame(t){
     ctx.globalAlpha=a3; ctx.fillStyle='rgba(232,161,106,.7)'; ctx.fillRect(70,y+14,W-140,1.5);
     T(String(it.s),70,y+130,`300 116px ${EN}`,'#F4ECE2'); ctx.font=`300 116px ${EN}`; const sw=ctx.measureText(String(it.s)).width; T('/ 100',70+sw+14,y+130,`400 34px ${KR}`,'#bbb');
     T(it.meta,70,y+190,`500 30px ${KR}`,'#d6cdc4');
-    ctx.shadowBlur=0; ctx.globalAlpha=1;
+    ctx.shadowBlur=0; ctx.globalAlpha=1; board(seg+1,seg); } }
   }
   // grain + letterbox
   ctx.save(); ctx.globalCompositeOperation='overlay'; ctx.globalAlpha=.22; ctx.drawImage(GR[Math.floor(t*12)%3],0,0,W,H); ctx.restore();
   let vg=ctx.createRadialGradient(W/2,H*.5,H*.25,W/2,H*.5,H*.75); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.55)'); ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
   ctx.fillStyle='#000'; ctx.fillRect(0,0,W,120); ctx.fillRect(0,H-120,W,120);
-  if(t>TOT-.4){ ctx.fillStyle=`rgba(0,0,0,${(t-(TOT-.4))/.4})`; ctx.fillRect(0,0,W,H); }
+  if(window.SAFE){ ctx.strokeStyle='#0f0'; ctx.lineWidth=3; ctx.strokeRect(60,250,900,1250); } // 루프(A4): 검은 화면 페이드 제거
 }
-window.frame=frame; window.TOT=TOT;
+window.frame=frame; window.TOT=TOT; window.CUES=CUES;
 </script>
