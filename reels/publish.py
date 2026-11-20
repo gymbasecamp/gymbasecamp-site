@@ -47,7 +47,24 @@ def instagram():
         errs.append(f'processing {vu}: {s}')
     if not cid: return f'error: {errs}'
     result['video_url'] = vurl
-    p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
+    # 11/20 요가 릴스: 처리 완료 후 게시 단계에서 인스타 내부 오류(code -1, 2207085) → 같은 컨테이너로 재시도.
+    # 재시도 전에 최근 게시물을 확인해, 오류 응답이어도 실제로 올라갔으면 중복 게시하지 않는다.
+    t0 = time.time(); p = {}
+    for attempt in range(4):
+        if attempt:
+            time.sleep(90 * attempt)
+            try:
+                last = requests.get(f'{G}/{uid}/media', params={'fields': 'id,timestamp,media_product_type', 'limit': 1, 'access_token': tok}, timeout=30).json().get('data', [])
+                if last and last[0].get('media_product_type') == 'REELS':
+                    ts = datetime.datetime.strptime(last[0]['timestamp'][:19], '%Y-%m-%dT%H:%M:%S').replace(tzinfo=datetime.timezone.utc).timestamp()
+                    if ts >= t0 - 120:
+                        p = {'id': last[0]['id']}; result['publish_note'] = f'오류 응답 후 게시 확인 (시도 {attempt})'; break
+            except Exception: pass
+        p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
+        if 'id' in p:
+            if attempt: result['publish_note'] = f'재시도 {attempt}회 후 성공'
+            break
+        result.setdefault('publish_errors', []).append(str(p)[:300])
     if 'id' not in p: return f'error publish: {p}'
     # 같은 영상을 스토리로도 알림 (실패해도 릴스 결과에는 영향 없음)
     try:
