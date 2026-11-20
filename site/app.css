@@ -727,3 +727,15 @@ table.cmp{table-layout:fixed;min-width:calc(150px + var(--n,2)*180px)}
   .cmp .meter{flex-direction:column-reverse;align-items:flex-start;gap:4px}
   .cmp .meter>span{white-space:nowrap}
 }
+
+/* 2026-11-20 모바일: 상세 이니셜 자리표시 축소(점수·공식몰 위로) · 커버리지 1열 · 홈 핵심 칩 4개 한 줄에 다 보이게 · EN 봉우리 이름 겹침 */
+@media (max-width:560px){
+  .d-img.noimg{aspect-ratio:auto;height:84px;font-size:34px;margin-bottom:12px}
+  .d-img.noimg .blogo img{width:56px!important}
+  .fit-grid.cov{grid-template-columns:1fr;gap:7px}
+}
+@media (max-width:759px){
+  .ev-facts{gap:4px}
+  .ev-facts li{font-size:10.5px;padding:5px 7px;letter-spacing:-.01em}
+  .ev-mini:lang(en){font-size:10.5px;letter-spacing:0}
+}

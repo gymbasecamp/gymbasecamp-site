@@ -260,7 +260,7 @@ function thumb(b, cls='thumb'){
   const img=src?`<img src="${esc(src)}" alt="${esc(b.en)}" loading="lazy" onerror="this.remove()">`:'';
   const ld=!img?logoDomain(b):'';
   const logo=ld?`<span class="blogo"><img src="https://www.google.com/s2/favicons?domain=${esc(ld)}&sz=128" alt="${esc(b.en)} logo" loading="lazy" referrerpolicy="no-referrer" onload="if(this.naturalWidth<48)this.parentNode.remove()" onerror="this.parentNode.remove()"></span>`:'';
-  return `<span class="${cls}" style="background:${bg}" aria-hidden="${img||logo?'false':'true'}">${initials(b)}${img?`<span style="position:absolute;inset:0">${img}</span>`:''}${logo}</span>`;
+  return `<span class="${cls}${img?'':' noimg'}" style="background:${bg}" aria-hidden="${img||logo?'false':'true'}">${initials(b)}${img?`<span style="position:absolute;inset:0">${img}</span>`:''}${logo}</span>`;
 }
 
 function inCmp(id){ return cmp.includes(id); }
