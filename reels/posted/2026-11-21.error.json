@@ -1,0 +1,11 @@
+{
+ "date": "2026-11-21",
+ "video_url": "https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@5fc033a29ca378bfd48bb7abdd1b3c8e8edfcdba/reels/queue/2026-11-21.mp4",
+ "publish_errors": [
+  "{'error': {'message': 'Fatal', 'code': -1, 'type': 'OAuthException', 'error_subcode': 2207085, 'is_transient': False, 'error_user_msg': 'An internal server error occurred. Please try again later.', 'error_user_title': 'Generic Internal Error', 'fbtrace_id': 'A77YWziQtOgNOaKiS35D1tc'}}",
+  "{'error': {'message': 'Fatal', 'code': -1, 'type': 'OAuthException', 'error_subcode': 2207085, 'is_transient': False, 'error_user_msg': 'An internal server error occurred. Please try again later.', 'error_user_title': 'Generic Internal Error', 'fbtrace_id': 'AadtkIsura7V812tKN4owdM'}}",
+  "{'error': {'message': 'Fatal', 'code': -1, 'type': 'OAuthException', 'error_subcode': 2207085, 'is_transient': False, 'error_user_msg': 'An internal server error occurred. Please try again later.', 'error_user_title': 'Generic Internal Error', 'fbtrace_id': 'AhdiGoKgTk1Un8lxCvRiQ8B'}}",
+  "{'error': {'message': 'Fatal', 'code': -1, 'type': 'OAuthException', 'error_subcode': 2207085, 'is_transient': False, 'error_user_msg': 'An internal server error occurred. Please try again later.', 'error_user_title': 'Generic Internal Error', 'fbtrace_id': 'ADnFphZJNLuxyJm9RGYV-tk'}}"
+ ],
+ "instagram": "error publish: {'error': {'message': 'Fatal', 'code': -1, 'type': 'OAuthException', 'error_subcode': 2207085, 'is_transient': False, 'error_user_msg': 'An internal server error occurred. Please try again later.', 'error_user_title': 'Generic Internal Error', 'fbtrace_id': 'ADnFphZJNLuxyJm9RGYV-tk'}}"
+}
