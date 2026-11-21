@@ -1192,5 +1192,94 @@
    ]
   ],
   "users": 2
+ },
+ "2026-11-21": {
+  "countries": {
+   "Germany": 1,
+   "South Korea": 5,
+   "United States": 1
+  },
+  "engaged_sessions": 4,
+  "engagement_sec": 156,
+  "events": {
+   "brand_click": 1,
+   "brand_view": 2,
+   "click": 4,
+   "filter_use": 1,
+   "first_visit": 7,
+   "official_click": 3,
+   "outbound_link_click": 1,
+   "page_view": 9,
+   "pwa_bar_show": 2,
+   "pwa_click": 2,
+   "pwa_open": 2,
+   "range_brand": 1,
+   "range_peak": 3,
+   "scroll": 7,
+   "session_start": 7,
+   "shop_click": 1,
+   "user_engagement": 3
+  },
+  "new_users": 7,
+  "sessions": 7,
+  "sources": {
+   "(direct)": 3,
+   "(not set)": 1,
+   "homescreen": 1,
+   "l.instagram.com": 3
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    3,
+    5
+   ],
+   [
+    "volante",
+    3,
+    1
+   ],
+   [
+    "drix",
+    2,
+    1
+   ],
+   [
+    "nike",
+    1,
+    5
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "on",
+    1,
+    1
+   ],
+   [
+    "reps-on-reps",
+    1,
+    1
+   ]
+  ],
+  "users": 7
  }
 }

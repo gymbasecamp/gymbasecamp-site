@@ -53,6 +53,12 @@
 "quiz": 0,
 "view": 0
 },
+"mihak": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 0
+},
 "muscolo": {
 "compare": 0,
 "official": 3,
@@ -64,6 +70,12 @@
 "official": 1,
 "quiz": 0,
 "view": 5
+},
+"on": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
 },
 "overwhelm": {
 "compare": 0,
@@ -103,9 +115,9 @@
 },
 "volante": {
 "compare": 0,
-"official": 1,
+"official": 3,
 "quiz": 0,
-"view": 0
+"view": 1
 },
 "youngla": {
 "compare": 1,
