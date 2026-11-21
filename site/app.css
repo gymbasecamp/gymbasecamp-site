@@ -761,3 +761,11 @@ table.cmp{table-layout:fixed;min-width:calc(150px + var(--n,2)*180px)}
 .pwaic{flex:none;width:42px;height:42px;border-radius:10px;background:var(--sunk);color:var(--accent);display:flex;align-items:center;justify-content:center}
 .pwabtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 @media (min-width:700px){.pwaov{align-items:center}.pwasheet{border-radius:18px}}
+
+/* ===== 2026-11-21: 데스크톱 목록 카드 비교/공식몰 버튼 한 줄 ===== */
+@media (min-width:561px){
+  .grid>.card{container-type:inline-size}
+  @container (max-width:330px){
+    .card-foot>.meter{flex:1 0 100%}
+  }
+}
