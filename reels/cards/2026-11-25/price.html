@@ -1,0 +1,57 @@
+<!doctype html><meta charset=utf-8>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;background:#0A0A0C;color:#F4EFE8;font-family:'Noto Sans CJK KR',sans-serif;overflow:hidden}
+.s{position:absolute;inset:0;padding:96px 84px;background:radial-gradient(900px 600px at 50% -10%,rgba(255,106,61,.16),transparent 70%),#0A0A0C;display:none}
+.s.on{display:block}
+.top{display:flex;justify-content:space-between;font:700 26px 'Inter Display','Noto Sans CJK KR';letter-spacing:8px;color:#FF6A3D}
+.kick{margin-top:70px;font:700 30px 'Noto Sans CJK KR';letter-spacing:6px;color:#FF6A3D}
+h1{font:900 104px/1.12 'Noto Sans CJK KR';margin-top:26px;letter-spacing:-2px}
+h1 em{font-style:normal;color:#FF6A3D}
+h2{font:900 76px/1.15 'Noto Sans CJK KR';margin-top:22px;letter-spacing:-1px}
+h2 em{font-style:normal;color:#FF6A3D}
+.pts{font:800 150px/1 'Inter Display';color:#FF6A3D;margin-top:40px;letter-spacing:-4px}
+.pts small{font:700 44px 'Noto Sans CJK KR';color:#F4EFE8;margin-left:10px;letter-spacing:0}
+p.lead{font:500 38px/1.55 'Noto Sans CJK KR';color:#d9d1c8;margin-top:34px}
+.badge{display:inline-block;margin-top:44px;background:#FF6A3D;color:#0A0A0C;font:900 46px 'Noto Sans CJK KR';padding:20px 36px;border-radius:16px}
+.foot{position:absolute;left:84px;right:84px;bottom:84px;font:500 32px 'Noto Sans CJK KR';color:#bdb4aa;display:flex;justify-content:space-between}
+.rows{margin-top:46px}
+.row{display:flex;align-items:center;gap:22px;margin:22px 0}
+.row .n{width:330px;font:700 36px 'Noto Sans CJK KR'}
+.row .bar{height:46px;background:#FF6A3D;border-radius:8px}
+.row .bar.g{background:#5b4a40}
+.row .v{font:800 40px 'Inter Display';color:#F4EFE8}
+.list{margin-top:40px}
+.it{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(244,239,232,.14);padding:24px 0;font:500 38px 'Noto Sans CJK KR'}
+.it b{font:800 42px 'Inter Display';color:#FF6A3D}
+.it span.d{display:block;font:400 28px 'Noto Sans CJK KR';color:#a99f95;margin-top:8px}
+.ex{margin-top:46px;border:2px solid rgba(255,106,61,.6);border-radius:18px;padding:30px 34px;font:500 34px/1.55 'Noto Sans CJK KR';color:#e8e0d6}
+.ex b{color:#FF6A3D}
+.tier{display:flex;align-items:center;gap:26px;margin-top:40px}
+.tier .L{width:120px;height:120px;border-radius:20px;display:flex;align-items:center;justify-content:center;font:900 76px 'Inter Display','Noto Sans CJK KR';color:#0A0A0C}
+.tier .c{font:500 34px/1.45 'Noto Sans CJK KR';color:#d9d1c8}
+.tier .c b{color:#F4EFE8;font-weight:800}
+.pills{display:flex;flex-wrap:wrap;gap:16px;margin-top:40px}
+.pill{border:2px solid rgba(244,239,232,.22);border-radius:14px;padding:14px 22px;font:700 34px 'Inter Display','Noto Sans CJK KR';color:#F4EFE8}
+.pill i{font-style:normal;color:#FF6A3D;margin-left:12px;font-weight:800}
+.big{width:200px;height:200px;border-radius:28px;display:flex;align-items:center;justify-content:center;font:900 140px 'Inter Display';color:#0A0A0C;margin-top:40px}
+.cols{display:flex;gap:40px;margin-top:40px}.col{flex:1}.col h3{font:800 30px 'Noto Sans CJK KR';color:#a99f95;letter-spacing:4px;margin-bottom:10px}.col.now h3{color:#FF6A3D}
+.r{display:flex;gap:16px;font:700 32px/1 'Inter Display','Noto Sans CJK KR';padding:15px 0;border-bottom:1px solid rgba(244,239,232,.12)}.r i{font-style:normal;color:#a99f95;width:44px}.col.now .r i{color:#FF6A3D}.r.hl{color:#FF6A3D}
+.mv{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(244,239,232,.14);padding:26px 0}.mv .nm{font:800 44px 'Inter Display','Noto Sans CJK KR'}.mv .nm span{display:block;font:400 28px 'Noto Sans CJK KR';color:#a99f95;margin-top:8px}.mv .up{font:900 52px 'Inter Display';color:#FF6A3D}
+.tb{margin-top:36px}
+.tr{display:grid;grid-template-columns:300px 1fr;align-items:center;padding:20px 0;border-bottom:1px solid rgba(244,239,232,.12)}
+.tr .nm{font:800 36px 'Inter Display','Noto Sans CJK KR'}.tr .nm span{display:block;font:500 24px 'Noto Sans CJK KR';color:#a99f95;margin-top:6px}
+.trk{position:relative;height:74px}
+.trk .ax{position:absolute;left:0;right:0;top:20px;height:6px;background:rgba(244,239,232,.10);border-radius:3px}
+.trk .rg{position:absolute;top:12px;height:22px;background:#FF6A3D;border-radius:11px}
+.trk .lb{position:absolute;top:42px;font:800 26px 'Inter Display','Noto Sans CJK KR';color:#F4EFE8;white-space:nowrap}
+.scale{display:grid;grid-template-columns:300px 1fr;margin-top:14px}.scale .t{position:relative;height:30px;font:600 24px 'Inter Display','Noto Sans CJK KR';color:#8d847b}.scale .t i{position:absolute;white-space:nowrap;font-style:normal;transform:translateX(-50%)}
+</style>
+<body>
+<div class="s on" id="s1"><div class="top"><span>GYM BASECAMP</span><span>1 / 6</span></div><div class="kick">헬스복 가격대 비교표</div><h1>헬스복 1~6위,<br><em>얼마부터</em><br>사요?</h1><div class="badge">블프 전에 저장 🔖</div><p class="lead">국내 헬스·보디빌딩 TOP 6<br>가격대를 한 장에 모았어요.</p><div class="foot"><span>GYM BASECAMP 100점 기준 · 광고·협찬 없음</span><span>넘겨서 →</span></div></div>
+<div class="s" id="s2"><div class="top"><span>GYM BASECAMP</span><span>2 / 6</span></div><div class="kick">결론부터</div><h2>6곳 모두<br><em>3만원 안</em>에서<br>시작해요</h2><div class="pts">1만<small>원대부터</small></div><p class="lead">가장 낮은 시작가: PHYSICAL GARMENTS<br>(블프 할인가 기준)</p><div class="foot"><span>11/21 집계 · 사이트 기록 가격</span><span>넘겨서 →</span></div></div>
+<div class="s" id="s3"><div class="top"><span>GYM BASECAMP</span><span>3 / 6</span></div><div class="kick">가격대 한눈에 · 막대 = 기록된 최저~최고가</div><div class="tb"><div class="tr"><div class="nm">DRIX<span>1위 · 82.6점</span></div><div class="trk"><div class="ax"></div><div class="rg" style="left:10.0%;width:10.0%"></div><div class="lb" style="left:10.0%">2만~4만</div></div></div><div class="tr"><div class="nm">BRUNK<span>2위 · 81.8점</span></div><div class="trk"><div class="ax"></div><div class="rg" style="left:7.4%;width:13.6%"></div><div class="lb" style="left:7.4%">1.49만~4.2만</div></div></div><div class="tr"><div class="nm">MUSCOLO<span>3위 · 81.8점</span></div><div class="trk"><div class="ax"></div><div class="rg" style="left:14.0%;width:28.5%"></div><div class="lb" style="left:14.0%">2.8만~8.5만</div></div></div><div class="tr"><div class="nm">MIHAK<span>4위 · 81.1점</span></div><div class="trk"><div class="ax"></div><div class="rg" style="left:7.8%;width:87.8%"></div><div class="lb" style="left:7.8%">1.56만~19.12만</div></div></div><div class="tr"><div class="nm">PHYSICAL GARMENTS<span>5위 · 80.6점</span></div><div class="trk"><div class="ax"></div><div class="rg" style="left:5.0%;width:36.5%"></div><div class="lb" style="left:5.0%">1만~8.3만</div></div></div><div class="tr"><div class="nm">ROUGH ATHLETIC<span>6위 · 80.1점</span></div><div class="trk"><div class="ax"></div><div class="rg" style="left:11.5%;width:13.0%"></div><div class="lb" style="left:11.5%">2.3만~4.9만</div></div></div></div><div class="scale"><div></div><div class="t"><i style="left:0.0%">0만</i><i style="left:25.0%">5만</i><i style="left:50.0%">10만</i><i style="left:75.0%">15만</i><i style="left:100.0%;transform:translateX(-100%)">20만</i></div></div><div class="foot"><span>할인가·정가 기준이 브랜드마다 달라요</span><span>넘겨서 →</span></div></div>
+<div class="s" id="s4"><div class="top"><span>GYM BASECAMP</span><span>4 / 6</span></div><div class="kick">가격 기준 (꼭 확인)</div><h2>같은 기준이<br><em>아니에요</em></h2><div class="list"><div class="it">DRIX<b style="font:700 30px 'Noto Sans CJK KR'">무신사 할인가</b></div><div class="it">BRUNK<b style="font:700 30px 'Noto Sans CJK KR'">공식몰 할인가</b></div><div class="it">MUSCOLO<b style="font:700 30px 'Noto Sans CJK KR'">공식몰 판매가</b></div><div class="it">MIHAK<b style="font:700 30px 'Noto Sans CJK KR'">블프 할인가·세트 포함</b></div><div class="it">PHYSICAL GARMENTS<b style="font:700 30px 'Noto Sans CJK KR'">블프 할인가</b></div><div class="it">ROUGH ATHLETIC<b style="font:700 30px 'Noto Sans CJK KR'">무신사 판매가</b></div></div><div class="foot"><span>가격·세일은 공식몰에서 최종 확인</span><span>넘겨서 →</span></div></div>
+<div class="s" id="s5"><div class="top"><span>GYM BASECAMP</span><span>5 / 6</span></div><div class="kick">어디서 사나</div><h2>무신사에도<br><em>5곳</em> 입점</h2><div class="list"><div class="it">DRIX<b>공식몰 · 무신사</b></div><div class="it">BRUNK<b>공식몰</b></div><div class="it">MUSCOLO<b>공식몰 · 무신사</b></div><div class="it">MIHAK<b>공식몰 · 무신사</b></div><div class="it">PHYSICAL GARMENTS<b>공식몰 · 무신사</b></div><div class="it">ROUGH ATHLETIC<b>공식몰 · 무신사</b></div></div><div class="foot"><span>사이트에서 버튼 한 번에 이동</span><span>넘겨서 →</span></div></div>
+<div class="s" id="s6"><div class="top"><span>GYM BASECAMP</span><span>6 / 6</span></div><div class="kick">블프 장바구니 전에</div><h2>이 표,<br><em>저장</em>해두세요</h2><div class="badge">저장 🔖</div><p class="lead">헬스복 전체 순위 · 공식몰 바로가기<br>프로필 링크 <b style="color:#FF6A3D">gymbasecamp.kr</b></p><div class="foot"><span>GYM BASECAMP</span><span>@gymbasecamp.kr</span></div></div>
+</body>
