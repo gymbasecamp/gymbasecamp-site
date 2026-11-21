@@ -205,6 +205,8 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"x-bionic":"Swiss functional sportswear brand built on partial-compression base layers, making fitness, running and winter training apparel for men and women.",
+"strength-shop":"Strongman and powerlifting specialist founded in Scotland in 2009 by strongman Joni Purmonen, selling IPF-approved singlets, grip shirts, shorts and lifting gear.",
 "velites":"Spanish CrossFit brand that grew from homemade jump ropes into grips, training shoes and men's and women's training apparel; official apparel partner of the 2025 CrossFit Games.",
 "ciele-athletics":"Montreal running brand founded in 2014, known for its GOCap running caps and technical singlets, shorts, tights, sports bras and jackets.",
 "new-balance":"Sports brand founded in Boston in 1906, with a full running apparel line of tanks, tights, shorts, jackets and sports bras alongside its running shoes.",
