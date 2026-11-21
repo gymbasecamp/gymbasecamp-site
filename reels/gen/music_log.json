@@ -314,5 +314,36 @@
    15.2
   ],
   "moved_from": "2026-11-23"
+ },
+ {
+  "kit": "compression",
+  "style": "컴프레션·기능성 — 퓨처 베이스",
+  "bpm": 141.176,
+  "root_midi": 52,
+  "scale": "major",
+  "prog": [
+   0,
+   4,
+   5,
+   3
+  ],
+  "motif_var": 2,
+  "swing": 0.027,
+  "drums": [
+   "x.....x...x.....",
+   "........x.......",
+   "..x...x...x...x."
+  ],
+  "seed": 2626,
+  "date": "2026-11-25",
+  "script": "music/engine.py",
+  "note": "EP.26 컴프레션 (압축판) fast length_s=14.6",
+  "cues": [
+   1.7,
+   3.4,
+   5.1,
+   6.8,
+   9.35
+  ]
  }
 ]
