@@ -205,6 +205,9 @@ TOK = {
 "후디":"hoodies",
 }
 DESC = {
+"lskd":"Australian training and running apparel brand from Logan, Queensland, founded by Jason Daniel; global partner of seven-time CrossFit Games champion Tia-Clair Toomey-Orr.",
+"isami":"Japanese martial-arts maker founded in 1932 in Saitama, making jiu-jitsu and karate gis in its own factory plus no-gi rash guards, spats and fight shorts.",
+"twins-special":"Thai Muay Thai and boxing brand founded in 1992 near Bangkok, known for colourful Muay Thai shorts and WBC/WBA/IBF/WBO-approved gloves.",
 "x-bionic":"Swiss functional sportswear brand built on partial-compression base layers, making fitness, running and winter training apparel for men and women.",
 "strength-shop":"Strongman and powerlifting specialist founded in Scotland in 2009 by strongman Joni Purmonen, selling IPF-approved singlets, grip shirts, shorts and lifting gear.",
 "velites":"Spanish CrossFit brand that grew from homemade jump ropes into grips, training shoes and men's and women's training apparel; official apparel partner of the 2025 CrossFit Games.",
