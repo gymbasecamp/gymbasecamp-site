@@ -1,5 +1,5 @@
 <!doctype html><meta charset=utf-8><body style="margin:0;background:#000"><canvas id=c width=1080 height=1920></canvas><script>
-const D={"ep": 25, "cat": "러닝", "hook": [[["러닝 운동복", 0]], [["정점", 1], ["을 달리는", 0]], [["브랜드 5", 0]]], "sub": "러닝 브랜드 · 100점 채점 · 11.20 집계", "items": [{"r": 5, "en": "NEW BALANCE", "ko": "뉴발란스", "s": 77.1, "ig": "@newbalance", "meta": "RC 러닝 의류 · RC 브라 · 히트 타이츠"}, {"r": 4, "en": "UVU", "ko": "유브이유", "s": 77.6, "ig": "@uvu", "meta": "트랙 자켓 2.0 · 풀 타이트 · 롱슬리브 티"}, {"r": 3, "en": "ADIDAS", "ko": "아디다스", "s": 79.1, "ig": "@adidaskr", "meta": "러닝·트레이닝 풀 라인 · 국내 공식몰"}, {"r": 2, "en": "HOKA", "ko": "호카", "s": 80.6, "ig": "@hoka_kr", "meta": "Glide 쇼츠 · Novafly 런 타이츠 · 싱글렛"}, {"r": 1, "en": "ASICS", "ko": "아식스", "s": 82.9, "ig": "@asicskr", "meta": "메타런 탱크 · 로드 쇼츠 · 패커블 자켓"}]};
+const D={"ep": 25, "cat": "러닝", "hook": [[["러닝 운동복", 0]], [["정점", 1], ["을 달리는", 0]], [["브랜드 5", 0]]], "sub": "러닝 브랜드 · 100점 채점 · 11.22 집계", "items": [{"r": 5, "en": "UVU", "ko": "유브이유", "s": 77.6, "ig": "@uvu", "meta": "트랙 자켓 2.0 · 풀 타이트 · 롱슬리브 티"}, {"r": 4, "en": "CIELE ATHLETICS", "ko": "씨엘 애슬레틱스", "s": 78.6, "ig": "@cieleathletics", "meta": "GOCap · RDCRP 싱글렛 · CRGTight 쇼츠"}, {"r": 3, "en": "ADIDAS", "ko": "아디다스", "s": 79.1, "ig": "@adidaskr", "meta": "러닝·트레이닝 풀 라인 · 국내 공식몰"}, {"r": 2, "en": "HOKA", "ko": "호카", "s": 80.6, "ig": "@hoka_kr", "meta": "Glide 쇼츠 · Novafly 런 타이츠 · 싱글렛"}, {"r": 1, "en": "ASICS", "ko": "아식스", "s": 82.9, "ig": "@asicskr", "meta": "메타런 탱크 · 로드 쇼츠 · 패커블 자켓"}]};
 const W=1080,H=1920,cv=document.getElementById('c'),ctx=cv.getContext('2d');
 let s=7;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
 const L=(a,b,t)=>a+(b-a)*t, cl=(v,a,b)=>Math.max(a,Math.min(b,v)), ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -338,7 +338,7 @@ function frame(t){
     ctx.shadowColor='#000'; ctx.shadowBlur=30;
     ctx.globalAlpha=a; T(`${D.cat} · ${it.r}위`,70,310,`600 28px ${KR}`,'#E8A16A','left',6);
     T(String(it.r).padStart(2,'0'),60,560+(1-a)*60,`200 280px ${EN}`,it.r===1?'#F2A770':'rgba(255,255,255,.92)','left',-8);
-    ctx.globalAlpha=a2; let fs=104; ctx.font=`300 ${fs}px ${EN}`; ctx.letterSpacing='12px'; while(ctx.measureText(it.en).width>W-140&&fs>56){fs-=4;ctx.font=`300 ${fs}px ${EN}`;} T(it.en,70,700,`300 ${fs}px ${EN}`,'#F4ECE2','left',12);
+    ctx.globalAlpha=a2; let fs=104; ctx.font=`300 ${fs}px ${EN}`; ctx.letterSpacing='12px'; while(ctx.measureText(it.en).width>W-190&&fs>56){fs-=4;ctx.font=`300 ${fs}px ${EN}`;} T(it.en,70,700,`300 ${fs}px ${EN}`,'#F4ECE2','left',12);
     T(it.ko,72,765,`500 38px ${KR}`,'#d3cac1');
     let y=820; if(it.ig){ ctx.font=`600 32px ${EN}`; const w=ctx.measureText(it.ig).width+48; ctx.shadowBlur=0; ctx.fillStyle='rgba(0,0,0,.4)'; ctx.beginPath(); ctx.roundRect(70,y-40,w,58,29); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=1.5; ctx.stroke(); T(it.ig,94,y,`600 32px ${EN}`,'#fff'); ctx.shadowBlur=30; y+=40; }
     ctx.globalAlpha=a3; ctx.fillStyle='rgba(232,161,106,.7)'; ctx.fillRect(70,y+14,W-140,1.5);

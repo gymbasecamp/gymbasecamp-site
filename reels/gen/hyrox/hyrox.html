@@ -1,6 +1,6 @@
 <!doctype html><meta charset=utf-8><body style="margin:0;background:#000"><canvas id=c width=1080 height=1920></canvas><script>
 // HYROX 레이스 — 5위→1위가 차례로 결승선을 통과. 규칙: 120분 − 점수 = 레이스 기록
-const D=window.DATA||{"ep":23,"date":"11.19","items":[
+const D=window.DATA||{"ep":23,"date":"11.22","items":[
  {"r":5,"en":"8ROX","ko":"에이트록스","s":64.4,"ig":""},
  {"r":4,"en":"TWL","ko":"티더블유엘","s":65.4,"ig":"@twl"},
  {"r":3,"en":"GYMSHARK","ko":"짐샤크","s":69.1,"ig":"@gymshark"},
@@ -102,7 +102,8 @@ function confetti(t){ ctx.save(); for(let i=0;i<90;i++){ const x=(i*97)%W, y=-40
 const GR=[0,1,2].map(()=>{const c=document.createElement('canvas');c.width=540;c.height=960;const g=c.getContext('2d');const id=g.createImageData(540,960);for(let i=0;i<id.data.length;i+=4){const v=128+(Math.random()-.5)*120;id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=255;}g.putImageData(id,0,0);return c;});
 const SERIF="'Noto Serif CJK KR',serif", EN="'Inter Display','Noto Sans CJK KR',sans-serif", KR="'Noto Sans CJK KR',sans-serif";
 function T(t,x,y,f,col,al,ls){ ctx.font=f; ctx.fillStyle=col; ctx.textAlign=al||'left'; ctx.letterSpacing=(ls||0)+'px'; ctx.fillText(t,x,y); }
-function board(done,cur){ const y=1780; for(let i=0;i<5;i++){ const it=IT[i]; const x=110+i*215; const d=done>i, on=cur===i;
+function board(done,cur,by){ const y=by||1780; // 엔딩은 안전 영역(y≤1500) 안으로 올림
+ for(let i=0;i<5;i++){ const it=IT[i]; const x=110+i*215; const d=done>i, on=cur===i;
   ctx.fillStyle=on?'rgba(255,106,61,.25)':d?'rgba(244,239,232,.10)':'rgba(244,239,232,.04)'; ctx.beginPath(); ctx.roundRect(x-100,y-46,200,92,4); ctx.fill(); ctx.strokeStyle=on?PT:'rgba(244,239,232,.25)'; ctx.lineWidth=1.5; ctx.stroke();
   let fs=24; ctx.font=`700 ${fs}px 'Inter Display'`; while(ctx.measureText(it.en).width>186&&fs>12){fs--;ctx.font=`700 ${fs}px 'Inter Display'`;} ctx.textAlign='center'; ctx.fillStyle=IV; ctx.letterSpacing='0px'; ctx.fillText(it.en,x,y-8);
   ctx.font="600 24px 'Inter Display'"; ctx.fillStyle=d?PT:'rgba(244,239,232,.4)'; ctx.fillText(d?tm(it.s):'— : —',x,y+26); } }
@@ -159,7 +160,7 @@ function frame(t){
     const a=cl((lt-1.2)/.4,0,1); ctx.globalAlpha=a; T('규칙: 점수가 높을수록 빨리 들어온다',70,720,`500 34px ${KR}`,'#ddd3c9'); T('기록 = 120분 − 점수',70,772,`500 30px ${KR}`,'rgba(221,211,201,.7)'); ctx.globalAlpha=1;
     if(lt>2.9){ const k=cl((lt-2.9)/.2,0,1); ctx.save(); ctx.translate(W/2,1180); ctx.scale(1+.5*(1-k),1+.5*(1-k)); ctx.globalAlpha=k; ctx.shadowColor=PT; ctx.shadowBlur=50; T('GO',0,0,`800 180px ${EN}`,'#fff','center',8); ctx.restore(); ctx.globalAlpha=1; }
     board(0,-1); }
-  else if(ph==='end'){ const a=cl(lt/.5,0,1); ctx.fillStyle=`rgba(0,0,0,${.55*a})`; ctx.fillRect(0,0,W,H); ctx.globalAlpha=a; T('GYM BASECAMP',W/2,420,`600 28px ${EN}`,PT,'center',10); ctx.shadowColor='#000'; ctx.shadowBlur=40; T('운동복,',W/2,580,`700 120px ${SERIF}`,IV,'center'); ctx.font=`700 120px ${SERIF}`; const w1=ctx.measureText('감 말고 ').width,w2=ctx.measureText('점수로.').width,x0=W/2-(w1+w2)/2; T('감 말고 ',x0,720,`700 120px ${SERIF}`,IV); T('점수로.',x0+w1,720,`700 120px ${SERIF}`,PT); ctx.shadowBlur=0; const b=cl((lt-.6)/.4,0,1); ctx.globalAlpha=b; T('HYROX 종목 전체 순위',W/2,830,`500 36px ${KR}`,'#ddd3c9','center'); T('gymbasecamp.kr',W/2,890,`700 44px ${EN}`,'#fff','center'); ctx.globalAlpha=1; board(5,-1); }
+  else if(ph==='end'){ const a=cl(lt/.5,0,1); ctx.fillStyle=`rgba(0,0,0,${.55*a})`; ctx.fillRect(0,0,W,H); ctx.globalAlpha=a; ctx.save(); {const ez=1+.03*lt; ctx.translate(W/2,700); ctx.scale(ez,ez); ctx.translate(-W/2,-700);} T('GYM BASECAMP',W/2,420,`600 28px ${EN}`,PT,'center',10); ctx.shadowColor='#000'; ctx.shadowBlur=40; T('운동복,',W/2,580,`700 120px ${SERIF}`,IV,'center'); ctx.font=`700 120px ${SERIF}`; const w1=ctx.measureText('감 말고 ').width,w2=ctx.measureText('점수로.').width,x0=W/2-(w1+w2)/2; T('감 말고 ',x0,720,`700 120px ${SERIF}`,IV); T('점수로.',x0+w1,720,`700 120px ${SERIF}`,PT); ctx.shadowBlur=0; const b=cl((lt-.6)/.4,0,1); ctx.globalAlpha=b; T('HYROX 종목 전체 순위',W/2,830,`500 36px ${KR}`,'#ddd3c9','center'); T('gymbasecamp.kr',W/2,890,`700 44px ${EN}`,'#fff','center'); ctx.restore(); ctx.globalAlpha=1; board(5,-1,1450); }
   else { const it=IT[ph], st=ST[it.en]; const a0=cl(lt/.3,0,1); ctx.globalAlpha=a0; T(`${ph===4?'LAST RUNNER':'RUNNER '+(ph+1)+' / 5'}  ·  ${SNAME[st.st]}`,70,300,`600 28px ${EN}`,PT,'left',6);
     let fs=110; ctx.font=`300 ${fs}px ${EN}`; ctx.letterSpacing='8px'; while(ctx.measureText(it.en).width>W-140&&fs>56){fs-=4;ctx.font=`300 ${fs}px ${EN}`;} T(it.en,66,420,`300 ${fs}px ${EN}`,IV,'left',8);
     T(`${it.ko}${it.ig?'  ·  '+it.ig:''}`,72,480,`500 32px ${KR}`,'#d9d1c8'); ctx.globalAlpha=1;
