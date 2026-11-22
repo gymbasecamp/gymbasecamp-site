@@ -1281,5 +1281,78 @@
    ]
   ],
   "users": 7
+ },
+ "2026-11-22": {
+  "countries": {
+   "South Korea": 1
+  },
+  "engaged_sessions": 1,
+  "engagement_sec": 37,
+  "events": {
+   "first_visit": 1,
+   "page_view": 1,
+   "pwa_bar_show": 1,
+   "range_peak": 2,
+   "scroll": 1,
+   "session_start": 1
+  },
+  "new_users": 1,
+  "sessions": 1,
+  "sources": {
+   "l.instagram.com": 1
+  },
+  "top_brands_28d": [
+   [
+    "muscolo",
+    3,
+    5
+   ],
+   [
+    "volante",
+    3,
+    1
+   ],
+   [
+    "drix",
+    2,
+    1
+   ],
+   [
+    "nike",
+    1,
+    5
+   ],
+   [
+    "bysec",
+    1,
+    2
+   ],
+   [
+    "borntowin",
+    1,
+    1
+   ],
+   [
+    "carmid",
+    1,
+    1
+   ],
+   [
+    "darc-sport",
+    1,
+    1
+   ],
+   [
+    "on",
+    1,
+    1
+   ],
+   [
+    "reps-on-reps",
+    1,
+    1
+   ]
+  ],
+  "users": 1
  }
 }
