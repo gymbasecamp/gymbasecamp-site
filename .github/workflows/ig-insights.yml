@@ -1,7 +1,8 @@
 name: IG insights (read-only)
 on:
-  schedule:
-    - cron: '41 22 * * *'   # 매일 07:41 KST 무렵(지연 감안)
+  # 2026-11-23 지훈 지시 "자동으로 하던 거 전부 멈춰" → 자동 실행(schedule) 꺼 둠. 다시 켜려면 아래 주석 해제
+  # schedule:
+  #   - cron: '41 22 * * *'   # 매일 07:41 KST 무렵(지연 감안)
   workflow_dispatch: {}
   push:
     branches: [main]
