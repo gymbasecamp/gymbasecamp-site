@@ -25,47 +25,57 @@ def instagram():
     if not (tok and uid): return 'skip: IG secrets not set'
     # IGAA = 인스타 로그인 토큰 / EAA = 페이스북(시스템 사용자) 토큰
     G = 'https://graph.facebook.com/v21.0' if not tok.startswith('IG') else 'https://graph.instagram.com/v21.0'
-    # 11/13 릴스: 인스타가 jsDelivr 영상을 못 가져옴(2207052) → 캐시 예열·재시도 후 raw.githubusercontent 로 대체
+    # 11/13 릴스: 인스타가 jsDelivr 영상을 못 가져옴(2207052) → raw.githubusercontent 로 대체.
+    # 11/20~23: jsDelivr로 만든 컨테이너는 처리(FINISHED)까지 되지만 게시 단계에서 내부 오류(code -1, 2207085)가 4번 연속.
+    #   마지막 성공(11/19)은 raw 주소였다 → raw 를 먼저 쓰고, 게시가 실패하면 같은 컨테이너만 되풀이하지 않고
+    #   새 컨테이너(다른 주소 / 표지 없이)로 다시 만든다. 오류 응답이어도 실제로 올라갔으면 중복 게시하지 않는다.
+    jsd = f"https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/"
     raw = f'https://raw.githubusercontent.com/gymbasecamp/gymbasecamp-site/{sha}/'
-    cands = [(public_url, f"https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/"), (public_url, f"https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/"), (raw + video, raw)]
-    errs, cid, vurl = [], None, None
-    for i, (vu, base) in enumerate(cands):
+    cands = [(raw, True), (jsd, True), (raw, False)]
+    errs, cid, vurl, p = [], None, None, {}
+    t0 = time.time()
+    def posted_since():
+        try:
+            last = requests.get(f'{G}/{uid}/media', params={'fields': 'id,timestamp,media_product_type', 'limit': 1, 'access_token': tok}, timeout=30).json().get('data', [])
+            if last and last[0].get('media_product_type') == 'REELS':
+                ts = datetime.datetime.strptime(last[0]['timestamp'][:19], '%Y-%m-%dT%H:%M:%S').replace(tzinfo=datetime.timezone.utc).timestamp()
+                if ts >= t0 - 120: return last[0]['id']
+        except Exception: pass
+        return None
+    for i, (base, with_cover) in enumerate(cands):
+        vu = base + video
         try: requests.get(vu, timeout=120, stream=True).close()  # CDN 캐시 예열
         except Exception: pass
-        if i: time.sleep(20)
+        if i:
+            time.sleep(60)
+            done = posted_since()
+            if done: p = {'id': done}; result['publish_note'] = f'오류 응답 후 게시 확인 (후보 {i})'; break
         r = requests.post(f'{G}/{uid}/media', data={'media_type': 'REELS', 'video_url': vu,
             'caption': item['caption'], 'share_to_feed': 'true', 'access_token': tok,
-            **({'cover_url': base + item['cover']} if item.get('cover') else {})}, timeout=60).json()
-        if 'id' not in r: errs.append(f'create {vu}: {r}'); continue
-        st = None
+            **({'cover_url': base + item['cover']} if (with_cover and item.get('cover')) else {})}, timeout=60).json()
+        if 'id' not in r: errs.append(f'create {vu}: {r}'[:300]); continue
+        st, s = None, {}
         for _ in range(40):
             s = requests.get(f'{G}/{r["id"]}', params={'fields': 'status_code,status', 'access_token': tok}, timeout=30).json()
             st = s.get('status_code')
             if st in ('FINISHED', 'ERROR'): break
             time.sleep(15)
-        if st == 'FINISHED': cid, vurl = r['id'], vu; break
-        errs.append(f'processing {vu}: {s}')
-    if not cid: return f'error: {errs}'
-    result['video_url'] = vurl
-    # 11/20 요가 릴스: 처리 완료 후 게시 단계에서 인스타 내부 오류(code -1, 2207085) → 같은 컨테이너로 재시도.
-    # 재시도 전에 최근 게시물을 확인해, 오류 응답이어도 실제로 올라갔으면 중복 게시하지 않는다.
-    t0 = time.time(); p = {}
-    for attempt in range(4):
-        if attempt:
-            time.sleep(90 * attempt)
-            try:
-                last = requests.get(f'{G}/{uid}/media', params={'fields': 'id,timestamp,media_product_type', 'limit': 1, 'access_token': tok}, timeout=30).json().get('data', [])
-                if last and last[0].get('media_product_type') == 'REELS':
-                    ts = datetime.datetime.strptime(last[0]['timestamp'][:19], '%Y-%m-%dT%H:%M:%S').replace(tzinfo=datetime.timezone.utc).timestamp()
-                    if ts >= t0 - 120:
-                        p = {'id': last[0]['id']}; result['publish_note'] = f'오류 응답 후 게시 확인 (시도 {attempt})'; break
-            except Exception: pass
-        p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
+        if st != 'FINISHED': errs.append(f'processing {vu}: {s}'[:300]); continue
+        cid, vurl = r['id'], vu
+        for attempt in range(2):
+            if attempt:
+                time.sleep(90)
+                done = posted_since()
+                if done: p = {'id': done}; break
+            p = requests.post(f'{G}/{uid}/media_publish', data={'creation_id': cid, 'access_token': tok}, timeout=60).json()
+            if 'id' in p: break
+            errs.append(f'publish {vu} cover={with_cover}: {p}'[:300])
         if 'id' in p:
-            if attempt: result['publish_note'] = f'재시도 {attempt}회 후 성공'
+            if i or not with_cover: result['publish_note'] = f'후보 {i + 1}({"raw" if base == raw else "jsDelivr"}, 표지 {"있음" if with_cover else "없음"})로 성공'
             break
-        result.setdefault('publish_errors', []).append(str(p)[:300])
-    if 'id' not in p: return f'error publish: {p}'
+    result['video_url'] = vurl or result['video_url']
+    if errs: result['publish_errors'] = errs
+    if 'id' not in p: return f'error: {errs[-1] if errs else p}'
     # 같은 영상을 스토리로도 알림 (실패해도 릴스 결과에는 영향 없음)
     try:
         r2 = requests.post(f'{G}/{uid}/media', data={'media_type': 'STORIES', 'video_url': vurl, 'access_token': tok}, timeout=60).json()
