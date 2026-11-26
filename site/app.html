@@ -1214,6 +1214,7 @@ const PWA=(()=>{
   function maybeBar(){
     views++;
     if(!can()||!(ios||android)) return;
+    if(/^#b-/.test(location.hash)) return; // 상세 화면엔 공식몰 고정 버튼이 있어 겹치지 않게
     const until=+ls.get('gb_pwa_dismiss')||0; if(Date.now()<until) return;
     if(views<2) return;
     const tray=document.getElementById('tray'); if(tray&&!tray.hidden) return;
@@ -1230,7 +1231,7 @@ const PWA=(()=>{
     document.getElementById('pwaBarX').addEventListener('click',()=>{ hideBar(); ls.set('gb_pwa_dismiss',String(Date.now()+14*864e5)); track('pwa_bar_close',{env}); });
     document.getElementById('pwaClose').addEventListener('click',close);
     document.getElementById('pwaOv').addEventListener('click',e=>{ if(e.target.id==='pwaOv') close(); });
-    window.addEventListener('hashchange',()=>setTimeout(maybeBar,1200));
+    window.addEventListener('hashchange',()=>{ if(/^#b-/.test(location.hash)) hideBar(); setTimeout(maybeBar,1200); });
     setTimeout(maybeBar,25000);
     sync();
     try{ const u=new URL(location.href); if(u.searchParams.get('pwa')==='1'){ u.searchParams.delete('pwa'); history.replaceState(history.state,'',u.toString()); if(!inapp&&can()){ track('pwa_handoff',{env}); setTimeout(()=>{ if(deferred) install('handoff'); else sheet(); },900); } } }catch(e){}
