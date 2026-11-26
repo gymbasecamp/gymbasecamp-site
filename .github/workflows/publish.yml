@@ -22,12 +22,15 @@ jobs:
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN_LONG || secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_TOKEN_OLD: ${{ secrets.IG_TOKEN }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
         run: |
           if [ -s .github/publish-date ] && [ "${{ github.event_name }}" = "push" ]; then export PUBLISH_DATE=$(cat .github/publish-date); [ -s .github/publish-kind ] && export PUBLISH_KIND=$(cat .github/publish-kind); fi
           case "${{ github.event.schedule }}" in "47 2 * * *") export PUBLISH_KIND=card;; "") ;; *) export PUBLISH_KIND=reel;; esac
+          # 2026-11-27: 릴스가 IG_TOKEN_LONG 전환(11/20) 직후부터 실패 → .github/publish-token 이 old 면 예전 토큰으로 시험
+          if [ "$(cat .github/publish-token 2>/dev/null)" = "old" ] && [ -n "$IG_TOKEN_OLD" ]; then export IG_TOKEN="$IG_TOKEN_OLD"; echo 'using old token'; fi
           python3 reels/publish.py
       - name: Commit log
         run: |
