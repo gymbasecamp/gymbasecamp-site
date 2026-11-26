@@ -779,3 +779,15 @@ table.cmp{table-layout:fixed;min-width:calc(150px + var(--n,2)*180px)}
 .ev-more{display:inline-block;margin-top:10px;background:none;border:0;padding:6px 0;color:#e3dbe6;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 @media (max-width:759px){.ev-hero .ev-nav{margin:8px 0 0!important}.ev-pick{margin-top:10px}}
 @media (max-width:759px){.ev:not(.panel):not(.explore) .ev-pks{opacity:0;pointer-events:none;transition:opacity .3s}}
+/* ===== 연말 쇼핑 시즌 블록 (2026-11-27) ===== */
+.ss{padding:44px 0 36px;background:linear-gradient(180deg,#0e1018,#07080d);border-bottom:1px solid var(--line)}
+.ss-eye{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--pt,#FF6A3D);margin:0}
+.ss h2{font-family:var(--serif);font-size:clamp(24px,4vw,34px);margin:8px 0 6px;color:var(--ink)}
+.ss-sub{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:40em}
+.ss-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ss-card{border:1px solid var(--line);background:var(--surface);padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ss-c{margin:0;font-size:12px;font-weight:700;color:var(--muted)}.ss-c span{color:var(--pt,#FF6A3D)}
+.ss-b{font-size:17px;font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss-p{margin:0;font-size:12px;color:var(--muted);line-height:1.45;flex:1}
+.ss-go{margin-top:8px;display:flex;align-items:center;justify-content:center;min-height:44px;background:var(--ink);color:#0A0A0C;font-size:13px;font-weight:800;text-decoration:none}
+@media (max-width:759px){.ss-grid{grid-template-columns:1fr 1fr}.ss-card:last-child:nth-child(odd){grid-column:1/-1}}

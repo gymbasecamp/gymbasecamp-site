@@ -532,12 +532,21 @@ function initRange(){
   const f=fit(); R.cam={x:f.x,y:f.y-80/f.z,z:f.z*1.18}; draw(); setTimeout(()=>fly(f,2600),150);
 }
 
+/* 연말 쇼핑 시즌 블록 (2026-11-27 손님 점검 C3): 종목별 1위 공식몰 바로가기. 세일 정보는 확인된 것만(가격대 칸), 1/6 이후 자동으로 숨김 */
+function viewSeason(){
+  const now=new Date(); if(now>new Date('2027-01-06T00:00:00+09:00')) return '';
+  const ko=lang==='ko';
+  const cards=CATN.map(c=>{ const b=evCatList(c)[0]; if(!b) return ''; const sc=evScore(b,c);
+    return `<div class="ss-card"><p class="ss-c">${esc(evS(c))} <span>${ko?'1위':'#1'}</span></p><a class="ss-b" href="#b-${b.id}" data-track="season_brand" data-brand="${esc(b.en)}">${esc(b.en)}</a><p class="ss-p">${esc(sc)}${ko?'점':' pts'}${b.price&&ko?` · ${esc(b.price.replace(/\s*\(.*$/,''))}`:''}</p><a class="ss-go" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" data-from="season">${ko?'공식몰에서 세일 확인 ↗':'Check sale at store ↗'}</a></div>`; }).join('');
+  return `<section class="ss"><div class="wrap"><p class="ss-eye">${ko?'블프 · 연말 쇼핑 시즌':'HOLIDAY SALE SEASON'}</p><h2>${ko?'종목별 1위, 공식몰에서 바로':'Each sport\'s #1 — straight to the store'}</h2><p class="ss-sub">${ko?'세일·쿠폰은 브랜드마다 기간이 달라요. 가격대는 사이트에 기록된 값이고, 최종 가격은 공식몰에서 확인하세요.':'Sales differ by brand. Prices are what we recorded — check the store for the final price.'}</p><div class="ss-grid">${cards}</div></div></section>`;
+}
 function viewHomeRest(){
   const t=T(); const nKR=BRANDS.filter(b=>b.origin==='국내').length;
   const n10=Math.floor(BRANDS.length/10)*10;
   const kStore=BRANDS.filter(b=>b.buy==='국내 공식몰').length, oShip=BRANDS.filter(b=>b.buy==='해외 직배송').length;
   const feat=FEATURED.map(id=>byId[id]).filter(Boolean);
   return `
+  ${viewSeason()}
   <section class="nx-find"><div class="wrap"><div class="nx-find-h"><h2>${lang==='ko'?'조건으로 찾기':'Find by what you wear'}</h2><p>${lang==='ko'?'핏과 아이템을 고르면 맞는 브랜드만 남습니다.':'Pick a fit and items; only matching brands remain.'}</p></div>
     <div class="finder">
       <div class="finder-h"><h2>${t.finderH}</h2><button class="clear" id="finderReset" type="button">${t.reset}</button></div>
@@ -1071,7 +1080,7 @@ function go(state){ S=Object.assign(emptyState(),JSON.parse(JSON.stringify(state
 
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,a,label'); if(!t) return;
-  if(t.dataset.track) track(t.dataset.track,{brand:t.dataset.brand});
+  if(t.dataset.track) track(t.dataset.track,Object.assign({brand:t.dataset.brand},t.dataset.from?{from:t.dataset.from}:{}));
   if(t.id==='langBtn'){ lang=lang==='ko'?'en':'ko'; try{localStorage.setItem('gb_lang',lang);}catch(x){} track('lang_switch'); render(); return; }
   if(t.dataset.cmp){ toggleCmp(t.dataset.cmp); return; }
   if(t.dataset.cmprm){ cmp=cmp.filter(x=>x!==t.dataset.cmprm); saveCmp(); render(); return; }
