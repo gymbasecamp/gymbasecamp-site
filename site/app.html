@@ -673,7 +673,7 @@ function storyHTML(b){
 function shopName(n){ return n.replace(/\(([^()]+)\)$/,(m,x,i)=>n.slice(0,i).includes(x)?'':m).trim(); }
 function dTopExtra(b){ const ko=lang==='ko'; const c=ctxCat(b); const sc=scoreOf(b);
   const others=(b.shops||[]).filter(([n,u])=>{ try{ return new URL(u).hostname.replace(/^www\./,'')!==new URL(b.url).hostname.replace(/^www\./,''); }catch(e){ return true; } }).slice(0,3);
-  return `<div class="d-top"><a class="d-sc" href="#about">${ko?`${esc(evS(c))} 점수 <b>${sc}</b>/100 · 기준 보기 →`:`${esc(evS(c))} score <b>${sc}</b>/100 · how we score →`}</a>${others.length?`<div class="d-shops"><span>${ko?'다른 구매처':'Also at'}</span>${others.map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener nofollow" data-track="shop_click" data-brand="${esc(b.en)}" data-from="detail_top">${esc(shopName(n))} ↗</a>`).join('')}</div>`:''}</div>`; }
+  return `<div class="d-top"><a class="d-sc" href="#about">${ko?`${esc(evS(c))} 점수 <b>${sc}</b>/100 · 기준 보기 →<small class="d-ed">현직 퍼스널 트레이너가 정한 100점 기준 · 매일 다시 계산</small>`:`${esc(evS(c))} score <b>${sc}</b>/100 · how we score →<small class="d-ed">100-pt criteria set by a working personal trainer · recalculated daily</small>`}</a>${others.length?`<div class="d-shops"><span>${ko?'다른 구매처':'Also at'}</span>${others.map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener nofollow" data-track="shop_click" data-brand="${esc(b.en)}" data-from="detail_top">${esc(shopName(n))} ↗</a>`).join('')}</div>`:''}</div>`; }
 function viewDetail(b){
   const t=T();
   const same=sorted(BRANDS.filter(x=>x.type===b.type&&x.id!==b.id),'score').slice(0,3);
@@ -863,6 +863,8 @@ function viewAbout(){
     <p class="note">User response stays neutral (10 for every brand) until we have enough visits. Ties are broken by user response, sport focus, then verified info, so every brand has its own rank. We never fill in information we can't verify.</p>
     <h2 class="dsp">Advertising policy</h2>
     <p>Sponsored brands are never mixed into recommendations. Any paid placement is labeled Sponsored and shown separately.</p>
+    <h2 class="dsp">Who picks</h2>
+    <p>The scoring criteria were set by our founder, a <b>working personal trainer</b> — what matters in the gym every day: is it made for the sport, can you buy it easily, is the information verified. Brand research and daily scoring run on AI-assisted automation, and anything we can't verify stays blank.</p>
     <h2 class="dsp" id="money">How we make money</h2>
     <p>We don't sell clothes. Some store buttons may become affiliate links in the future: the store pays a commission and your price stays the same. Rankings and scores use the same criteria whether or not a commission exists, and affiliate buttons will be marked.</p>
     <h2 class="dsp">Suggest a brand</h2>
@@ -886,6 +888,8 @@ function viewAbout(){
     <p class="note">사용자 반응은 방문 데이터가 충분히 쌓이기 전까지 모든 브랜드에 같은 중간값(10점)을 줍니다. 동점이면 사용자 반응 → 종목 특화도 → 정보 신뢰도 순으로 정해서 공동 순위가 없습니다. 확인할 수 없는 정보는 임의로 채우지 않습니다.</p>
     <h2 class="dsp">광고 원칙</h2>
     <p>광고나 스폰서 브랜드는 추천순에 섞지 않습니다. 광고가 붙는 경우 Sponsored 표시를 하고 일반 추천과 분리해서 보여줍니다.</p>
+    <h2 class="dsp">누가 고르나요</h2>
+    <p>점수 기준은 <b>현직 퍼스널 트레이너</b>인 운영자가 직접 정했습니다. 매일 회원들과 운동하며 보는 것 — 종목에 맞는 옷인지, 한국에서 바로 살 수 있는지, 정보가 확실한지 — 을 100점으로 나눴어요. 브랜드 정보 수집과 매일 점수 계산은 AI 도움을 받은 자동화로 하고, 확인되지 않은 정보는 채우지 않습니다.</p>
     <h2 class="dsp" id="money">수익과 공정성</h2>
     <p>GYM BASECAMP는 옷을 팔지 않습니다. 앞으로 일부 공식몰·판매처 버튼에 제휴(수수료) 링크를 쓸 수 있어요. 수수료는 판매처가 내고, 여러분이 내는 가격에는 더해지지 않습니다. 순위와 점수는 수수료가 있든 없든 같은 기준으로만 계산하고, 제휴 링크인 버튼에는 따로 표시합니다.</p>
     <h2 class="dsp">브랜드 제보</h2>
