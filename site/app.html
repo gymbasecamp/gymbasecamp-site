@@ -342,10 +342,10 @@ function viewHome(){
     <header class="ev-hero" id="evHero">
       <p class="ev-eye">BASECAMP RANGE · ${ko?'운동복 브랜드 순위':'GYMWEAR RANKING'}</p>
       <h1 class="ev-h">${ko?'운동복,<br>감 말고 <em>점수로</em>':'Gymwear,<br>by the <em>score</em>'}</h1>
-      <p class="ev-sub">${ko?`${n}개 브랜드를 ${CATN.length}개 종목 봉우리에 올렸습니다. <br>정상엔 그 종목 1위만 섭니다.`:`${n} brands placed on ${CATN.length} sport peaks. <br>Only the #1 stands on each summit.`}</p>
-      <ul class="ev-facts"><li><b>${n}</b>${ko?'개 브랜드':' brands'}</li><li><b>100</b>${ko?'점 채점':'-pt score'}</li><li>${ko?'공식몰로 <b>바로</b>':'<b>Direct</b> to store'}</li><li>${ko?'광고는 순위에 <b>안 섞음</b>':'<b>No ads</b> in ranks'}</li></ul>
-      <div class="ev-act"><button type="button" class="ev-btn" data-ev="find">${ko?'내 정상 찾기':'Find my summit'}</button><span class="ev-hint">${ko?'아래 종목을 누르면 1위부터 순위가 열려요 · 봉우리를 눌러도 돼요':'Tap a sport below to open its ranking · or tap a peak'}</span></div>
+      <p class="ev-sub">${ko?`${n}개 브랜드 · 9개 종목 · 100점 채점 · 광고 없는 순위`:`${n} brands · 9 sports · 100-pt score. No ads in the ranks.`}</p>
+      <p class="ev-pick">${ko?'내 운동을 누르면 1위부터 바로 보여드려요':'Tap your sport — see #1 instantly'}</p>
       <div class="ev-nav" id="evNav"></div>
+      <button type="button" class="ev-more" data-ev="find">${ko?'핏·아이템 조건으로 찾기 →':'Find by fit & items →'}</button>
     </header>
     <aside class="ev-panel" id="evPanel" aria-live="polite" hidden></aside>
     <template id="evFindT">
@@ -492,7 +492,7 @@ function initRange(){
   if(G3){ R.g3=G3; cv.style.display='none'; root.classList.add('is3d'); fit=()=>G3.ov(); focus=p=>G3.pk(p); draw=()=>G3.render(); fly=(to,ms)=>G3.fly(to,ms); window.addEventListener('resize',()=>G3.resize()); }
   const ko=lang==='ko';
   pks.innerHTML=P.map((p,i)=>`<button type="button" class="ev-pk" data-evp="${i}"><span class="ev-flag"></span><span class="ev-card"><span class="ev-cc">${esc(evS(p.c))}<i>${ko?'1위':'#1'}</i></span><b>${esc(p.b.en)}</b><span class="ev-cs">${evScore(p.b,p.c)}</span><small>${esc(p.b.ko)}</small></span><span class="ev-mini">${esc(evS(p.c))}</span></button>`).join('');
-  nav.innerHTML=P.slice().sort((a,b)=>CATN.indexOf(a.c)-CATN.indexOf(b.c)).map(p=>`<button type="button" data-evp="${P.indexOf(p)}">${esc(evS(p.c))}</button>`).join('');
+  nav.innerHTML=P.slice().sort((a,b)=>CATN.indexOf(a.c)-CATN.indexOf(b.c)).map(p=>{ const top=evCatList(p.c)[0]; return `<button type="button" data-evp="${P.indexOf(p)}"><b>${esc(evS(p.c))}</b>${top?`<small>${ko?'1위 ':'#1 '}${esc(top.en)}</small>`:''}</button>`; }).join('');
   // 2026-11-21: 패널 아랫부분(4위 이하·공식몰 ↗)이 화면 밖이나 비교 트레이 뒤에 숨지 않게 — 열 때마다 아래 여백을 계산
   const padPanel=()=>{ const tr=document.getElementById('tray'), th=tr&&!tr.hidden?tr.offsetHeight:0, below=Math.max(0,root.getBoundingClientRect().bottom-innerHeight); const mob=root.clientWidth<760, off=below+th; panel.style.bottom=off?`${(mob?0:20)+off}px`:''; panel.style.maxHeight=off&&mob?`calc(64% - ${off}px)`:''; };
   const openPanel=html=>{ panel.innerHTML=html; panel.hidden=false; padPanel(); requestAnimationFrame(()=>panel.classList.add('in')); root.classList.add('panel'); };

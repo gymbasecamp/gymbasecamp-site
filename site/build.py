@@ -57,7 +57,7 @@ def scope_css(css):
                     k += 1
                 res.append(prelude + css[j:k + 1]); i = k + 1
                 continue
-            if prelude.startswith('@media') or prelude.startswith('@supports'):
+            if prelude.startswith(('@media', '@supports', '@container')):
                 inner, i = parse_block(j + 1)
                 res.append(prelude + '{' + inner + '}')
             else:
