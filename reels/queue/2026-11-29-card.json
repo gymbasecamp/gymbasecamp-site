@@ -14,6 +14,8 @@
  "meta": {
   "format": "card",
   "sport": "러닝",
-  "card_type": "추천 세트(겨울 러닝 풀세트)"
- }
+  "card_type": "추천 세트(겨울 러닝 풀세트)",
+  "moved_from": "2026-11-24-card"
+ },
+ "approved": false
 }

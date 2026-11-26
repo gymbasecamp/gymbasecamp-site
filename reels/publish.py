@@ -15,6 +15,9 @@ q = os.path.join(ROOT, 'reels/queue', day + '.json')
 if not os.path.exists(q):
     print('no queue for', day); sys.exit(0)
 item = json.load(open(q, encoding='utf-8'))
+# 2026-11-27 지훈 지시: 업로드 전날 23시쯤 지훈이 점검하고 OK 한 것만 다음 날 게시. 큐에 "approved": false 면 건너뛴다.
+if item.get('approved') is False:
+    print('not approved yet — skip', day); sys.exit(0)
 video = item.get('video', ''); plats = item.get('platforms', ['instagram', 'youtube'])
 sha = os.environ.get('GITHUB_SHA', 'main')
 public_url = f'https://cdn.jsdelivr.net/gh/gymbasecamp/gymbasecamp-site@{sha}/{video}'
