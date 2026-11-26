@@ -331,7 +331,61 @@ function evPeaks(){
   const lo=Math.min(...tops.map(p=>evScore(p.b,p.c))), hi=Math.max(...tops.map(p=>evScore(p.b,p.c)));
   return order.map((p,i)=>({...p,x:520+i*420,y:Math.round(1010-(evScore(p.b,p.c)-lo)/(hi-lo||1)*560)}));
 }
+/* ===== B안 리디자인 (2026-11-27 지훈 승인: "스포츠 스코어보드" — F1 순위 타워 · Strava 왕관 · RunRepeat 점수 근거, 단정·단순·쓰기 쉽게·다시 찾고 싶게) ===== */
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+function myCat(){ const c=LS.get('gb_mycat',null); return CATN.includes(c)?c:'헬스·보디빌딩'; }
+function setMyCat(c){ if(CATN.includes(c)) LS.set('gb_mycat',c); }
+function favs(){ const a=LS.get('gb_fav',[]); return Array.isArray(a)?a.filter(id=>byId[id]):[]; }
+function toggleFav(id){ const a=favs(); const i=a.indexOf(id); if(i>=0) a.splice(i,1); else a.unshift(id); LS.set('gb_fav',a.slice(0,30)); track(i>=0?'fav_remove':'fav_add',{brand:byId[id].en}); return i<0; }
+function recents(){ const a=LS.get('gb_recent',[]); return Array.isArray(a)?a.filter(id=>byId[id]):[]; }
+function pushRecent(id){ const a=recents().filter(x=>x!==id); a.unshift(id); LS.set('gb_recent',a.slice(0,8)); }
+const CROWN='<svg class="crown" width="16" height="13" viewBox="0 0 22 18" aria-hidden="true"><path d="M2 15 L4 4 L8.5 9 L11 2 L13.5 9 L18 4 L20 15 Z" fill="currentColor"/></svg>';
+const startPrice=b=>{ const m=priceMin(b); if(m==null) return ''; return lang==='ko'?`약 ${m}만원부터`:`from ~₩${Math.round(m*10000).toLocaleString()}`; };
+function towerRows(c,n){ const list=evCatList(c).slice(0,n); const lead=list.length?evScore(list[0],c):0; const ko=lang==='ko';
+  return list.map((b,i)=>{ const sc=evScore(b,c); return `<li class="tw-r${i===0?' tw-1':''}"><span class="tw-n">${i+1}</span><a class="tw-b" href="#b-${b.id}" data-track="tower_brand" data-brand="${esc(b.en)}"><b>${esc(b.en)}</b><small>${esc(startPrice(b)||lb(b.buy))}</small></a><span class="tw-s">${sc}</span><span class="tw-g">${i===0?(ko?'1위':'#1'):'−'+(Math.round((lead-sc)*10)/10).toFixed(1)}</span><a class="tw-o" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" data-from="tower" aria-label="${esc(b.en)} ${ko?'공식몰':'store'}">↗</a></li>`; }).join(''); }
 function viewHome(){
+  const ko=lang==='ko', c=myCat(), top=evCatList(c)[0];
+  const chips=[c,...CATN.filter(x=>x!==c)].map(x=>`<button type="button" class="bh-chip" data-mycat="${esc(x)}" aria-pressed="${x===c}">${esc(evS(x))}</button>`).join('');
+  const others=CATN.filter(x=>x!==c).map(x=>{ const b=evCatList(x)[0]; return b?`<a class="bh-o" href="#rank-${EV_SLUG[x]}" data-track="home_other" data-brand="${esc(b.en)}"><span><small>${esc(evS(x))}</small><b>${esc(b.en)}</b></span><em>${evScore(b,x)}</em></a>`:''; }).join('');
+  const rc=recents().slice(0,6), fv=favs().slice(0,6);
+  const mini=(ids,label)=>ids.length?`<section class="bh-sec"><h2 class="bh-h">${label}</h2><div class="bh-mini">${ids.map(id=>{const b=byId[id];return `<a href="#b-${b.id}" data-track="home_mini" data-brand="${esc(b.en)}">${esc(b.en)}</a>`;}).join('')}</div></section>`:'';
+  return `<div class="bh wrap">
+  <section class="bh-hero"><p class="bh-eye">${ko?'내 종목':'MY SPORT'} · ${esc(evS(c))} ★</p>
+    <h1 class="bh-h1">${ko?`오늘 ${esc(evS(c))}복 1위는<br><em>${esc(top?top.en:'—')}</em>${top?'예요':''}`:`Today's ${esc(evS(c))} #1:<br><em>${esc(top?top.en:'—')}</em>`}</h1>
+    <p class="bh-sub">${ko?`${BRANDS.length}개 브랜드 · 9개 종목 · 100점 채점 · 매일 다시 계산 · 광고 없는 순위`:`${BRANDS.length} brands · 9 sports · 100-pt score · updated daily · no ads in ranks`}</p></section>
+  <div class="bh-chips" role="group" aria-label="${ko?'내 종목 고르기':'Pick your sport'}">${chips}</div>
+  <section class="tw"><div class="tw-h"><span>${esc(evS(c))} TOP 5</span><small>${ko?'1위와 점수 차':'gap to #1'}</small></div><ol class="tw-l">${towerRows(c,5)}</ol><a class="tw-more" href="#rank-${EV_SLUG[c]}">${ko?`${esc(evS(c))} 전체 순위 보기 →`:`Full ${esc(evS(c))} ranking →`}</a></section>
+  ${mini(fv,(ko?'♥ 찜한 브랜드':'♥ Saved'))}
+  ${mini(rc,(ko?'최근 본 브랜드':'Recently viewed'))}
+  <section class="bh-sec"><h2 class="bh-h">${ko?'다른 종목 1위':'#1 in other sports'}</h2><div class="bh-grid">${others}</div></section>
+  <div class="bh-links"><a href="#brands">${ko?'전체 브랜드 · 조건으로 찾기 →':'All brands · filter →'}</a><a href="#about">${ko?'점수는 이렇게 매겨요 →':'How we score →'}</a></div>
+  </div>${viewSeason()}`;
+}
+function viewRank(c){
+  const ko=lang==='ko'; const list=evCatList(c); setMyCat(c);
+  const chips=CATN.map(x=>`<a class="bh-chip" href="#rank-${EV_SLUG[x]}" aria-current="${x===c?'page':'false'}">${esc(evS(x))}</a>`).join('');
+  return `<div class="bh wrap"><div class="rk-top"><a class="rk-back" href="#home" aria-label="${ko?'홈':'Home'}">←</a><h1 class="rk-t">${esc(evS(c))} ${ko?'순위':'ranking'}</h1><span class="rk-c">${list.length}${ko?'개 브랜드':' brands'}</span></div>
+  <div class="bh-chips">${chips}</div>
+  ${picksHTML(c)}
+  <section class="tw"><div class="tw-h tw-cols"><span>${ko?'순위':'#'}</span><span>${ko?'브랜드':'Brand'}</span><span>${ko?'점수':'Score'}</span><span>${ko?'차이':'Gap'}</span><span></span></div><ol class="tw-l">${towerRows(c,list.length)}</ol></section>
+  <p class="rk-note">${ko?'현직 퍼스널 트레이너가 정한 100점 기준 · 매일 다시 계산 · 광고는 순위에 섞지 않아요.':'100-pt criteria set by a working personal trainer · updated daily · no ads in the ranks.'} <a href="#about">${ko?'기준 보기 →':'How we score →'}</a></p></div>`;
+}
+function whyParts(b,c){ const ko=lang==='ko'; const p=b.v2; const fo=(b.fc&&b.fc[c]!=null)?b.fc[c]:p.focus; const f=b.f||[];
+  const nItems=['슬리브리스/탱크','쇼츠','팬츠/조거','레깅스','스포츠브라','아우터','펌프커버/헤비웨이트','스트렝스/싱글렛','러닝/HYROX/크로스트레이닝'].filter(k=>f.includes(k)).length;
+  const R=[[ko?'종목 특화도':'Sport focus',fo,25,ko?(c===b.cat?`${evS(c)} 대표 브랜드`:`${evS(c)} 겸 종목`):(c===b.cat?'main sport':'secondary sport')],
+    [ko?'제품 구성':'Range',p.range,20,ko?`아이템 ${nItems}종 확인`:`${nItems} item types`],
+    [ko?'국내 구매':'Buying in Korea',p.access,20,lb(b.buy)],
+    [ko?'정보 신뢰도':'Verified info',p.info,10,(b.ig&&b.ig!=='확인 필요')?(ko?'공식 정보 확인':'verified'):(ko?'인스타 계정 확인 중':'Instagram pending')],
+    [ko?'에디터 평가':'Editor',p.editor,5,ko?'직접 검토':'reviewed'],
+    [ko?'사용자 반응':'User response',p.user,20,ko?'데이터 쌓는 중':'collecting data']];
+  return R.map(([l,v,m,w])=>`<div class="why-r"><div><span class="why-l">${esc(l)} <i>· ${esc(w)}</i></span><span class="why-bar"><span style="width:${Math.round(v/m*100)}%"${v>=m?' class="full"':''}></span></span></div><b>${v}/${m}</b></div>`).join(''); }
+function bDetailTop(b){ const ko=lang==='ko'; const c=ctxCat(b); const sc=scoreOf(b); const rk=(b.rk&&b.rk[c])||b.rankT; const fav=favs().includes(b.id);
+  const shops=[[ko?`${b.ko||b.en} 공식몰`:`${b.en} official store`,b.url,lb(b.buy)]].concat((b.shops||[]).filter(([n,u])=>{ try{ return new URL(u).hostname.replace(/^www\./,'')!==new URL(b.url).hostname.replace(/^www\./,''); }catch(e){ return true; } }).slice(0,3).map(([n,u])=>[shopName(n),u,'']));
+  return `<div class="bd"><div class="bd-bar"><a class="rk-back" href="#rank-${EV_SLUG[c]}" aria-label="${ko?'순위로':'Back'}">←</a><span class="bd-acts"><button type="button" class="bd-cmp" data-cmp="${b.id}" aria-pressed="false">${T().cmpAdd}</button><button type="button" class="bd-fav" data-fav="${b.id}" aria-pressed="${fav}" aria-label="${ko?'찜하기':'Save'}">${fav?'♥':'♡'}</button></span></div>
+  <div class="bd-hero"><div><span class="bd-badge${rk===1?' gold':''}">${rk===1?CROWN:''}${esc(evS(c))} ${ko?`${rk}위`:`#${rk}`}</span><h1 class="bd-name">${esc(b.en)}</h1><p class="bd-ko">${esc(b.ko)} · ${esc(lb(b.origin))}${b.one&&ko?` · ${esc(b.one)}`:''}</p></div><div class="bd-score"><b>${sc}</b><small>${ko?'100점 만점':'/ 100'}</small></div></div>
+  <section class="why"><div class="why-h"><h2>${ko?`왜 ${sc}점일까`:`Why ${sc}`}</h2><a href="#about">${ko?'채점 기준 →':'Criteria →'}</a></div>${whyParts(b,c)}<p class="why-n">${ko?'현직 퍼스널 트레이너가 정한 기준 · 매일 다시 계산':'Criteria set by a working personal trainer · updated daily'}</p></section>
+  <section class="buy"><h2>${ko?'어디서 살까':'Where to buy'}</h2>${shops.map(([n,u,t],i)=>`<a class="buy-r" href="${esc(i===0?ou(u):u)}" target="_blank" rel="noopener${i?' nofollow':''}" data-track="${i===0?'official_click':'shop_click'}" data-brand="${esc(b.en)}" data-from="buy_list"><span><b>${esc(n)}</b>${t?`<small>${esc(t)}</small>`:''}</span><em>↗</em></a>`).join('')}${b.price?`<p class="buy-p">${ko?'가격대':'Price'} · ${esc(b.price)}</p>`:''}</section></div>`; }
+function viewHomeOld(){
   const n=BRANDS.length, ko=lang==='ko';
   const chip=(k,v)=>`<button type="button" class="ev-chip" data-evk="${k}" data-evv="${esc(v)}" aria-pressed="false">${esc(trOne?trOne(v):v)}</button>`;
   return `
@@ -682,8 +736,8 @@ function viewDetail(b){
   const up=ASSETS&&DB?`<div class="uploader"><label class="btn ghost sm" for="imgIn" style="cursor:pointer">${has?t.chImg:t.upImg}</label><input id="imgIn" type="file" accept="image/png,image/jpeg,image/webp" data-brand="${b.id}">${has?`<button class="btn ghost sm" data-rmimg="${b.id}">${t.rmImg}</button>`:''}<span>${t.upNote}</span></div>`:'';
   return `
   <div class="wrap">
-    <div class="crumb"><a href="#brands">← BRANDS</a> &nbsp;/&nbsp; ${esc(lb(b.type))}</div>
-    <div class="d-head">
+    ${bDetailTop(b)}
+    <div class="d-head d-old">
       <div><h1 class="dsp">${esc(b.en)}</h1><div class="ko">${esc(b.ko)} · ${esc(lb(b.origin))} · <b>${rankLabel(b)}</b>${mv(b,1)}</div>${b.one&&lang==='ko'?`<p class="d-one">${esc(b.one)}</p>`:''}</div>
       <div class="d-actions">
         <button class="btn ghost" data-cmp="${b.id}" aria-pressed="false">${t.cmpAdd}</button>
@@ -713,7 +767,7 @@ function viewDetail(b){
       <div style="min-width:0">
         ${thumb(b,'d-img')}
         ${up}
-        <div class="panel">
+        <div class="panel p-score">
           <h2>${t.scoreH}</h2>
           <div class="score-big"><b>${b.v2.total}</b><span>/ 100 · ${rankLabel(b)}</span></div>
           ${breakdown(b)}
@@ -1071,14 +1125,15 @@ function render(){
   chrome();
   const h=(location.hash||'#home').slice(1);
   let key='home';
-  if(h.startsWith('b-') && byId[h.slice(2)]){ app.innerHTML=viewDetail(byId[h.slice(2)]); key='brands'; }
+  if(h.startsWith('b-') && byId[h.slice(2)]){ pushRecent(h.slice(2)); app.innerHTML=viewDetail(byId[h.slice(2)]); key='brands'; }
+  else if(h.startsWith('rank-') && evSlugCat(h.slice(5))){ app.innerHTML=viewRank(evSlugCat(h.slice(5))); key='home'; }
   else if(h==='brands'){ const open=document.getElementById('fDetails')?.open; app.innerHTML=viewBrands(); key='brands'; document.getElementById('sort').value=S.sort; const d=document.getElementById('fDetails'); if(open===false || (open===undefined && matchMedia('(max-width:900px)').matches)) d.open=false; renderGrid(); }
   else if(h==='privacy'){ app.innerHTML=viewPrivacy(); key='about'; }
   else if(h==='compare'){ app.innerHTML=viewCompare(); key='compare'; }
   else if(h==='quiz'){ app.innerHTML=viewQuiz(); key='quiz'; }
   else if(h==='submit'){ app.innerHTML=viewSubmit(); key='about'; }
   else if(h==='about'){ app.innerHTML=viewAbout(); key='about'; }
-  else { app.innerHTML=viewHome(); updateFinder(); }
+  else { app.innerHTML=viewHome(); }
   stopAura(); if(key==='home') initRange(); else stopRange();
   document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===key) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   try{ const na=document.querySelector('.nav [aria-current="page"]'), nv=na&&na.parentElement; if(nv&&nv.scrollWidth>nv.clientWidth+2){ const r=na.getBoundingClientRect(), q=nv.getBoundingClientRect(); if(r.left<q.left||r.right>q.right) nv.scrollLeft+=r.left-q.left-(q.width-r.width)/2; } }catch(e){}
@@ -1117,6 +1172,8 @@ document.addEventListener('click',e=>{
   if(t.classList.contains('sfilter')){ const k=t.dataset.k,v=t.dataset.v; S[k]=S[k].includes(v)?S[k].filter(x=>x!==v):[...S[k],v]; t.setAttribute('aria-pressed',S[k].includes(v)); track('filter_use',{filter:v}); renderGrid(); return; }
   if(t.dataset.remove){ const v=t.dataset.remove; ['f','origin','cat','type','buy'].forEach(k=>S[k]=(S[k]||[]).filter(x=>x!==v)); document.querySelectorAll(`.sfilter[data-v="${CSS.escape(v)}"]`).forEach(c=>c.setAttribute('aria-pressed','false')); renderGrid(); return; }
   if(t.hasAttribute('data-clearall')){ const sort=S.sort; S=emptyState(); S.sort=sort; render(); return; }
+  if(t.dataset.mycat){ setMyCat(t.dataset.mycat); track('mycat_pick',{category:t.dataset.mycat}); render(); return; }
+  if(t.dataset.fav){ const on=toggleFav(t.dataset.fav); t.setAttribute('aria-pressed',on); t.textContent=on?'♥':'♡'; flash(lang==='ko'?(on?'찜했어요. 홈에서 다시 볼 수 있어요.':'찜을 뺐어요.'):(on?'Saved — find it on Home.':'Removed.')); return; }
   if(t.dataset.ans){ quiz.a[quiz.step]=t.dataset.ans; quiz.step++; if(quiz.step===3) track('quiz_complete',{answers:quiz.a.join('|')}); render(); window.scrollTo(0,0); return; }
   if(t.id==='qBack'){ quiz.step=Math.max(0,quiz.step-1); render(); return; }
   if(t.id==='qRetry'){ quiz={step:0,a:[]}; render(); window.scrollTo(0,0); return; }
