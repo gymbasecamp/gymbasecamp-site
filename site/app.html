@@ -499,7 +499,7 @@ function initRange(){
   const closePanel=()=>{ panel.classList.remove('in'); root.classList.remove('panel'); root.classList.remove('explore'); R.sel=null; setTimeout(()=>{ if(!panel.classList.contains('in')) panel.hidden=true; },350); fly(fit(),1100); };
   const rows=(list,c)=>list.map(b=>{ const sc=evScore(b,c); return `<li class="ev-row"><span class="ev-rn">${b.rk[c]}</span><a class="ev-rb" href="#b-${b.id}" data-track="range_brand" data-brand="${esc(b.en)}"><b>${esc(b.en)}</b><small>${ko?`${esc(b.ko)} · `:''}${esc(lb(b.buy))}${c!==b.cat?` · ${ko?`주종목 ${esc(evS(b.cat))}`:`main: ${esc(evS(b.cat))}`}`:''}</small><span class="ev-bar"><i style="width:${sc}%"></i></span></a><span class="ev-rs">${sc}</span><a class="ev-ro" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" aria-label="${ko?'공식몰':'store'}">↗</a></li>`; }).join('');
   const showRank=p=>{ R.sel=p; track('range_peak',{category:p.c}); const list=evCatList(p.c);
-    openPanel(`<div class="ev-ph"><p class="ev-pc">${esc(lb(p.c))}</p><h2>${esc(evS(p.c))} ${ko?'순위':'ranking'}</h2><p class="ev-pn">${ko?`${list.length}개 브랜드 · 100점 만점 점수순`:`${list.length} brands · by score`}</p><button type="button" class="ev-x" data-ev="close" aria-label="close">×</button></div><ol class="ev-list">${rows(list,p.c)}</ol><button type="button" class="ev-btn ghost" data-ev="find">${ko?'조건으로 다시 찾기':'Refine by what you wear'}</button>`);
+    openPanel(`<div class="ev-ph"><p class="ev-pc">${esc(lb(p.c))}</p><h2>${esc(evS(p.c))} ${ko?'순위':'ranking'}</h2><p class="ev-pn">${ko?`${list.length}개 브랜드 · 100점 만점 점수순`:`${list.length} brands · by score`}</p><button type="button" class="ev-x" data-ev="close" aria-label="close">×</button></div>${picksHTML(p.c)}<ol class="ev-list">${rows(list,p.c)}</ol><button type="button" class="ev-btn ghost" data-ev="find">${ko?'조건으로 다시 찾기':'Refine by what you wear'}</button>`);
     fly(focus(p),1300); };
   const cnt=()=>{ const m=BRANDS.filter(b=>EVF.f.every(k=>b.f.includes(k))&&(!EVF.buy.length||EVF.buy.includes(b.buy))); const e=document.getElementById('evCnt'); if(e) e.innerHTML=ko?`맞는 브랜드 <b>${m.length}</b>개`:`<b>${m.length}</b> brands match`; return m; };
   const showFind=()=>{ R.sel=null; openPanel(document.getElementById('evFindT').innerHTML); panel.querySelectorAll('.ev-chip').forEach(c=>{ const k=c.dataset.evk==='buy'?'buy':'f'; c.setAttribute('aria-pressed',EVF[k].includes(c.dataset.evv)); }); cnt(); if(mobile) fly(fit(),900); };
@@ -533,6 +533,16 @@ function initRange(){
 }
 
 /* 연말 쇼핑 시즌 블록 (2026-11-27 손님 점검 C3): 종목별 1위 공식몰 바로가기. 세일 정보는 확인된 것만(가격대 칸), 1/6 이후 자동으로 숨김 */
+/* 종목별 3픽 (2026-11-27, Wirecutter식 '최고·가성비·대안' 추천) — 데이터에서만 계산 */
+function priceMin(b){ const s=String(b.price||''); if(!/원/.test(s)) return null; const m=s.match(/(\d+(?:\.\d+)?)\s*만/); return m?parseFloat(m[1]):null; }
+function sportPicks(c){ const list=evCatList(c); if(!list.length) return []; const top=list[0]; const out=[{k:'top',b:top}];
+  const pool=list.slice(1,10).filter(b=>priceMin(b)!=null); const bud=pool.sort((a,b)=>priceMin(a)-priceMin(b))[0]; if(bud && (priceMin(top)==null || priceMin(bud)<priceMin(top))) out.push({k:'budget',b:bud});
+  const easy=list.slice(0,10).find(b=>b.buy==='국내 공식몰'&&!out.some(o=>o.b===b)); if(easy) out.push({k:'easy',b:easy});
+  return out; }
+function picksHTML(c){ const ko=lang==='ko'; const L={top:ko?'종목 1위':'Top pick',budget:ko?'가성비 픽':'Budget pick',easy:ko?'국내 바로 구매':'Easy to buy in Korea'};
+  const why=o=>o.k==='top'?(ko?`${evScore(o.b,c)}점 · 최고 점수`:`${evScore(o.b,c)} pts · highest score`):o.k==='budget'?(ko?`TOP10 중 가장 낮은 시작가 · 약 ${priceMin(o.b)}만원부터`:`Lowest starting price in top 10 · from ~₩${Math.round(priceMin(o.b)*10000).toLocaleString()}`):(ko?`국내 공식몰 · ${o.b.rk[c]}위 ${evScore(o.b,c)}점`:`Korean official store · #${o.b.rk[c]}`);
+  const ps=sportPicks(c); if(ps.length<2) return '';
+  return `<div class="pk">${ps.map(o=>`<div class="pk-c pk-${o.k}"><p class="pk-l">${L[o.k]}</p><a class="pk-b" href="#b-${o.b.id}" data-track="pick_brand" data-brand="${esc(o.b.en)}" data-from="pick_${o.k}">${esc(o.b.en)}</a><p class="pk-w">${why(o)}</p><a class="pk-go" href="${esc(ou(o.b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(o.b.en)}" data-from="pick_${o.k}">${ko?'공식몰 ↗':'Store ↗'}</a></div>`).join('')}</div>`; }
 function viewSeason(){
   const now=new Date(); if(now>new Date('2027-01-06T00:00:00+09:00')) return '';
   const ko=lang==='ko';
@@ -659,6 +669,11 @@ function storyHTML(b){
     .map(x=>{ const i=x.indexOf(':'); return i>0?[x.slice(0,i).trim(),x.slice(i+1).trim()]:['',x]; });
   return `<section class="story"><p class="story-eye">BRAND STORY</p><h2>${esc(b.en)}의 이야기</h2><ol class="story-tl">${items.map(([k,v])=>`<li><b>${esc(k)}</b><p>${esc(v)}</p></li>`).join('')}</ol>${src.length?`<p class="story-src">출처 ${src.map((u,i)=>`<a href="${esc(u)}" target="_blank" rel="noopener nofollow">[${i+1}]</a>`).join(' ')}</p>`:''}</section>`;
 }
+/* 상세 위쪽: 점수 한 줄 + 다른 구매처 버튼 + 점수 기준 링크 (2026-11-27, RunRepeat식 '여러 판매처·기준 공개') */
+function shopName(n){ return n.replace(/\(([^()]+)\)$/,(m,x,i)=>n.slice(0,i).includes(x)?'':m).trim(); }
+function dTopExtra(b){ const ko=lang==='ko'; const c=ctxCat(b); const sc=scoreOf(b);
+  const others=(b.shops||[]).filter(([n,u])=>{ try{ return new URL(u).hostname.replace(/^www\./,'')!==new URL(b.url).hostname.replace(/^www\./,''); }catch(e){ return true; } }).slice(0,3);
+  return `<div class="d-top"><a class="d-sc" href="#about">${ko?`${esc(evS(c))} 점수 <b>${sc}</b>/100 · 기준 보기 →`:`${esc(evS(c))} score <b>${sc}</b>/100 · how we score →`}</a>${others.length?`<div class="d-shops"><span>${ko?'다른 구매처':'Also at'}</span>${others.map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener nofollow" data-track="shop_click" data-brand="${esc(b.en)}" data-from="detail_top">${esc(shopName(n))} ↗</a>`).join('')}</div>`:''}</div>`; }
 function viewDetail(b){
   const t=T();
   const same=sorted(BRANDS.filter(x=>x.type===b.type&&x.id!==b.id),'score').slice(0,3);
@@ -672,8 +687,9 @@ function viewDetail(b){
       <div><h1 class="dsp">${esc(b.en)}</h1><div class="ko">${esc(b.ko)} · ${esc(lb(b.origin))} · <b>${rankLabel(b)}</b>${mv(b,1)}</div>${b.one&&lang==='ko'?`<p class="d-one">${esc(b.one)}</p>`:''}</div>
       <div class="d-actions">
         <button class="btn ghost" data-cmp="${b.id}" aria-pressed="false">${t.cmpAdd}</button>
-        <a class="btn" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}">${t.officialGo}</a>
+        <a class="btn" href="${esc(ou(b.url))}" target="_blank" rel="noopener" data-track="official_click" data-brand="${esc(b.en)}" data-from="detail_top">${t.officialGo}</a>
       </div>
+      ${dTopExtra(b)}
     </div>
     <div class="d-body">
       <div style="min-width:0">
@@ -847,6 +863,8 @@ function viewAbout(){
     <p class="note">User response stays neutral (10 for every brand) until we have enough visits. Ties are broken by user response, sport focus, then verified info, so every brand has its own rank. We never fill in information we can't verify.</p>
     <h2 class="dsp">Advertising policy</h2>
     <p>Sponsored brands are never mixed into recommendations. Any paid placement is labeled Sponsored and shown separately.</p>
+    <h2 class="dsp" id="money">How we make money</h2>
+    <p>We don't sell clothes. Some store buttons may become affiliate links in the future: the store pays a commission and your price stays the same. Rankings and scores use the same criteria whether or not a commission exists, and affiliate buttons will be marked.</p>
     <h2 class="dsp">Suggest a brand</h2>
     <p>Know a brand we should add? <a href="#submit">Send it here</a>. We check the official details first.</p>
   </div></div>`;
@@ -868,6 +886,8 @@ function viewAbout(){
     <p class="note">사용자 반응은 방문 데이터가 충분히 쌓이기 전까지 모든 브랜드에 같은 중간값(10점)을 줍니다. 동점이면 사용자 반응 → 종목 특화도 → 정보 신뢰도 순으로 정해서 공동 순위가 없습니다. 확인할 수 없는 정보는 임의로 채우지 않습니다.</p>
     <h2 class="dsp">광고 원칙</h2>
     <p>광고나 스폰서 브랜드는 추천순에 섞지 않습니다. 광고가 붙는 경우 Sponsored 표시를 하고 일반 추천과 분리해서 보여줍니다.</p>
+    <h2 class="dsp" id="money">수익과 공정성</h2>
+    <p>GYM BASECAMP는 옷을 팔지 않습니다. 앞으로 일부 공식몰·판매처 버튼에 제휴(수수료) 링크를 쓸 수 있어요. 수수료는 판매처가 내고, 여러분이 내는 가격에는 더해지지 않습니다. 순위와 점수는 수수료가 있든 없든 같은 기준으로만 계산하고, 제휴 링크인 버튼에는 따로 표시합니다.</p>
     <h2 class="dsp">브랜드 제보</h2>
     <p>소개하고 싶은 짐웨어 브랜드가 있다면 <a href="#submit">여기서 제보</a>해주세요. 공식 정보를 확인한 뒤 분류·필터·점수까지 반영해 추가합니다.</p>
   </div></div>`;

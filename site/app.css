@@ -791,3 +791,18 @@ table.cmp{table-layout:fixed;min-width:calc(150px + var(--n,2)*180px)}
 .ss-p{margin:0;font-size:12px;color:var(--muted);line-height:1.45;flex:1}
 .ss-go{margin-top:8px;display:flex;align-items:center;justify-content:center;min-height:44px;background:var(--ink);color:#0A0A0C;font-size:13px;font-weight:800;text-decoration:none}
 @media (max-width:759px){.ss-grid{grid-template-columns:1fr 1fr}.ss-card:last-child:nth-child(odd){grid-column:1/-1}}
+/* ===== 2026-11-27 수익화 배울 점 적용: 3픽·상세 위 구매처·기준 링크 ===== */
+.pk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:6px 0 16px}
+.pk-c{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);padding:10px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.pk-top{border-color:#FF6A3D}
+.pk-l{margin:0;font-size:11px;font-weight:800;color:#FF6A3D;letter-spacing:.02em}
+.pk-b{font-size:15px;font-weight:800;color:#fff;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-w{margin:0;font-size:11px;line-height:1.4;color:#cfc6d6;flex:1}
+.pk-go{margin-top:6px;display:flex;align-items:center;justify-content:center;min-height:40px;background:#F4EFE8;color:#0A0A0C;font-size:12.5px;font-weight:800;text-decoration:none}
+.d-top{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.d-sc{font-size:14px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:10px}
+.d-sc b{font-size:20px;color:var(--pt,#FF6A3D)}
+.d-shops{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px}
+.d-shops span{color:var(--muted);margin-right:2px}
+.d-shops a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700}
+@media (max-width:420px){.pk{grid-template-columns:1fr}.pk-c{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 10px}.pk-w{flex-basis:100%;order:3}.pk-go{order:4;flex-basis:100%}}
