@@ -1,4 +1,10 @@
 {
+"adidas": {
+"compare": 0,
+"official": 0,
+"quiz": 0,
+"view": 1
+},
 "asics": {
 "compare": 0,
 "official": 0,
@@ -37,9 +43,9 @@
 },
 "drix": {
 "compare": 0,
-"official": 2,
+"official": 3,
 "quiz": 0,
-"view": 1
+"view": 2
 },
 "gymshark": {
 "compare": 0,
