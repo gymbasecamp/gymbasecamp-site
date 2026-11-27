@@ -1,29 +1,8 @@
 {
- "date": "2026-11-27",
- "events": {
-  "brand_click": 1,
-  "brand_view": 3,
-  "click": 4,
-  "filter_use": 6,
-  "first_visit": 2,
-  "mycat_pick": 5,
-  "official_click": 3,
-  "outbound_link_click": 1,
-  "page_view": 4,
-  "pwa_bar_show": 4,
-  "pwa_click": 1,
-  "quiz_open": 1,
-  "scroll": 4,
-  "session_start": 3,
-  "shop_click": 1,
-  "tower_brand": 2
- },
- "sessions": 3,
- "sources": {
-  "(direct)": 1,
-  "(not set)": 1,
-  "l.instagram.com": 2
- },
- "updated_kst": "2026-11-27 07:59",
- "users": 3
+ "date": "2026-11-28",
+ "events": {},
+ "sessions": 0,
+ "sources": {},
+ "updated_kst": "2026-11-28 07:59",
+ "users": 0
 }

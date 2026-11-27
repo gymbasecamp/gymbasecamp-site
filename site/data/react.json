@@ -11,6 +11,12 @@
 "quiz": 0,
 "view": 2
 },
+"asrv": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
+},
 "battract": {
 "compare": 0,
 "official": 0,
@@ -107,6 +113,12 @@
 "quiz": 0,
 "view": 1
 },
+"skullpig": {
+"compare": 0,
+"official": 1,
+"quiz": 0,
+"view": 1
+},
 "under-armour": {
 "compare": 1,
 "official": 0,
@@ -115,9 +127,9 @@
 },
 "uvu": {
 "compare": 0,
-"official": 0,
+"official": 2,
 "quiz": 0,
-"view": 2
+"view": 3
 },
 "volante": {
 "compare": 0,
