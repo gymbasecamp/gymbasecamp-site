@@ -16,6 +16,11 @@ SERIF = '/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc'
 SANS = '/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc'
 SANS_B = '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'
 INTER = '/usr/share/fonts/opentype/inter/InterDisplay-Medium.otf'
+import os
+BIGS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts', 'BigShoulders-Bold.ttf')
+# 2026-11-27 B안 '스포츠 스코어보드'(사이트와 같은 색·글씨): 남색 #0B1430 · 흰색 · 주황 #FF7A50 · 보조 #A9CCF5, 숫자/영문 Big Shoulders, 한글 Noto Sans CJK(IBM Plex Sans KR 대체)
+THEMES = {'b': dict(BG=(11, 20, 48), IV=(255, 255, 255), PT=(255, 122, 80), SUB=(169, 204, 245), GLOW=(120, 62, 40), TITLE='sans'),
+          'old': dict(BG=(10, 10, 12), IV=(244, 239, 232), PT=(255, 106, 61), SUB=(200, 192, 182), GLOW=(90, 52, 30), TITLE='serif')}
 KR = 1  # ttc 안 한국어 글꼴 번호
 
 def font(path, size, idx=KR):
@@ -29,13 +34,14 @@ def fit(d, text, path, size, maxw, idx=KR):
         size -= 4
     return font(path, size, idx)
 
-def make(bg, crop, ep, sport, hook, out, kind='main', line2=None):
+def make(bg, crop, ep, sport, hook, out, kind='main', line2=None, theme='b'):
+    th = THEMES[theme]; BG, IV, PT, SUB = th['BG'], th['IV'], th['PT'], th['SUB']; TT = SANS if th['TITLE'] == 'sans' else SERIF
     im = Image.new('RGB', (W, H), BG); d = ImageDraw.Draw(im)
     # 위쪽 스포트라이트
     glow = Image.new('L', (W, H), 0); gd = ImageDraw.Draw(glow)
     gd.polygon([(W/2-80, 0), (W/2+80, 0), (W/2+520, 1500), (W/2-520, 1500)], fill=60)
     glow = glow.filter(ImageFilter.GaussianBlur(70))
-    im = Image.composite(Image.new('RGB', (W, H), (90, 52, 30)), im, glow)
+    im = Image.composite(Image.new('RGB', (W, H), th['GLOW']), im, glow)
     # 아래쪽 선수 실루엣(영상 프레임에서 잘라 옴) — 위로 갈수록 어둡게 사라짐
     if bg:
         src = Image.open(bg).convert('RGB').resize((W, H))
@@ -48,27 +54,32 @@ def make(bg, crop, ep, sport, hook, out, kind='main', line2=None):
     d = ImageDraw.Draw(im)
     # 시즌·EP
     tag = (f"SEASON 1 · 정상 쟁탈전   EP.{ep}" if ep else "GYM BASECAMP · 랭킹 기준") if kind == "main" else "SEASON 1 · 오늘의 브랜드"
-    f = font(SANS_B, 34); d.text((W/2, 330), tag, font=f, fill=PT, anchor='mm')
+    if theme == 'b' and kind == 'main' and ep:
+        f1 = font(SANS_B, 34); f2 = ImageFont.truetype(BIGS, 64); t1 = 'SEASON 1 · 정상 쟁탈전   '; t2 = f'EP.{ep}'
+        w1, w2 = d.textlength(t1, font=f1), d.textlength(t2, font=f2); x0 = (W - w1 - w2) / 2
+        d.text((x0, 330), t1, font=f1, fill=SUB, anchor='lm'); d.text((x0 + w1, 330), t2, font=f2, fill=PT, anchor='lm')
+    else:
+        f = font(SANS_B, 34); d.text((W/2, 330), tag, font=f, fill=PT, anchor='mm')
     # 종목 이름(크게)
-    f = fit(d, sport, SERIF, 168, W - 120)
+    f = fit(d, sport, TT, 168, W - 120)
     d.text((W/2, 520), sport, font=f, fill=IV, anchor='mm')
     # 두 번째 줄
     l2 = line2 or ('운동복 브랜드 TOP5' if kind == 'main' else '종목별 순위·사는 곳')
-    f = fit(d, l2, SERIF, 92, W - 160); d.text((W/2, 690), l2, font=f, fill=IV, anchor='mm')
+    f = fit(d, l2, TT, 92, W - 160); d.text((W/2, 690), l2, font=f, fill=IV, anchor='mm')
     # 훅 배지
     f = fit(d, hook, SANS, 64, W - 260)
     tw = d.textlength(hook, font=f); bw, bh = tw + 90, 112; bx, by = (W - bw) / 2, 800
     d.rounded_rectangle((bx, by, bx + bw, by + bh), radius=18, fill=PT)
     d.text((W/2, by + bh/2 + 2), hook, font=f, fill=BG, anchor='mm')
     # 아래 브랜드 표기
-    f = font(INTER, 30, 0); d.text((W/2, 1800), 'GYM BASECAMP · gymbasecamp.kr', font=f, fill=(200, 192, 182), anchor='mm')
+    f = font(INTER, 30, 0); d.text((W/2, 1800), 'GYM BASECAMP · gymbasecamp.kr', font=f, fill=SUB, anchor='mm')
     im.save(out, quality=92)
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--bg'); ap.add_argument('--crop', default='0,1050,1760')
     ap.add_argument('--ep', default=''); ap.add_argument('--sport', required=True); ap.add_argument('--hook', required=True)
-    ap.add_argument('--line2'); ap.add_argument('--kind', default='main'); ap.add_argument('--out', required=True)
+    ap.add_argument('--line2'); ap.add_argument('--kind', default='main'); ap.add_argument('--theme', default='b', choices=['b', 'old']); ap.add_argument('--out', required=True)
     a = ap.parse_args()
-    make(a.bg, [int(v) for v in a.crop.split(',')], a.ep, a.sport, a.hook, a.out, a.kind, a.line2)
+    make(a.bg, [int(v) for v in a.crop.split(',')], a.ep, a.sport, a.hook, a.out, a.kind, a.line2, a.theme)
     print(a.out)

@@ -345,5 +345,67 @@
    6.8,
    9.35
   ]
+ },
+ {
+  "kit": "pl",
+  "style": "파워리프팅 — 헤비 시네마틱",
+  "bpm": 85.714,
+  "root_midi": 46,
+  "scale": "minor",
+  "prog": [
+   0,
+   5,
+   2,
+   6
+  ],
+  "motif_var": 3,
+  "swing": 0.033,
+  "drums": [
+   "x.......x.......",
+   "....x.......x...",
+   "x...x...x...x..."
+  ],
+  "seed": 2727,
+  "date": "2026-11-29",
+  "script": "music/engine.py",
+  "note": "EP.27 파워리프팅 (표준판) std length_s=24.8",
+  "cues": [
+   4.2,
+   7.7,
+   11.2,
+   14.7,
+   18.9
+  ]
+ },
+ {
+  "kit": "fight",
+  "style": "격투기 — 타이코 힙합",
+  "bpm": 96.0,
+  "root_midi": 43,
+  "scale": "hijaz",
+  "prog": [
+   0,
+   3,
+   1,
+   0
+  ],
+  "motif_var": 3,
+  "swing": 0.049,
+  "drums": [
+   "x..x......x..x..",
+   "....x.......x...",
+   "x.x.x.x.x.x.x.x."
+  ],
+  "seed": 2828,
+  "date": "2026-11-30",
+  "script": "music/engine.py",
+  "note": "EP.28 격투기 (압축판) fast length_s=15.0",
+  "cues": [
+   1.6,
+   3.475,
+   5.35,
+   7.225,
+   10.35
+  ]
  }
 ]

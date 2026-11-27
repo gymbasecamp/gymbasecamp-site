@@ -1,0 +1,118 @@
+<!doctype html><meta charset=utf-8>
+<!-- 토요일 고정 코너 '이번 주 순위 변동' (card_type weekly_moves) · 2026-11-28 첫 회
+     B안 색: 배경 #0B1430 · 카드 #121D45 · 글자 #FFFFFF · 보조 #A9CCF5 · 포인트 #FF7A50
+     숫자 Big Shoulders(reels/gen/fonts, OFL) · 본문 IBM Plex Sans KR → 이 환경에 없어 Noto Sans CJK KR로 대체 -->
+<style>
+@font-face{font-family:'BS';src:url('../../gen/fonts/BigShoulders-Bold.ttf')}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1350px;background:#0B1430;color:#fff;font-family:'IBM Plex Sans KR','Noto Sans CJK KR',sans-serif;overflow:hidden}
+.s{position:absolute;inset:0;padding:90px 80px;background:radial-gradient(900px 560px at 85% -10%,rgba(255,122,80,.14),transparent 70%),#0B1430;display:none}
+.s.on{display:block}
+.top{display:flex;justify-content:space-between;font:700 26px 'BS','Noto Sans CJK KR';letter-spacing:7px;color:#A9CCF5}
+.top b{color:#FF7A50;font-weight:700}
+.kick{margin-top:64px;font:700 30px 'Noto Sans CJK KR';letter-spacing:4px;color:#FF7A50}
+h1{font:900 112px/1.08 'Noto Sans CJK KR';margin-top:26px;letter-spacing:-3px}
+h1 em,h2 em{font-style:normal;color:#FF7A50}
+h2{font:900 74px/1.14 'Noto Sans CJK KR';margin-top:20px;letter-spacing:-2px}
+.date{font:700 92px/1 'BS';color:#A9CCF5;margin-top:34px;letter-spacing:2px}
+.badge{display:inline-block;margin-top:40px;background:#FF7A50;color:#0B1430;font:900 50px 'Noto Sans CJK KR';padding:20px 38px;border-radius:14px}
+p.lead{font:500 36px/1.5 'Noto Sans CJK KR';color:#A9CCF5;margin-top:30px}
+.foot{position:absolute;left:80px;right:80px;bottom:76px;font:500 28px 'Noto Sans CJK KR';color:#A9CCF5;display:flex;justify-content:space-between}
+/* 1위 표 */
+.tbl{margin-top:34px;background:#121D45;border-radius:18px;padding:8px 30px}
+.tr{display:grid;grid-template-columns:300px 1fr 150px 150px;align-items:center;padding:19px 0;border-bottom:1px solid rgba(169,204,245,.14)}
+.tr:last-child{border-bottom:0}
+.tr .sp{font:600 30px 'Noto Sans CJK KR';color:#A9CCF5}
+.tr .br{font:800 36px 'BS','Noto Sans CJK KR';letter-spacing:1px}
+.tr .sc{font:700 44px 'BS';text-align:right}
+.tr .tg{justify-self:end;font:700 24px 'Noto Sans CJK KR';color:#A9CCF5;border:2px solid rgba(169,204,245,.35);border-radius:10px;padding:6px 12px}
+.tr .tg.new{background:#FF7A50;border-color:#FF7A50;color:#0B1430}
+.note{margin-top:18px;font:500 24px 'Noto Sans CJK KR';color:#A9CCF5}
+/* 변화 카드 */
+.mv{background:#121D45;border-radius:18px;padding:34px 36px;margin-top:30px}
+.mv .hd{display:flex;justify-content:space-between;align-items:baseline}
+.mv .nm{font:800 64px 'BS','Noto Sans CJK KR';letter-spacing:1px}
+.mv .nm span{font:600 28px 'Noto Sans CJK KR';color:#A9CCF5;margin-left:14px;letter-spacing:0}
+.mv .up{font:800 64px 'BS';color:#FF7A50}
+.mv .row{display:flex;gap:26px;align-items:baseline;margin-top:14px;font:700 54px 'BS';color:#fff}
+.mv .row i{font-style:normal;color:#A9CCF5;font:600 28px 'Noto Sans CJK KR'}
+.mv .why{margin-top:14px;font:500 30px/1.45 'Noto Sans CJK KR';color:#dfe9fb}
+.mv .why b{color:#FF7A50}
+/* 리스트 */
+.li{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid rgba(169,204,245,.14)}
+.li .nm{font:800 42px 'BS','Noto Sans CJK KR';letter-spacing:1px}
+.li .nm span{display:block;font:500 26px 'Noto Sans CJK KR';color:#A9CCF5;margin-top:6px;letter-spacing:0}
+.li .v{font:700 44px 'BS';color:#FF7A50}
+.chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}
+.chip{background:#121D45;border-radius:12px;padding:14px 20px;font:700 30px 'BS','Noto Sans CJK KR';letter-spacing:1px}
+.chip i{font-style:normal;font:500 22px 'Noto Sans CJK KR';color:#A9CCF5;margin-left:10px;letter-spacing:0}
+.sub{margin-top:44px;font:700 30px 'Noto Sans CJK KR';color:#A9CCF5}
+/* 접전 */
+.vs{background:#121D45;border-radius:18px;padding:34px 36px;margin-top:30px}
+.vs .sp{font:700 30px 'Noto Sans CJK KR';color:#A9CCF5}
+.vs .line{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
+.vs .a{font:800 54px 'BS';letter-spacing:1px}
+.vs .a small{font:700 44px 'BS';color:#A9CCF5;margin-left:12px}
+.vs .gap{font:800 80px 'BS';color:#FF7A50}
+.vs .gap small{font:700 28px 'Noto Sans CJK KR'}
+</style>
+<body>
+<div class="s on" id="s1"><div class="top"><span>GYM BASECAMP</span><span><b>1</b> / 6</span></div>
+ <div class="kick">매주 토요일 · 고정 코너</div>
+ <h1>이번 주<br>운동복 순위<br><em>변동</em></h1>
+ <div class="date">11.21 – 11.28</div>
+ <div class="badge">1위 9곳 모두 수성</div>
+ <p class="lead">대신 TOP 5 안은 움직였어요.<br>헬스 2·4위가 새 얼굴.</p>
+ <div class="foot"><span>9개 종목 · 100점 기준 · 광고 없음</span><span>넘겨서 →</span></div></div>
+
+<div class="s" id="s2"><div class="top"><span>GYM BASECAMP</span><span><b>2</b> / 6</span></div>
+ <div class="kick">한 장 요약 · 9개 종목 1위</div>
+ <div class="tbl">
+  <div class="tr"><span class="sp">헬스·보디빌딩</span><span class="br">DRIX</span><span class="sc">82.6</span><span class="tg">수성 1주</span></div>
+  <div class="tr"><span class="sp">요가·필라테스</span><span class="br">XEXYMIX</span><span class="sc">85.1</span><span class="tg">수성 3주</span></div>
+  <div class="tr"><span class="sp">종합 스포츠</span><span class="br">ADIDAS</span><span class="sc">85.1</span><span class="tg">수성 1주</span></div>
+  <div class="tr"><span class="sp">러닝</span><span class="br">ASICS</span><span class="sc">82.9</span><span class="tg">수성 1주</span></div>
+  <div class="tr"><span class="sp">컴프레션</span><span class="br">VOLANTE</span><span class="sc">83.1</span><span class="tg">수성 1주</span></div>
+  <div class="tr"><span class="sp">크로스핏</span><span class="br">REEBOK</span><span class="sc">82.6</span><span class="tg">수성 2주</span></div>
+  <div class="tr"><span class="sp">HYROX</span><span class="br">REEBOK</span><span class="sc">76.6</span><span class="tg">수성 2주</span></div>
+  <div class="tr"><span class="sp">파워리프팅</span><span class="br">A7</span><span class="sc">82.4</span><span class="tg">수성 1주</span></div>
+  <div class="tr"><span class="sp">격투기</span><span class="br">VENUM</span><span class="sc">75.6</span><span class="tg">수성 2주</span></div>
+ </div>
+ <div class="note">수성 N주 = 매주 토요일 0시 집계에서 연속 1위 · 왕좌 교체는 주황 NEW로 표시</div>
+ <div class="foot"><span>11.27 집계</span><span>넘겨서 →</span></div></div>
+
+<div class="s" id="s3"><div class="top"><span>GYM BASECAMP</span><span><b>3</b> / 6</span></div>
+ <div class="kick">가장 큰 변화 · 헬스·보디빌딩</div>
+ <h2>헬스 TOP 5에<br><em>두 계단 이상</em> 점프</h2>
+ <div class="mv"><div class="hd"><div class="nm">BRUNK<span>브렁크</span></div><div class="up">▲6</div></div>
+  <div class="row">8위 → 2위 <i>79.1 → 81.8점</i></div>
+  <div class="why">제품 구성 <b>11.6 → 14.3</b><br>공식몰에서 여성 라인·쇼츠 확인</div></div>
+ <div class="mv"><div class="hd"><div class="nm">MIHAK<span>미학</span></div><div class="up">▲9</div></div>
+  <div class="row">13위 → 4위 <i>77.9 → 81.1점</i></div>
+  <div class="why">제품 구성 <b>11.1 → 14.3</b><br>공식몰에서 오버핏·스포츠브라 확인</div></div>
+ <div class="foot"><span>점수는 확인된 정보로만 바뀌어요</span><span>넘겨서 →</span></div></div>
+
+<div class="s" id="s4"><div class="top"><span>GYM BASECAMP</span><span><b>4</b> / 6</span></div>
+ <div class="kick">새 얼굴</div>
+ <h2 style="margin-bottom:24px">TOP 5에<br><em>3곳</em> 새로 진입</h2>
+ <div class="li"><div class="nm">BRUNK<span>헬스·보디빌딩</span></div><div class="v">2위</div></div>
+ <div class="li"><div class="nm">MIHAK<span>헬스·보디빌딩</span></div><div class="v">4위</div></div>
+ <div class="li"><div class="nm">LSKD<span>크로스핏 · 이번 주 새로 추가</span></div><div class="v">4위</div></div>
+ <div class="sub">이번 주 새로 추가된 브랜드 6곳 · 총 131개</div>
+ <div class="chips"><span class="chip">LSKD<i>크로스핏</i></span><span class="chip">X-BIONIC<i>컴프레션</i></span><span class="chip">STRENGTH SHOP<i>파워</i></span><span class="chip">AESENE<i>러닝</i></span><span class="chip">ISAMI<i>격투기</i></span><span class="chip">TWINS SPECIAL<i>격투기</i></span></div>
+ <div class="foot"><span>11.21 0시 집계 → 11.27 집계</span><span>넘겨서 →</span></div></div>
+
+<div class="s" id="s5"><div class="top"><span>GYM BASECAMP</span><span><b>5</b> / 6</span></div>
+ <div class="kick">다음 주 주목 · 1점 안 접전</div>
+ <h2>1위가 바뀐다면<br><em>여기</em>부터</h2>
+ <div class="vs"><div class="sp">격투기</div><div class="line"><div class="a">VENUM<small>75.6</small></div><div class="gap">0.2<small>점 차</small></div></div><div class="line"><div class="a" style="color:#A9CCF5">BLACK COMBAT<small>75.4</small></div></div></div>
+ <div class="vs"><div class="sp">헬스·보디빌딩</div><div class="line"><div class="a">DRIX<small>82.6</small></div><div class="gap">0.8<small>점 차</small></div></div><div class="line"><div class="a" style="color:#A9CCF5">BRUNK<small>81.8</small></div></div></div>
+ <div class="foot"><span>1위와 2위 점수 차가 가장 작은 두 종목</span><span>넘겨서 →</span></div></div>
+
+<div class="s" id="s6"><div class="top"><span>GYM BASECAMP</span><span><b>6</b> / 6</span></div>
+ <div class="kick">다음 주도 토요일 12:30</div>
+ <h1>저장하고<br><em>비교</em>해<br>보세요</h1>
+ <div class="badge">💾 저장</div>
+ <p class="lead">9개 종목 전체 순위·공식몰은<br>프로필 링크 <b style="color:#FF7A50">gymbasecamp.kr</b></p>
+ <div class="foot"><span>광고는 순위에 안 섞어요</span><span>@gymbasecamp.kr</span></div></div>
+</body>
